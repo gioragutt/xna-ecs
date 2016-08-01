@@ -1,0 +1,7 @@
+D:\Repositories\xna-try\XnaTry\ECS\bin\Debug\ECS.dll
+D:\Repositories\xna-try\XnaTry\ECS\bin\Debug\ECS.pdb
+D:\Repositories\xna-try\XnaTry\ECS\obj\Debug\ECS.csprojResolveAssemblyReference.cache
+D:\Repositories\xna-try\XnaTry\ECS\obj\Debug\ECS.dll
+D:\Repositories\xna-try\XnaTry\ECS\obj\Debug\ECS.pdb
+D:\Repositories\xna-try\XnaTry\ECS\bin\Debug\nunit.framework.dll
+D:\Repositories\xna-try\XnaTry\ECS\bin\Debug\nunit.framework.xml

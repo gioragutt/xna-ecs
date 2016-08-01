@@ -1,0 +1,16 @@
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\XnaTryLib.dll
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\XnaTryLib.pdb
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.dll
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.Game.dll
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.dll
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.dll
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.dll
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.xml
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.Game.xml
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.Graphics.xml
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.GamerServices.xml
+D:\Repositories\xna-try\XnaTry\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.Input.Touch.xml
+D:\Repositories\xna-try\XnaTry\XnaTryLib\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+D:\Repositories\xna-try\XnaTry\XnaTryLib\obj\x86\Debug\XnaTryLib.dll
+D:\Repositories\xna-try\XnaTry\XnaTryLib\obj\x86\Debug\XnaTryLib.pdb
+D:\Repositories\xna-try\XnaTry\XnaTryLib\obj\x86\Debug\XnaTryLib.csprojResolveAssemblyReference.cache

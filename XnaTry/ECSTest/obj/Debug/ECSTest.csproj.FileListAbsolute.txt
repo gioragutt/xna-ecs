@@ -1,0 +1,9 @@
+D:\Repositories\xna-try\XnaTry\ECSTest\bin\Debug\ECSTest.dll
+D:\Repositories\xna-try\XnaTry\ECSTest\bin\Debug\ECSTest.pdb
+D:\Repositories\xna-try\XnaTry\ECSTest\bin\Debug\ECS.dll
+D:\Repositories\xna-try\XnaTry\ECSTest\bin\Debug\nunit.framework.dll
+D:\Repositories\xna-try\XnaTry\ECSTest\bin\Debug\ECS.pdb
+D:\Repositories\xna-try\XnaTry\ECSTest\bin\Debug\nunit.framework.xml
+D:\Repositories\xna-try\XnaTry\ECSTest\obj\Debug\ECSTest.csprojResolveAssemblyReference.cache
+D:\Repositories\xna-try\XnaTry\ECSTest\obj\Debug\ECSTest.dll
+D:\Repositories\xna-try\XnaTry\ECSTest\obj\Debug\ECSTest.pdb

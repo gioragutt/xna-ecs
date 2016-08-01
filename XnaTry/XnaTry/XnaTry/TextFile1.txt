@@ -1,0 +1,6 @@
+﻿Shit we need:
+
+- General Input manager class to process input
+- Screen Manager class to process screens and transitions between them
+- Some base entity class
+- MB unit tests?
