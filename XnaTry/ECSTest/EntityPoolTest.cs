@@ -114,10 +114,11 @@ namespace ECSTest
         {
             pool.Add(entity);
             var container = pool.GetComponents(entity);
-            container.AddComponent(new DummyComponent());
+            var component = new DummyComponent();
+            container.AddComponent(component);
             var allDummies = pool.GetAllOf<DummyComponent>();
             Assert.AreEqual(allDummies.Count, 1);
-            Assert.AreSame(entity, allDummies.First());
+            Assert.AreSame(component, allDummies.First());
         }
     }
 }

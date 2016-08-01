@@ -11,9 +11,18 @@ namespace ECS
             if (entity == null)
                 throw new ArgumentNullException("entity");
         }
-        public ICollection<IEntity> GetAllOf<TComponent>() where TComponent : class, IComponent
+
+        public ICollection<TComponent> GetAllOf<TComponent>() where TComponent : class, IComponent
         {
-            return Keys.Where(entity => this[entity].HasComponent<TComponent>()).ToList();
+            ICollection<TComponent> components = new List<TComponent>();
+
+            foreach (var container in Values)
+            {
+                if (container.HasComponent<TComponent>())
+                    components.Add(container.GetComponent<TComponent>());
+            }
+
+            return components;
         }
 
         public bool Exists(IEntity entity)
