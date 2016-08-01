@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ECS
 {
@@ -10,6 +11,13 @@ namespace ECS
         /// <param name="entities">The components that this system is in charge of</param>
         /// <param name="delta">Milliseconds since last update</param>
         void Update(ICollection<IComponent> entities, long delta);
+
+        /// <summary>
+        /// Allows to get only the relevant components
+        /// </summary>
+        /// <param name="pool">The available pool of entities</param>
+        /// <returns>An ICollection of all relevant components for the system</returns>
+        ICollection<IComponent> GetRelevant(IEntityPool pool);
     }
 
     public interface ISystem<TComponent> : ISystem where TComponent : class, IComponent
