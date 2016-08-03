@@ -45,16 +45,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentContainer.cs" />
-    <Compile Include="Entity.cs" />
-    <Compile Include="EntityManager.cs" />
-    <Compile Include="EntityPool.cs" />
-    <Compile Include="IComponent.cs" />
-    <Compile Include="IComponentContainer.cs" />
-    <Compile Include="IEntityPool.cs" />
-    <Compile Include="ISystem.cs" />
-    <Compile Include="IEntity.cs" />
+    <Compile Include="BaseTypes\TypedContainer.cs" />
+    <Compile Include="BaseTypes\ComponentContainer.cs" />
+    <Compile Include="BaseTypes\Entity.cs" />
+    <Compile Include="Managers\EntityManager.cs" />
+    <Compile Include="BaseTypes\EntityPool.cs" />
+    <Compile Include="Interfaces\IComponent.cs" />
+    <Compile Include="Interfaces\IComponentContainer.cs" />
+    <Compile Include="Interfaces\IEntityPool.cs" />
+    <Compile Include="Interfaces\ITypedContainer.cs" />
+    <Compile Include="Interfaces\ISystem.cs" />
+    <Compile Include="Interfaces\IEntity.cs" />
+    <Compile Include="Interfaces\ISystemContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BaseTypes\SystemContainer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

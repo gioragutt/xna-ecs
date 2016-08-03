@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
+using ECS.BaseTypes;
+using ECS.Interfaces;
 
-namespace ECS
+namespace ECS.Managers
 {
     public class EntityManager
     {
@@ -19,4 +20,6 @@ namespace ECS
             return entity;
         }
     }
+
+    // TODO: Create a system manager class, a test system, and test whether update was called with CounterComponent
 }

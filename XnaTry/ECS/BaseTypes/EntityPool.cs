@@ -1,11 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ECS.Interfaces;
 
-namespace ECS
+namespace ECS.BaseTypes
 {
     public class EntityPool : Dictionary<IEntity, IComponentContainer>, IEntityPool
     {
+        public EntityPool() { }
+
+        public EntityPool(EntityPool pool)
+        {
+            foreach (var entity in pool)
+            {
+                Add(entity.Key, entity.Value);
+            }
+        }
+
+        public EntityPool(IEnumerable<IEntity> entities)
+        {
+            foreach (var entity in entities)
+            {
+                Add(entity);   
+            }
+        }
+
         static void AssertEntityNotNull(IEntity entity)
         {
             if (entity == null)
@@ -14,15 +33,8 @@ namespace ECS
 
         public ICollection<TComponent> GetAllOf<TComponent>() where TComponent : class, IComponent
         {
-            ICollection<TComponent> components = new List<TComponent>();
-
-            foreach (var container in Values)
-            {
-                if (container.HasComponent<TComponent>())
-                    components.Add(container.GetComponent<TComponent>());
-            }
-
-            return components;
+            return Values.Where(components => components.Has<TComponent>()).
+                SelectMany(components => components.GetAllOf<TComponent>()).ToList();
         }
 
         public bool Exists(IEntity entity)

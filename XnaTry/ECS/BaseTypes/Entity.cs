@@ -1,6 +1,7 @@
 ﻿using System;
+using ECS.Interfaces;
 
-namespace ECS
+namespace ECS.BaseTypes
 {
     public class Entity : IEntity
     {

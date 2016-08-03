@@ -1,5 +1,5 @@
 using System.Diagnostics;
-using ECS;
+using ECS.Managers;
 
 namespace XnaTry
 {
