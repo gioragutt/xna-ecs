@@ -12,7 +12,7 @@ namespace ECS.BaseTypes
             return typeof(TDerived).IsAssignableFrom(otherType);
         }
 
-        public void Add<TDerived>(TDerived instance) where TDerived : class, TBase
+        public virtual void Add<TDerived>(TDerived instance) where TDerived : class, TBase
         {
             if (instance == null)
                 throw new ArgumentNullException("instance");
