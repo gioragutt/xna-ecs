@@ -1,4 +1,5 @@
-﻿using ECS.Interfaces;
+﻿using System;
+using ECS.Interfaces;
 
 namespace ECS.BaseTypes
 {
@@ -6,6 +7,9 @@ namespace ECS.BaseTypes
     {
         public override void Add<TDerived>(TDerived instance)
         {
+            if (instance == null)
+                throw new ArgumentNullException("instance");
+
             instance.Container = this;
             base.Add(instance);
         }
