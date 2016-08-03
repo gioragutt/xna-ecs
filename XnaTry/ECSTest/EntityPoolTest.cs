@@ -1,4 +1,5 @@
-﻿using ECS.BaseTypes;
+﻿using ECS;
+using ECS.BaseTypes;
 using ECS.Interfaces;
 using NUnit.Framework;
 using System;
@@ -119,6 +120,44 @@ namespace ECSTest
             var allDummies = pool.GetAllOf<DummyComponent>();
             Assert.AreEqual(allDummies.Count, 1);
             Assert.AreSame(component, allDummies.First());
+        }
+    }
+
+    [TestFixture]
+    public class AllThatTest : EntityPoolTests
+    {
+        [Test]
+        public void GetAllThatReturnsEmptyWhenPoolIsEmpty()
+        {
+            Assert.AreEqual(pool.AllThat(c => true).Count(), 0);
+        }
+
+        [Test]
+        public void AddingAComponentToAContainerReturnsIt()
+        {
+            pool.Add(entity);
+            var container = pool.GetComponents(entity);
+            container.Add(new DummyComponent());
+            Assert.AreEqual(pool.AllThat(c => c.Has<DummyComponent>()).Count(), 1);
+        }
+
+        [Test]
+        public void TwoEntitiesInPoolOnlyOneHasDummy()
+        {
+            pool.AddToPool(entity).Add(new DummyComponent());
+            pool.AddToPool(new Entity(Guid.NewGuid())).Add(new DummyComponent());
+            Assert.AreEqual(pool.AllThat(c => c.Has<DummyComponent>()).Count(), 2);
+        }
+        [Test]
+        public void TwoEntitiesInPoolBothHaveDummies()
+        {
+            pool.Add(entity);
+            var container = pool.GetComponents(entity);
+            container.Add(new DummyComponent());
+            var anotherEntity = new Entity(Guid.NewGuid());
+            pool.Add(anotherEntity);
+
+            Assert.AreEqual(pool.AllThat(c => c.Has<DummyComponent>()).Count(), 1);
         }
     }
 }
