@@ -28,6 +28,6 @@ namespace ECS.Interfaces
         /// </summary>
         /// <param name="pool">The available pool of entities</param>
         /// <returns>An ICollection of all relevant components for the system</returns>
-        ICollection<TComponent> GetRelevant(IEntityPool pool);
+        ICollection<IComponentContainer> GetRelevant(IEntityPool pool);
     }
 }

@@ -10,12 +10,14 @@ namespace ECSTest
 
         public void Update(IEntityPool pool, long delta)
         {
-            Update(GetRelevant(pool), delta);   
+            var containers = GetRelevant(pool);
+            var components = containers.Select(c => c.Get<CounterComponent>()).ToList();
+            Update(components, delta);
         }
 
-        public ICollection<CounterComponent> GetRelevant(IEntityPool pool)
+        public ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
         {
-            return pool.GetAllOf<CounterComponent>();
+            return pool.AllThat(c => c.Has<CounterComponent>()).ToList();
         }
 
         public void Update(ICollection<CounterComponent> entities, long delta)

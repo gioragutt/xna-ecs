@@ -9,22 +9,6 @@ namespace ECS.BaseTypes
     {
         public EntityPool() { }
 
-        public EntityPool(EntityPool pool)
-        {
-            foreach (var entity in pool)
-            {
-                Add(entity.Key, entity.Value);
-            }
-        }
-
-        public EntityPool(IEnumerable<IEntity> entities)
-        {
-            foreach (var entity in entities)
-            {
-                Add(entity);   
-            }
-        }
-
         static void AssertEntityNotNull(IEntity entity)
         {
             if (entity == null)
@@ -35,6 +19,11 @@ namespace ECS.BaseTypes
         {
             return Values.Where(components => components.Has<TComponent>()).
                 SelectMany(components => components.GetAllOf<TComponent>()).ToList();
+        }
+
+        public IEnumerable<IComponentContainer> AllThat(Predicate<IComponentContainer> predicate)
+        {
+            return predicate == null ? default(IEnumerable<IComponentContainer>) : Values.Where(c => predicate(c));
         }
 
         public bool Exists(IEntity entity)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ECS.Interfaces
 {
@@ -26,6 +27,13 @@ namespace ECS.Interfaces
         /// <returns>IComponentContainer of the entity</returns>
         /// <exception cref="System.ArgumentNullException">If entity is null</exception>
         IComponentContainer GetComponents(IEntity entity);
+
+        /// <summary>
+        /// Gets all component containers that fall under the given predicate
+        /// </summary>
+        /// <param name="predicate">The predicate with which to filter containers</param>
+        /// <returns>An enumeration of all containers that fall under the predicate</returns>
+        IEnumerable<IComponentContainer> AllThat(Predicate<IComponentContainer> predicate); 
 
         /// <summary>
         /// Add an entity with an empty component container
