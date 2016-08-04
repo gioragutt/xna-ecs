@@ -6,7 +6,12 @@ namespace ECS.Managers
 {
     public class EntityManager
     {
-        public EntityPool EntityPool { get; }
+        public IEntityPool EntityPool { get; }
+
+        internal EntityManager(IEntityPool pool = null)
+        {
+            EntityPool = pool ?? new EntityPool();
+        }
 
         public EntityManager()
         {
@@ -20,6 +25,4 @@ namespace ECS.Managers
             return entity;
         }
     }
-
-    // TODO: Create a system manager class, a test system, and test whether update was called with CounterComponent
 }
