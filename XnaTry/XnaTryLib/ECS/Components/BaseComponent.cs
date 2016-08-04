@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ECS.Interfaces;
+﻿using ECS.Interfaces;
 
-namespace XnaTryLib.ECS
+namespace XnaTryLib.ECS.Components
 {
     public abstract class BaseComponent : IComponent
     {

@@ -1,7 +1,7 @@
-﻿using ECS.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ECS.Interfaces;
 
-namespace XnaTryLib.ECS
+namespace XnaTryLib.ECS.Systems
 {
     public abstract class BaseSystem : ISystem
     {

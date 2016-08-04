@@ -1,6 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 
-namespace XnaTryLib.ECS
+namespace XnaTryLib.ECS.Components
 {
     public class Transform : BaseComponent
     {
@@ -47,5 +48,27 @@ namespace XnaTryLib.ECS
             : this(Vector2.Zero)
         {
         }
+
+        public override string ToString()
+        {
+            return string.Format("Position: ( {0}, {1} ) Rotation: ( {2} ) Scale: ( {3} )",
+                Position.X, Position.Y, MathHelper.ToDegrees(Rotation), Scale);
+        }
+
+        public void RotateTo(Vector2 point)
+        {
+            var angle = AngleBetween(Position, point);
+            Rotation = MathHelper.ToRadians((float) angle);
+        }
+
+        public static double AngleBetween(Vector2 first, Vector2 second)
+        {
+            double sin = first.X * second.Y - second.X * first.Y;
+            double cos = first.X * second.X + first.Y * second.Y;
+
+            return Math.Atan2(sin, cos) * (180 / Math.PI);
+        }
+
+        public void MoveBy(Vector2 vector) { Position = Vector2.Add(Position, vector); }
     }
 }

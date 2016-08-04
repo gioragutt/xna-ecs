@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using XnaTryLib.ECS.Components;
 
-namespace XnaTryLib.ECS
+namespace XnaTryLib.ECS.Systems
 {
     public class RendererSystem : BaseSystem
     {

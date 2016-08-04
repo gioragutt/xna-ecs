@@ -1,7 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
 
-namespace XnaTryLib.ECS
+namespace XnaTryLib.ECS.Components
 {
     /// <summary>
     /// The base sprite component of entities in the game
