@@ -21,12 +21,12 @@ namespace XnaTryLib.ECS
             drawingSystems = new SystemManager(entityManager.EntityPool);
         }
 
-        public void RegisterSystem(ISystem system)
+        public void RegisterSystem<TSystem>(TSystem system) where TSystem : class, ISystem
         {
             nonDrawingSystems.AddSystem(system);
         }
 
-        public void RegisterDrawingSystem(ISystem system)
+        public void RegisterDrawingSystem<TSystem>(TSystem system) where TSystem : class, ISystem
         {
             drawingSystems.AddSystem(system);
         }
