@@ -5,48 +5,69 @@ using ECS.Interfaces;
 
 namespace ECS.BaseTypes
 {
-    public class EntityPool : Dictionary<IEntity, IComponentContainer>, IEntityPool
+    public class EntityPool : IEntityPool
     {
-        public EntityPool() { }
+        protected readonly Dictionary<IEntity, IComponentContainer> entities;
 
-        static void AssertEntityNotNull(IEntity entity)
+        public EntityPool()
+        {
+            entities = new Dictionary<IEntity, IComponentContainer>();
+        }
+
+        public EntityPool(EntityPool other)
+        {
+            entities = other.entities;
+        }
+
+        static void AssertParameterNotNull(object entity, string name)
         {
             if (entity == null)
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(name);
         }
 
         public ICollection<TComponent> GetAllOf<TComponent>() where TComponent : class, IComponent
         {
-            return Values.Where(components => components.Has<TComponent>()).
+            return entities.Values.Where(components => components.Has<TComponent>()).
                 SelectMany(components => components.GetAllOf<TComponent>()).ToList();
         }
 
         public IEnumerable<IComponentContainer> AllThat(Predicate<IComponentContainer> predicate)
         {
-            return predicate == null ? default(IEnumerable<IComponentContainer>) : Values.Where(c => predicate(c));
+            return predicate == null ? default(IEnumerable<IComponentContainer>) :
+                entities.Values.Where(c => predicate(c));
         }
 
         public bool Exists(IEntity entity)
         {
-            AssertEntityNotNull(entity);
-            return ContainsKey(entity);
+            AssertParameterNotNull(entity, "entity");
+            return entities.ContainsKey(entity);
         }
 
         public IComponentContainer GetComponents(IEntity entity)
         {
-            AssertEntityNotNull(entity);
+            AssertParameterNotNull(entity, "entity");
             IComponentContainer componentContainer;
-            return TryGetValue(entity, out componentContainer) ? componentContainer : null;
+            return entities.TryGetValue(entity, out componentContainer) ? componentContainer : null;
+        }
+
+        public void Add(IEntity entity, IComponentContainer container)
+        {
+            AssertParameterNotNull(entity, "entity");
+            AssertParameterNotNull(container, "container");
+
+            entities.Add(entity, container);
         }
 
         public void Add(IEntity entity)
         {
-            AssertEntityNotNull(entity);
+            AssertParameterNotNull(entity, "entity");
 
             if (Exists(entity))
                 return;
 
             Add(entity, new ComponentContainer());
         }
+
+        public int Count => entities.Count;
     }
 }
