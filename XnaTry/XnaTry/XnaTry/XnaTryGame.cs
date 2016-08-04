@@ -12,15 +12,11 @@ namespace XnaTry
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        XnaTryLib.BaseSprite sprite;
 
         public XnaTryGame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            //sprite = new XnaTryLib.BaseSprite(this, @"Front_2", Vector2.Zero);
-            //this.AddService(spriteBatch);
-            //Components.Add(sprite);
         }
 
         /// <summary>
