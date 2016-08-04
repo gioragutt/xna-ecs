@@ -5,6 +5,7 @@ using System.Text;
 using ECS.Interfaces;
 using ECS.Managers;
 using Microsoft.Xna.Framework;
+using XnaTryLib.ECS.Components;
 
 namespace XnaTryLib.ECS
 {
@@ -35,6 +36,17 @@ namespace XnaTryLib.ECS
         {
             var newGameObject = new GameObject();
             entityManager.EntityPool.Add(newGameObject.Entity, newGameObject.Components);
+            return newGameObject;
+        }
+
+        public GameObject CreateDebugPrint(Func<string> valueGetter, Color? color = null)
+        {
+            var newGameObject = CreateGameObject();
+            newGameObject.Components.Add(new DebugPrintText
+            {
+                ValueGetter = valueGetter,
+                Color = color ?? Color.Blue
+            });
             return newGameObject;
         }
 

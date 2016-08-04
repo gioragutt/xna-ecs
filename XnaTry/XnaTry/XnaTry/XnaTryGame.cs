@@ -1,8 +1,9 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using XnaTryLib;
 using XnaTryLib.ECS;
+using XnaTryLib.ECS.Components;
+using XnaTryLib.ECS.Systems;
 
 namespace XnaTry
 {
@@ -17,14 +18,18 @@ namespace XnaTry
 
         public XnaTryGame()
         {
+            IsMouseVisible = true;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             GameManager = new GameManager();
             var entity = GameManager.CreateGameObject();
             entity.Components.Add(new Sprite("Front_2"));
+
             entity.Transform.Position = new Vector2(350, 0);
             entity.Transform.Scale = 0.5f;
             entity.Transform.Rotation = MathHelper.ToRadians(90);
+            GameManager.CreateDebugPrint(() => (entity.Transform.ToString()), Color.Red);
+            GameManager.CreateDebugPrint(() => (string.Format("Mouse Position: ( {0}, {1} )", Mouse.GetState().X, Mouse.GetState().Y)));
         }
 
         /// <summary>
@@ -39,6 +44,12 @@ namespace XnaTry
             {
                 Content = Content,
                 SpriteBatch = spriteBatch
+            });
+
+            GameManager.RegisterDrawingSystem(new DebugPrintSystem
+            {
+                SpriteBatch = spriteBatch,
+                Font = Content.Load<SpriteFont>("DefaultFont")
             });
 
             base.LoadContent();            

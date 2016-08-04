@@ -1,6 +1,7 @@
 ﻿using System;
 using ECS.BaseTypes;
 using ECS.Interfaces;
+using XnaTryLib.ECS.Components;
 
 namespace XnaTryLib.ECS
 {
