@@ -35,7 +35,7 @@ namespace XnaTry
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            GameManager.RegisterdDrawingSystem(new RendererSystem
+            GameManager.RegisterDrawingSystem(new RendererSystem
             {
                 Content = Content,
                 SpriteBatch = spriteBatch

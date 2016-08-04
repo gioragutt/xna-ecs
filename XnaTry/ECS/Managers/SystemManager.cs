@@ -15,7 +15,7 @@ namespace ECS.Managers
             Entities = entities;
         }
 
-        public void AddSystem<TComponent>(ISystem<TComponent> system) where TComponent : class, IComponent
+        public void AddSystem(ISystem system)
         {
             Systems.Add(system);
         }

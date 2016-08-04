@@ -4,7 +4,7 @@ using ECS.Interfaces;
 
 namespace ECSTest
 {
-    public class CounterSystem : ISystem<CounterComponent>
+    public class CounterSystem : ISystem
     {
         public bool Enabled { get; set; } = true;
 

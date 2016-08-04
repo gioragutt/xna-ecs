@@ -12,10 +12,7 @@ namespace ECS.Interfaces
         /// <param name="pool">The pool of available entities</param>
         /// <param name="delta">Milliseconds since last update</param>
         void Update(IEntityPool pool, long delta);
-    }
 
-    public interface ISystem<TComponent> : ISystem where TComponent : class, IComponent
-    {
         /// <summary>
         /// Update a set of entities based on shared logic
         /// </summary>

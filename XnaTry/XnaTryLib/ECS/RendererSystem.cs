@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace XnaTryLib.ECS
 {
-    public class RendererSystem : BaseSystem<Sprite>
+    public class RendererSystem : BaseSystem
     {
         public SpriteBatch SpriteBatch { get; set; }
         public ContentManager Content { get; set; }

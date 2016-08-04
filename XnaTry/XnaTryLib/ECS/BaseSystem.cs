@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XnaTryLib.ECS
 {
-    public abstract class BaseSystem<T> : ISystem<T> where T : class, IComponent
+    public abstract class BaseSystem : ISystem
     {
         public bool Enabled { get; set; }
 
