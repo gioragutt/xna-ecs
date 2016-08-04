@@ -21,7 +21,7 @@ namespace ECS.Interfaces
         /// </summary>
         /// <param name="entities">The components that this system is in charge of</param>
         /// <param name="delta">Milliseconds since last update</param>
-        void Update(ICollection<TComponent> entities, long delta);
+        void Update(ICollection<IComponentContainer> entities, long delta);
 
         /// <summary>
         /// Allows to get only the relevant components
