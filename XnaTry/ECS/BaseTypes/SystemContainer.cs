@@ -5,6 +5,6 @@ namespace ECS.BaseTypes
 {
     public class SystemContainer : TypedContainer<ISystem>, ISystemContainer
     {
-        public IEnumerable<ISystem> GetAll() { return Values; }
+        public IEnumerable<ISystem> All => Values;
     }
 }

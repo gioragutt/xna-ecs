@@ -23,6 +23,7 @@ namespace ECS.Managers
         void Update(long delta)
         {
             foreach (var system in Systems.GetAll().Where(s => s.Enabled))
+            foreach (var system in Systems.All.Where(s => s.Enabled))
             {
                 system.Update(Entities, delta);
             }
