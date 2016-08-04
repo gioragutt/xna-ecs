@@ -1,11 +1,17 @@
 ﻿using System;
+using System.Collections;
 using ECS.Interfaces;
 
 namespace ECS.BaseTypes
 {
-    public class Entity : IEntity
+    public class Entity : IEntity, IEquatable<IEntity>
     {
         #region Equality Members
+
+        public bool Equals(IEntity other)
+        {
+            return Id.Equals(other.Id);
+        }
 
         protected bool Equals(Entity other)
         {
@@ -28,7 +34,7 @@ namespace ECS.BaseTypes
 
         #endregion
 
-        public Guid Id { get; set; }
+        public Guid Id { get; }
 
         public Entity(Guid id)
         {
