@@ -12,11 +12,5 @@
         /// Components always have a state of being enabled or disabled
         /// </summary>
         bool Enabled { get; set; }
-
-        /// <summary>
-        /// Components need to be updated
-        /// </summary>
-        /// <param name="delta">Milliseconds since the last update</param>
-        void Update(long delta);
     }
 }
