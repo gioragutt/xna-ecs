@@ -44,21 +44,29 @@ namespace XnaTryLib.ECS.Components
         /// <summary>
         /// Initializes a default transform
         /// </summary>
-        public Transform()
-            : this(Vector2.Zero)
-        {
-        }
+        public Transform() : this(Vector2.Zero) { }
 
         public override string ToString()
         {
-            return string.Format("Position: ( {0}, {1} ) Rotation: ( {2} ) Scale: ( {3} )",
-                Position.X, Position.Y, MathHelper.ToDegrees(Rotation), Scale);
+            const string format = "P ( {0}, {1} ) R ( {2} ) S ( {3} )";
+            return string.Format(format,
+                Position.X.ToString("0000"), 
+                Position.Y.ToString("0000"), 
+                MathHelper.ToDegrees(Rotation).ToString("000"),
+                Scale);
         }
+
+        public void MoveBy(Vector2 vector) { Position = Vector2.Add(Position, vector); }
+
+        #region Rotation Methods
+
+        /// Currently not used, as rotation part was initially in the MovementSystem
+        /// And it should be in a component of it's own
 
         public void RotateTo(Vector2 point)
         {
             var angle = AngleBetween(Position, point);
-            Rotation = MathHelper.ToRadians((float) angle);
+            Rotation = MathHelper.ToRadians((float)angle);
         }
 
         public static double AngleBetween(Vector2 first, Vector2 second)
@@ -69,6 +77,6 @@ namespace XnaTryLib.ECS.Components
             return Math.Atan2(sin, cos) * (180 / Math.PI);
         }
 
-        public void MoveBy(Vector2 vector) { Position = Vector2.Add(Position, vector); }
+        #endregion
     }
 }
