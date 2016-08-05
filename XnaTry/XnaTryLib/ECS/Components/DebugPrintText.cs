@@ -5,7 +5,8 @@ namespace XnaTryLib.ECS.Components
 {
     public class DebugPrintText : BaseComponent
     {
-        public Func<string> ValueGetter { get; set; }
+        public object PrintValue { get; set; }
+        public Func<string> PrintFunc { get; set; } 
         public Color Color { get; set; } = Color.Blue;
     }
 }

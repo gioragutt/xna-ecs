@@ -28,9 +28,9 @@ namespace XnaTryLib.ECS.Systems
         private Vector2 PrintDebugText(IComponentContainer entity, Vector2 textPos)
         {
             var debugPrintComp = entity.Get<DebugPrintText>();
-            if (debugPrintComp.ValueGetter == null)
+            if (debugPrintComp.PrintValue == null && debugPrintComp.PrintFunc == null)
                 return textPos;
-            var text = debugPrintComp.ValueGetter();
+            var text = debugPrintComp.PrintValue?.ToString() ?? debugPrintComp.PrintFunc();
             var textSize = Font.MeasureString(text);
             SpriteBatch.DrawString(Font, text, textPos, debugPrintComp.Color);
             textPos.Y += textSize.Y + Constants.DebugPrintSpacing;
