@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace XnaTryLib
 {
-    internal class Util
+    internal static class Util
     {
         public static IEnumerable<T> GetEnumValues<T>()
         {

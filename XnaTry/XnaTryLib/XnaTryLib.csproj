@@ -60,13 +60,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="ECS\BaseComponent.cs" />
-    <Compile Include="ECS\BaseSystem.cs" />
+    <Compile Include="ECS\Components\BaseComponent.cs" />
+    <Compile Include="ECS\Components\DebugPrintText.cs" />
     <Compile Include="ECS\GameManager.cs" />
     <Compile Include="ECS\GameObject.cs" />
-    <Compile Include="ECS\RendererSystem.cs" />
-    <Compile Include="ECS\Sprite.cs" />
-    <Compile Include="ECS\Transform.cs" />
+    <Compile Include="ECS\Systems\DebugPrintSystem.cs" />
+    <Compile Include="ECS\Systems\RendererSystem.cs" />
+    <Compile Include="ECS\Components\Sprite.cs" />
+    <Compile Include="ECS\Components\Transform.cs" />
     <Compile Include="Extentions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
