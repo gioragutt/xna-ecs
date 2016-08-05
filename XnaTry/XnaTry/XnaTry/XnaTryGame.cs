@@ -26,10 +26,21 @@ namespace XnaTry
             entity.Components.Add(new Sprite("Front_2"));
 
             entity.Transform.Position = new Vector2(350, 0);
-            entity.Transform.Scale = 0.5f;
-            entity.Transform.Rotation = MathHelper.ToRadians(90);
-            GameManager.CreateDebugPrint(() => (entity.Transform.ToString()), Color.Red);
-            GameManager.CreateDebugPrint(() => (string.Format("Mouse Position: ( {0}, {1} )", Mouse.GetState().X, Mouse.GetState().Y)));
+            entity.Transform.Scale = 0.2f;
+            entity.Transform.Rotation = MathHelper.ToRadians(60);
+
+            entity.Components.Add(new Velocity
+            {
+                VelocityVector = new Vector2(4)
+            });
+
+            var input = new KeyboardDirectionalInput();
+            entity.Components.Add(input);
+
+            GameManager.AddDebugPrint(entity, input, Color.Green);
+            GameManager.CreateDebugPrint(entity.Transform, Color.Red);
+            GameManager.CreateDebugPrint(() => Mouse.GetState().ToString());
+            GameManager.RegisterSystem(new MovementSystem());
         }
 
         /// <summary>

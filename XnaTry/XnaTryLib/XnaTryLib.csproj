@@ -69,6 +69,7 @@
     <Compile Include="ECS\GameManager.cs" />
     <Compile Include="ECS\GameObject.cs" />
     <Compile Include="ECS\Systems\DebugPrintSystem.cs" />
+    <Compile Include="ECS\Systems\MovementSystem.cs" />
     <Compile Include="ECS\Systems\RendererSystem.cs" />
     <Compile Include="ECS\Components\Sprite.cs" />
     <Compile Include="ECS\Components\Transform.cs" />
