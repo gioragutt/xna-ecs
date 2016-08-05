@@ -62,6 +62,10 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ECS\Components\BaseComponent.cs" />
     <Compile Include="ECS\Components\DebugPrintText.cs" />
+    <Compile Include="ECS\Components\DirectionalInput.cs" />
+    <Compile Include="ECS\Components\KeyboardDirectionalInput.cs" />
+    <Compile Include="ECS\Components\Velocity.cs" />
+    <Compile Include="ECS\Systems\BaseSystem.cs" />
     <Compile Include="ECS\GameManager.cs" />
     <Compile Include="ECS\GameObject.cs" />
     <Compile Include="ECS\Systems\DebugPrintSystem.cs" />

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework;
@@ -52,6 +51,7 @@ namespace XnaTryLib.ECS.Systems
             Util.AssertArgumentNotNull(sprite, "sprite");
             if (sprite.Texture != null)
                 return;
+
             Util.AssertStringArgumentNotNull(sprite.AssetName, "sprite.AssetName");
             sprite.Texture = Content.Load<Texture2D>(sprite.AssetName);
         }

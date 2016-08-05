@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ECS.Interfaces;
+﻿using ECS.Interfaces;
 using ECS.Managers;
 using Microsoft.Xna.Framework;
+using System;
 using XnaTryLib.ECS.Components;
 
 namespace XnaTryLib.ECS
