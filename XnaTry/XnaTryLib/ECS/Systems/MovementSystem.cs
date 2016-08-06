@@ -22,6 +22,25 @@ namespace XnaTryLib.ECS.Systems
             var transform = entity.Get<Transform>();
             var velocity = entity.Get<Velocity>();
             var input = entity.Get<DirectionalInput>();
+            var rotateToMouse = entity.Get<RotateToMouse>();
+            HandleMovement(delta, input, velocity, transform);
+            HandleRotationToMouse(rotateToMouse, transform);
+        }
+
+        private static void HandleRotationToMouse(RotateToMouse rotateToMouse, Transform transform)
+        {
+            if (!Util.ComponentsEnabled(rotateToMouse))
+                return;
+
+            var mousePosition = rotateToMouse.MousePosition;
+            transform.RotateTo(mousePosition);
+        }
+
+        private static void HandleMovement(long delta, DirectionalInput input, Velocity velocity, Transform transform)
+        {
+            if (!Util.ComponentsEnabled(input, velocity))
+                return;
+
             input.Update(delta);
             var moveVector = GetMoveVector(velocity, input);
             transform.MoveBy(moveVector);
@@ -47,8 +66,8 @@ namespace XnaTryLib.ECS.Systems
         public override ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
         {
             return pool.AllThat(c => c.Has<Transform>() &&
-                                     c.Has<Velocity>() &&
-                                     c.Has<DirectionalInput>()).ToList();
+                                     ((c.Has<Velocity>() && c.Has<DirectionalInput>()) ||
+                                      c.Has<RotateToMouse>())).ToList();
         }
     }
 }
