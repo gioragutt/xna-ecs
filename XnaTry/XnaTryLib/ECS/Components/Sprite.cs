@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace XnaTryLib.ECS.Components
 {
@@ -19,6 +20,11 @@ namespace XnaTryLib.ECS.Components
         /// The texture to be Rendered
         /// </summary>
         public Texture2D Texture { get; set; }
+
+        /// <summary>
+        /// The origin of rotation of the texture
+        /// </summary>
+        public Vector2 Origin => new Vector2(Texture.Width / 2.0f, Texture.Height / 2.0f);
 
         private void InitializeProperties(Texture2D texture, string assetName)
         {

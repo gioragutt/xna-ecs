@@ -35,7 +35,7 @@ namespace XnaTryLib.ECS.Systems
                 sourceRectangle: null, // draw whole texture; can be used for spritesheets
                 color: Color.White,
                 rotation: transform.Rotation, 
-                origin: Vector2.Zero, 
+                origin: sprite.Origin, 
                 scale: transform.Scale, 
                 effects: SpriteEffects.None, 
                 layerDepth: 0);
