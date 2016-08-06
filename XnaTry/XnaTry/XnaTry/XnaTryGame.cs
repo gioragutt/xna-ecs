@@ -16,30 +16,48 @@ namespace XnaTry
         SpriteBatch spriteBatch;
         GameManager GameManager { get; }
 
+        private Transform entityTransform;
+
         public XnaTryGame()
         {
             IsMouseVisible = true;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             GameManager = new GameManager();
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+
             var entity = GameManager.CreateGameObject();
-            entity.Components.Add(new Sprite("Front_2"));
+            entity.Components.Add(new Sprite("Player/Down_002"));
 
             entity.Transform.Position = new Vector2(350, 0);
             entity.Transform.Scale = 0.2f;
-            entity.Transform.Rotation = MathHelper.ToRadians(60);
+            //entity.Transform.Rotation = MathHelper.ToRadians(60);
 
-            entity.Components.Add(new Velocity
-            {
-                VelocityVector = new Vector2(4)
-            });
+            entityTransform = entity.Transform;
+            //entity.Components.Add(new RotateToMouse());
+            entity.Components.Add(new Velocity(new Vector2(4)));
 
             var input = new KeyboardDirectionalInput();
             entity.Components.Add(input);
 
-            GameManager.AddDebugPrint(entity, input, Color.Green);
+            var another = GameManager.CreateGameObject();
+            another.Components.Add(new Sprite("Player/Down_003"));
+
+            another.Transform.Position = new Vector2(700, 300);
+            another.Transform.Scale = 0.2f;
+            //another.Components.Add(new RotateToMouse());
+            another.Components.Add(new Velocity(new Vector2(5)));
+            another.Components.Add(new KeyboardDirectionalInput(new KeyboardSettings(Keys.A, Keys.D, Keys.W, Keys.S)));
+
+
+            GameManager.CreateDebugPrint(input, Color.Green);
             GameManager.CreateDebugPrint(entity.Transform, Color.Red);
             GameManager.CreateDebugPrint(() => Mouse.GetState().ToString());
+
             GameManager.RegisterSystem(new MovementSystem());
         }
 
@@ -63,7 +81,7 @@ namespace XnaTry
                 Font = Content.Load<SpriteFont>("DefaultFont")
             });
 
-            base.LoadContent();            
+            base.LoadContent();
         }
 
         /// <summary>
