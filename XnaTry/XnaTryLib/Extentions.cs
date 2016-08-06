@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
 namespace XnaTryLib
@@ -13,6 +14,11 @@ namespace XnaTryLib
         public static Vector2 ToVector(this Point point)
         {
             return new Vector2(point.X, point.Y);
+        }
+
+        public static float ToRadians(this Vector2 vector)
+        {
+            return (float)Math.Atan2(vector.X, -vector.Y);
         }
     }
 }
