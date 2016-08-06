@@ -85,25 +85,14 @@ namespace XnaTryLib.ECS.Components
         /// <param name="vector">The vector to move by</param>
         public void MoveBy(Vector2 vector) { Position = Vector2.Add(Position, vector); }
 
-        #region Rotation Methods
-
-        /// Currently not used, as rotation part was initially in the MovementSystem
-        /// And it should be in a component of it's own
-
+        /// <summary>
+        /// Rotates the transform towards the given point
+        /// </summary>
+        /// <param name="point">The point to rotate to</param>
         public void RotateTo(Vector2 point)
         {
-            var angle = AngleBetween(Position, point);
-            Rotation = MathHelper.ToRadians((float)angle);
+            var diff = Vector2.Subtract(point, Position);
+            Rotation = diff.ToRadians();
         }
-
-        public static double AngleBetween(Vector2 first, Vector2 second)
-        {
-            double sin = first.X * second.Y - second.X * first.Y;
-            double cos = first.X * second.X + first.Y * second.Y;
-
-            return Math.Atan2(sin, cos) * (180 / Math.PI);
-        }
-
-        #endregion
     }
 }
