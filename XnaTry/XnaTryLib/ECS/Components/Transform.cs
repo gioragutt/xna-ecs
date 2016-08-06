@@ -5,18 +5,41 @@ namespace XnaTryLib.ECS.Components
 {
     public class Transform : BaseComponent
     {
+        private float scale;
+        private float rotation;
+
         /// <summary>
         /// The scale of the entity
         /// </summary>
         /// <remarks>
         /// Scale is multiplicative. 1F is normal size, 2F is twice as big, 0.5F is twice as small
         /// </remarks>
-        public float Scale { get; set; }
+        public float Scale
+        {
+            get
+            {
+                return scale;
+            }
+            set
+            {
+                scale = value <= 0 ? 0 : value;
+            }
+        }
 
         /// <summary>
         /// Angle of rotation in radians
         /// </summary>
-        public float Rotation { get; set; }
+        public float Rotation
+        {
+            get
+            {
+                return rotation;
+            }
+            set
+            {
+                rotation = (value + Constants.MaxRotation) % Constants.MaxRotation;
+            }
+        }
 
         /// <summary>
         /// The position of the entity
@@ -56,6 +79,10 @@ namespace XnaTryLib.ECS.Components
                 Scale);
         }
 
+        /// <summary>
+        /// Move the transform position by the given vector
+        /// </summary>
+        /// <param name="vector">The vector to move by</param>
         public void MoveBy(Vector2 vector) { Position = Vector2.Add(Position, vector); }
 
         #region Rotation Methods

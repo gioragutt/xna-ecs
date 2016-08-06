@@ -1,4 +1,6 @@
-﻿namespace XnaTryLib
+﻿using Microsoft.Xna.Framework;
+
+namespace XnaTryLib
 {
     public static class Constants
     {
@@ -11,5 +13,7 @@
 
         public const float FullPositiveInput = 1;
         public const float FullNegativeInput = -1;
+
+        public const float MaxRotation = MathHelper.TwoPi;
     }
 }
