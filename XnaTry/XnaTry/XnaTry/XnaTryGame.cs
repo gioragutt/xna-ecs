@@ -14,20 +14,22 @@ namespace XnaTry
     /// </summary>
     public class XnaTryGame : Game
     {
-        GraphicsDeviceManager graphics;
+        public GraphicsDeviceManager Graphics { get; }
         SpriteBatch spriteBatch;
-        GameManager GameManager { get; }
+        private GameManager GameManager { get; }
 
         public XnaTryGame()
         {
             IsMouseVisible = true;
-            graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             GameManager = new GameManager();
         }
 
         void Initialize_ECS_Example()
         {
+            bool CreateAnnoyingComponents = false;
+
             // Create an entity
             var entity = GameManager.CreateGameObject();
 
@@ -44,26 +46,30 @@ namespace XnaTry
 
             // Change Transform
             entity.Transform.Scale = 0.3f;
-            entity.Transform.Rotation = MathHelper.ToRadians(30);
 
-
+            if (CreateAnnoyingComponents)
+                entity.Transform.Rotation = MathHelper.ToRadians(30);
 
             // Add Animation
-            var stateAnimation = new StateAnimation<MovementDirection>(entity.Components.Get<Sprite>(), 0, MovementDirection.Down,
+            var stateAnimation = new StateAnimation<MovementDirection>(sprite, 0, MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
                 {
-                    { MovementDirection.Down, new TextureCollectionAnimation(sprite, Util.FormatCollection("Player/Down_{0:D3}", 1, 2, 3, 4), 50) },
-                    { MovementDirection.Up, new TextureCollectionAnimation(sprite, Util.FormatCollection("Player/Up_{0:D3}", 1, 2, 3, 4), 50) },
-                    { MovementDirection.Left, new TextureCollectionAnimation(sprite, Util.FormatCollection("Player/Left_{0:D3}", 1, 2, 3, 4), 50) },
-                    { MovementDirection.Right, new TextureCollectionAnimation(sprite, Util.FormatCollection("Player/Right_{0:D3}", 1, 2, 3, 4), 50) }
+                    { MovementDirection.Down, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Down_{0:D3}", 1, 4), 50) },
+                    { MovementDirection.Up, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Up_{0:D3}", 1, 4), 50) },
+                    { MovementDirection.Left, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Left_{0:D3}", 1, 4), 50) },
+                    { MovementDirection.Right, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Right_{0:D3}", 1, 4), 50) }
                 });
+
             entity.Components.Add(stateAnimation);
 
             // Link Input to Animation
             entity.Components.Add(new MovementToAnimationLinker(entity.Components.Get<DirectionalInput>(), stateAnimation));
 
-            // If you really like it, you can have some fun rotating your character towards the mouse
-            entity.Components.Add(new RotateToMouse());
+            if (CreateAnnoyingComponents)
+            {
+                // If you really like it, you can have some fun rotating your character towards the mouse
+                entity.Components.Add(new RotateToMouse());
+            }
         }
 
         protected override void Initialize()

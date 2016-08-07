@@ -40,5 +40,16 @@ namespace XnaTryLib
         {
             return collection.Select(item => string.Format(format, item)).ToList();
         }
+
+        public static IList<string> FormatRange(string format, int min, int max)
+        {
+            var diff = max - min;
+            var items = new List<int>();
+            for (var i = min; i != max + Math.Sign(diff); i += Math.Sign(diff))
+            {
+                items.Add(i);
+            }
+            return items.Select(item => string.Format(format, item)).ToList();
+        }
     }
 }

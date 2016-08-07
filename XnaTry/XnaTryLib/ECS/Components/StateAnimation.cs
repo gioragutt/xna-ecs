@@ -1,46 +1,77 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Content;
 
 namespace XnaTryLib.ECS.Components
 {
-    public class StateBasedAnimation<T> : Animation
+    public class StateAnimation<T> : Animation
     {
-        private Dictionary<T, Animation> States { get; }
+        private T currentState;
 
+        /// <summary>
+        /// The animation states
+        /// </summary>
+        private Dictionary<T, Animation> Animations { get; }
+
+        /// <summary>
+        /// The default state to return to when disable
+        /// </summary>
         public T DefaultState { get; set; }
 
+        /// <summary>
+        /// The current state of the animation
+        /// </summary>
+        /// <remarks>
+        /// Setting it updates the animation state
+        /// </remarks>
         public T CurrentState
         {
+            get
+            {
+                return currentState;
+            }
             set
             {
-                if (!States.ContainsKey(value))
-                    throw new ArgumentOutOfRangeException("value", value, "Value of CurrentState must added to the animation states");
+                if (!Animations.ContainsKey(value))
+                    throw new ArgumentOutOfRangeException("value", value, "Value of CurrentState must be in the animation states");
 
-                CurrentAnimation = States[value];
+                if (currentState.Equals(value) && ActiveAnimation != null)
+                    return;
+
+                currentState = value;
+                ActiveAnimation = Animations[currentState];
             }
         }
 
-        private Animation CurrentAnimation { get; set; }
+        /// <summary>
+        /// The animation currently active
+        /// </summary>
+        private Animation ActiveAnimation { get; set; }
 
-        public StateBasedAnimation(Sprite sprite, long msPerFrame, T defaultState, Dictionary<T, Animation> states) 
+        public StateAnimation(Sprite sprite, long msPerFrame, T defaultState, Dictionary<T, Animation> animations) 
             : base(sprite, msPerFrame)
         {
-            States = states;
+            Animations = animations;
             DefaultState = defaultState;
+
+            if (animations.ContainsKey(DefaultState))
+                CurrentState = DefaultState;
+            else if (animations.Count > 0)
+                CurrentState = animations.Keys.First();
         }
 
-        public StateBasedAnimation(Sprite sprite, long msPerFrame, T initialState)
+        public StateAnimation(Sprite sprite, long msPerFrame, T initialState)
             : this(sprite, msPerFrame, initialState, new Dictionary<T, Animation>())
         {
         }
 
         public void AddState(T id, Animation animation)
         {
-            if (States.ContainsKey(id))
+            if (Animations.ContainsKey(id))
                 return;
 
-            States.Add(id, animation);
+            Animations.Add(id, animation);
 
             if (id.Equals(DefaultState))
                 CurrentState = id;
@@ -48,13 +79,13 @@ namespace XnaTryLib.ECS.Components
 
         public override void LoadContent(ContentManager content)
         {
-            CurrentAnimation.LoadContent(content);
+            ActiveAnimation.LoadContent(content);
         }
 
         public override void Disable()
         {
             CurrentState = DefaultState;
-            CurrentAnimation.Disable();
+            ActiveAnimation.Disable();
         }
         
         public override void Update(long delta)
@@ -65,8 +96,8 @@ namespace XnaTryLib.ECS.Components
                 return;
             }
 
-            CurrentAnimation.Enabled = true;
-            CurrentAnimation.Update(delta);
+            ActiveAnimation.Enabled = true;
+            ActiveAnimation.Update(delta);
         }
     }
 }
