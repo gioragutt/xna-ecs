@@ -35,7 +35,17 @@ namespace XnaTry
 
             // Now add input
             entity.Components.Add(new Velocity(new Vector2(5)));
+
+            #region Different Keyboard Layout Options, First in order gets chosen
+
+            // WASD
+            entity.Components.Add(new KeyboardDirectionalInput(new KeyboardLayoutOptions(Keys.A, Keys.D, Keys.W, Keys.S)));
+            // Arrow Keys
             entity.Components.Add(new KeyboardDirectionalInput());
+            // Numpad Arrows
+            entity.Components.Add(new KeyboardDirectionalInput(new KeyboardLayoutOptions(Keys.NumPad4, Keys.NumPad6, Keys.NumPad8, Keys.NumPad2)));
+
+            #endregion
 
             // Now show that there's an entity
             GameManager.CreateDebugPrint(entity.Transform);
@@ -51,13 +61,14 @@ namespace XnaTry
                 entity.Transform.Rotation = MathHelper.ToRadians(30);
 
             // Add Animation
+            const long msPerFrame = 100; 
             var stateAnimation = new StateAnimation<MovementDirection>(sprite, 0, MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
                 {
-                    { MovementDirection.Down, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Down_{0:D3}", 1, 4), 50) },
-                    { MovementDirection.Up, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Up_{0:D3}", 1, 4), 50) },
-                    { MovementDirection.Left, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Left_{0:D3}", 1, 4), 50) },
-                    { MovementDirection.Right, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Right_{0:D3}", 1, 4), 50) }
+                    { MovementDirection.Down, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Down_{0:D3}", 1, 4), msPerFrame) },
+                    { MovementDirection.Up, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Up_{0:D3}", 1, 4), msPerFrame) },
+                    { MovementDirection.Left, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Left_{0:D3}", 1, 4), msPerFrame) },
+                    { MovementDirection.Right, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Right_{0:D3}", 1, 4), msPerFrame) }
                 });
 
             entity.Components.Add(stateAnimation);
