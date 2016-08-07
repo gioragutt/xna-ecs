@@ -72,6 +72,8 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Label.cs" />
+    <Compile Include="LabelSystem.cs" />
     <Compile Include="MovementDirection.cs" />
     <Compile Include="MovementToAnimationLinker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

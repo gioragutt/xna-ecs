@@ -26,7 +26,11 @@ namespace XnaTry
             GameManager = new GameManager();
         }
 
-        void Initialize_ECS_Example()
+        public readonly KeyboardLayoutOptions wasdKeys = new KeyboardLayoutOptions(Keys.A, Keys.D, Keys.W, Keys.S);
+        public readonly KeyboardLayoutOptions arrowKeys = KeyboardDirectionalInput.DefaultLayoutOptions;
+        public readonly KeyboardLayoutOptions numpadArrowKeys = new KeyboardLayoutOptions(Keys.NumPad4, Keys.NumPad6, Keys.NumPad8, Keys.NumPad2);
+
+        void Initialize_ECS_Example(KeyboardLayoutOptions keys, Color debugColor, Vector2 initialPosition)
         {
             bool CreateAnnoyingComponents = false;
 
@@ -35,20 +39,10 @@ namespace XnaTry
 
             // Now add input
             entity.Components.Add(new Velocity(new Vector2(5)));
-
-            #region Different Keyboard Layout Options, First in order gets chosen
-
-            // WASD
-            entity.Components.Add(new KeyboardDirectionalInput(new KeyboardLayoutOptions(Keys.A, Keys.D, Keys.W, Keys.S)));
-            // Arrow Keys
-            entity.Components.Add(new KeyboardDirectionalInput());
-            // Numpad Arrows
-            entity.Components.Add(new KeyboardDirectionalInput(new KeyboardLayoutOptions(Keys.NumPad4, Keys.NumPad6, Keys.NumPad8, Keys.NumPad2)));
-
-            #endregion
+            entity.Components.Add(new KeyboardDirectionalInput(keys));
 
             // Now show that there's an entity
-            GameManager.CreateDebugPrint(entity.Transform);
+            GameManager.CreateDebugPrint(entity.Transform, debugColor);
 
             // Show a character
             var sprite = new Sprite("Player/Down_001");
@@ -56,6 +50,7 @@ namespace XnaTry
 
             // Change Transform
             entity.Transform.Scale = 0.3f;
+            entity.Transform.Position = initialPosition;
 
             if (CreateAnnoyingComponents)
                 entity.Transform.Rotation = MathHelper.ToRadians(30);
@@ -75,6 +70,7 @@ namespace XnaTry
 
             // Link Input to Animation
             entity.Components.Add(new MovementToAnimationLinker(entity.Components.Get<DirectionalInput>(), stateAnimation));
+            entity.Components.Add(new Label(debugColor.ToString(), LabelPlacement.TopCenter, debugColor));
 
             if (CreateAnnoyingComponents)
             {
@@ -87,7 +83,8 @@ namespace XnaTry
         {
             base.Initialize();
 
-            Initialize_ECS_Example();
+            Initialize_ECS_Example(wasdKeys, Color.Red, new Vector2(100, 400));
+            Initialize_ECS_Example(arrowKeys, Color.Blue, new Vector2(700, 400));
 
             GameManager.RegisterSystem(new MovementSystem());
             GameManager.RegisterSystem(new LinkerSystem());
@@ -101,6 +98,8 @@ namespace XnaTry
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            var defaultFont = Content.Load<SpriteFont>("DefaultFont");
+
             GameManager.RegisterDrawingSystem(new AnimationSystem
             {
                 Content = Content
@@ -112,10 +111,16 @@ namespace XnaTry
                 SpriteBatch = spriteBatch
             });
 
+            GameManager.RegisterDrawingSystem(new LabelSystem
+            {
+                DefaultFont = defaultFont,
+                SpriteBatch = spriteBatch
+            });
+
             GameManager.RegisterDrawingSystem(new DebugPrintSystem
             {
                 SpriteBatch = spriteBatch,
-                Font = Content.Load<SpriteFont>("DefaultFont")
+                Font = defaultFont
             });
 
             base.LoadContent();
