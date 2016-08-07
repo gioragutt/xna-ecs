@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using XnaTryLib;
 using XnaTryLib.ECS;
 using XnaTryLib.ECS.Components;
 using XnaTryLib.ECS.Systems;
@@ -16,8 +17,6 @@ namespace XnaTry
         SpriteBatch spriteBatch;
         GameManager GameManager { get; }
 
-        private Transform entityTransform;
-
         public XnaTryGame()
         {
             IsMouseVisible = true;
@@ -26,39 +25,48 @@ namespace XnaTry
             GameManager = new GameManager();
         }
 
+        void Initialize_ECS_Example()
+        {
+            // Create an entity
+            var entity = GameManager.CreateGameObject();
+
+            // Now add input
+            entity.Components.Add(new Velocity(new Vector2(5)));
+            entity.Components.Add(new KeyboardDirectionalInput());
+
+            // Now show that there's an entity
+            GameManager.CreateDebugPrint(entity.Transform);
+
+            // Show a character
+            entity.Components.Add(new Sprite("Player/Down_001"));
+
+            // Change Transform
+            entity.Transform.Scale = 0.3f;
+            entity.Transform.Rotation = MathHelper.ToRadians(30);
+
+            // Add Animation
+            var stateAnimation = new StateBasedAnimation<MovementDirection>(entity.Components.Get<Sprite>(), 0, MovementDirection.Down);
+            stateAnimation.AddState(MovementDirection.Down, new TextureCollectionAnimation(stateAnimation.Sprite, Util.FormatCollection("Player/Down_{0:D3}", 1, 2, 3, 4), 50));
+            stateAnimation.AddState(MovementDirection.Up, new TextureCollectionAnimation(stateAnimation.Sprite, Util.FormatCollection("Player/Up_{0:D3}", 1, 2, 3, 4), 50));
+            stateAnimation.AddState(MovementDirection.Left, new TextureCollectionAnimation(stateAnimation.Sprite, Util.FormatCollection("Player/Left_{0:D3}", 1, 2, 3, 4), 50));
+            stateAnimation.AddState(MovementDirection.Right, new TextureCollectionAnimation(stateAnimation.Sprite, Util.FormatCollection("Player/Right_{0:D3}", 1, 2, 3, 4), 50));
+            entity.Components.Add(stateAnimation);
+
+            // Link Input to Animation
+            entity.Components.Add(new MovementToAnimationLinker(entity.Components.Get<DirectionalInput>(), stateAnimation));
+
+            // If you really like it, you can have some fun rotating your character towards the mouse
+            entity.Components.Add(new RotateToMouse());
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
 
-            var entity = GameManager.CreateGameObject();
-            entity.Components.Add(new Sprite("Player/Down_002"));
-
-            entity.Transform.Position = new Vector2(350, 0);
-            entity.Transform.Scale = 0.2f;
-            //entity.Transform.Rotation = MathHelper.ToRadians(60);
-
-            entityTransform = entity.Transform;
-            //entity.Components.Add(new RotateToMouse());
-            entity.Components.Add(new Velocity(new Vector2(4)));
-
-            var input = new KeyboardDirectionalInput();
-            entity.Components.Add(input);
-
-            var another = GameManager.CreateGameObject();
-            another.Components.Add(new Sprite("Player/Down_003"));
-
-            another.Transform.Position = new Vector2(700, 300);
-            another.Transform.Scale = 0.2f;
-            //another.Components.Add(new RotateToMouse());
-            another.Components.Add(new Velocity(new Vector2(5)));
-            another.Components.Add(new KeyboardDirectionalInput(new KeyboardSettings(Keys.A, Keys.D, Keys.W, Keys.S)));
-
-
-            GameManager.CreateDebugPrint(input, Color.Green);
-            GameManager.CreateDebugPrint(entity.Transform, Color.Red);
-            GameManager.CreateDebugPrint(() => Mouse.GetState().ToString());
+            Initialize_ECS_Example();
 
             GameManager.RegisterSystem(new MovementSystem());
+            GameManager.RegisterSystem(new LinkerSystem());
         }
 
         /// <summary>
@@ -68,6 +76,11 @@ namespace XnaTry
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            GameManager.RegisterDrawingSystem(new AnimationSystem
+            {
+                Content = Content
+            });
 
             GameManager.RegisterDrawingSystem(new RendererSystem
             {
