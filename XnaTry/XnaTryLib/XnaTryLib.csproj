@@ -65,6 +65,7 @@
     <Compile Include="ECS\Components\DebugPrintText.cs" />
     <Compile Include="ECS\Components\DirectionalInput.cs" />
     <Compile Include="ECS\Components\KeyboardDirectionalInput.cs" />
+    <Compile Include="ECS\Components\Linker.cs" />
     <Compile Include="ECS\Components\RotateToMouse.cs" />
     <Compile Include="ECS\Components\StateBasedAnimation.cs" />
     <Compile Include="ECS\Components\TextureCollectionAnimation.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="ECS\GameManager.cs" />
     <Compile Include="ECS\GameObject.cs" />
     <Compile Include="ECS\Systems\DebugPrintSystem.cs" />
+    <Compile Include="ECS\Systems\LinkerSystem.cs" />
     <Compile Include="ECS\Systems\MovementSystem.cs" />
     <Compile Include="ECS\Systems\RendererSystem.cs" />
     <Compile Include="ECS\Components\Sprite.cs" />
