@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MovementDirection.cs" />
+    <Compile Include="MovementToAnimationLinker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="XnaTryGame.cs" />
