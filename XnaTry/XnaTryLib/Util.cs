@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace XnaTryLib
 {
-    internal static class Util
+    public static class Util
     {
         public static IEnumerable<T> GetEnumValues<T>()
         {
@@ -34,6 +34,11 @@ namespace XnaTryLib
         {
             if (string.IsNullOrEmpty(argument))
                 throw new ArgumentNullException(parameterName);
+        }
+
+        public static IList<string> FormatCollection(string format, params object[] collection)
+        {
+            return collection.Select(item => string.Format(format, item)).ToList();
         }
     }
 }
