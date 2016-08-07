@@ -22,7 +22,7 @@ namespace XnaTryLib.ECS.Components
     {
         private KeyboardLayoutOptions LayoutOptions { get; }
 
-        private static readonly KeyboardLayoutOptions DefaultLayoutOptions = new KeyboardLayoutOptions
+        public static readonly KeyboardLayoutOptions DefaultLayoutOptions = new KeyboardLayoutOptions
         {
             Down = Keys.Down,
             Up = Keys.Up,
