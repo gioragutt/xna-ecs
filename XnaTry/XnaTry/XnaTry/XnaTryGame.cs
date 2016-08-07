@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -38,18 +39,24 @@ namespace XnaTry
             GameManager.CreateDebugPrint(entity.Transform);
 
             // Show a character
-            entity.Components.Add(new Sprite("Player/Down_001"));
+            var sprite = new Sprite("Player/Down_001");
+            entity.Components.Add(sprite);
 
             // Change Transform
             entity.Transform.Scale = 0.3f;
             entity.Transform.Rotation = MathHelper.ToRadians(30);
 
+
+
             // Add Animation
-            var stateAnimation = new StateBasedAnimation<MovementDirection>(entity.Components.Get<Sprite>(), 0, MovementDirection.Down);
-            stateAnimation.AddState(MovementDirection.Down, new TextureCollectionAnimation(stateAnimation.Sprite, Util.FormatCollection("Player/Down_{0:D3}", 1, 2, 3, 4), 50));
-            stateAnimation.AddState(MovementDirection.Up, new TextureCollectionAnimation(stateAnimation.Sprite, Util.FormatCollection("Player/Up_{0:D3}", 1, 2, 3, 4), 50));
-            stateAnimation.AddState(MovementDirection.Left, new TextureCollectionAnimation(stateAnimation.Sprite, Util.FormatCollection("Player/Left_{0:D3}", 1, 2, 3, 4), 50));
-            stateAnimation.AddState(MovementDirection.Right, new TextureCollectionAnimation(stateAnimation.Sprite, Util.FormatCollection("Player/Right_{0:D3}", 1, 2, 3, 4), 50));
+            var stateAnimation = new StateAnimation<MovementDirection>(entity.Components.Get<Sprite>(), 0, MovementDirection.Down,
+                new Dictionary<MovementDirection, Animation>
+                {
+                    { MovementDirection.Down, new TextureCollectionAnimation(sprite, Util.FormatCollection("Player/Down_{0:D3}", 1, 2, 3, 4), 50) },
+                    { MovementDirection.Up, new TextureCollectionAnimation(sprite, Util.FormatCollection("Player/Up_{0:D3}", 1, 2, 3, 4), 50) },
+                    { MovementDirection.Left, new TextureCollectionAnimation(sprite, Util.FormatCollection("Player/Left_{0:D3}", 1, 2, 3, 4), 50) },
+                    { MovementDirection.Right, new TextureCollectionAnimation(sprite, Util.FormatCollection("Player/Right_{0:D3}", 1, 2, 3, 4), 50) }
+                });
             entity.Components.Add(stateAnimation);
 
             // Link Input to Animation

@@ -3,7 +3,7 @@ using XnaTryLib.ECS.Components;
 
 namespace XnaTry
 {
-    public class MovementToAnimationLinker : Linker<DirectionalInput, StateBasedAnimation<MovementDirection>>
+    public class MovementToAnimationLinker : Linker<DirectionalInput, StateAnimation<MovementDirection>>
     {
         public override void Link()
         {
@@ -31,7 +31,7 @@ namespace XnaTry
             Second.CurrentState = direction;
         }
 
-        public MovementToAnimationLinker(DirectionalInput first, StateBasedAnimation<MovementDirection> second) 
+        public MovementToAnimationLinker(DirectionalInput first, StateAnimation<MovementDirection> second) 
             : base(first, second)
         {
 

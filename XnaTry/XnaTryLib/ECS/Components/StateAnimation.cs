@@ -23,7 +23,7 @@ namespace XnaTryLib.ECS.Components
 
         private Animation CurrentAnimation { get; set; }
 
-        public StateBasedAnimation(Sprite sprite, long msPerFrame, Dictionary<T, Animation> states, T defaultState) 
+        public StateBasedAnimation(Sprite sprite, long msPerFrame, T defaultState, Dictionary<T, Animation> states) 
             : base(sprite, msPerFrame)
         {
             States = states;
@@ -31,7 +31,7 @@ namespace XnaTryLib.ECS.Components
         }
 
         public StateBasedAnimation(Sprite sprite, long msPerFrame, T initialState)
-            : this(sprite, msPerFrame, new Dictionary<T, Animation>(), initialState)
+            : this(sprite, msPerFrame, initialState, new Dictionary<T, Animation>())
         {
         }
 
