@@ -66,6 +66,7 @@
     <Compile Include="ECS\Components\DirectionalInput.cs" />
     <Compile Include="ECS\Components\KeyboardDirectionalInput.cs" />
     <Compile Include="ECS\Components\RotateToMouse.cs" />
+    <Compile Include="ECS\Components\TextureCollectionAnimation.cs" />
     <Compile Include="ECS\Components\Velocity.cs" />
     <Compile Include="ECS\Systems\AnimationSystem.cs" />
     <Compile Include="ECS\Systems\BaseSystem.cs" />
