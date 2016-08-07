@@ -2,14 +2,14 @@
 
 namespace XnaTryLib.ECS.Components
 {
-    public struct KeyboardSettings
+    public struct KeyboardLayoutOptions
     {
         public Keys Left { get; set; }
         public Keys Right { get; set; }
         public Keys Up { get; set; }
         public Keys Down { get; set; }
 
-        public KeyboardSettings(Keys left = Keys.Left, Keys right = Keys.Right, Keys up = Keys.Up, Keys down = Keys.Down)
+        public KeyboardLayoutOptions(Keys left = Keys.Left, Keys right = Keys.Right, Keys up = Keys.Up, Keys down = Keys.Down)
         {
             Left = left;
             Right = right;
@@ -20,9 +20,9 @@ namespace XnaTryLib.ECS.Components
 
     public class KeyboardDirectionalInput : DirectionalInput
     {
-        private KeyboardSettings Settings { get; }
+        private KeyboardLayoutOptions LayoutOptions { get; }
 
-        private static readonly KeyboardSettings DefaultSettings = new KeyboardSettings
+        private static readonly KeyboardLayoutOptions DefaultLayoutOptions = new KeyboardLayoutOptions
         {
             Down = Keys.Down,
             Up = Keys.Up,
@@ -31,25 +31,25 @@ namespace XnaTryLib.ECS.Components
         };
 
         /// <summary>
-        /// Initializes the input component with the key settings
+        /// Initializes the input component with the key LayoutOptions
         /// </summary>
-        /// <param name="settings">Settings; default (arrow keys) if null specified</param>
-        public KeyboardDirectionalInput(KeyboardSettings? settings = null)
+        /// <param name="layoutOptions">LayoutOptions; default (arrow keys) if null specified</param>
+        public KeyboardDirectionalInput(KeyboardLayoutOptions? layoutOptions = null)
         {
-            Settings = settings ?? DefaultSettings;
+            LayoutOptions = layoutOptions ?? DefaultLayoutOptions;
         }
 
         public override void Update(long delta)
         {
             Vertical = Horizontal = 0;
             var keyboard = Keyboard.GetState();
-            if (keyboard.IsKeyDown(Settings.Down))
+            if (keyboard.IsKeyDown(LayoutOptions.Down))
                 Vertical += Constants.FullPositiveInput;
-            if (keyboard.IsKeyDown(Settings.Up))
+            if (keyboard.IsKeyDown(LayoutOptions.Up))
                 Vertical += Constants.FullNegativeInput;
-            if (keyboard.IsKeyDown(Settings.Right))
+            if (keyboard.IsKeyDown(LayoutOptions.Right))
                 Horizontal += Constants.FullPositiveInput;
-            if (keyboard.IsKeyDown(Settings.Left))
+            if (keyboard.IsKeyDown(LayoutOptions.Left))
                 Horizontal += Constants.FullNegativeInput;
         }
     }
