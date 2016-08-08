@@ -29,6 +29,7 @@ namespace XnaTry
             Text = text;
             Placement = placement;
             Font = font;
+            Color = color;
         }
 
         public string Text { get; set; }
