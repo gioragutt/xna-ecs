@@ -144,7 +144,7 @@ namespace XnaTry
         {
             var keyboardState = Keyboard.GetState();
             // Allows the game to exit
-            if (keyboardState.KeysPressed(Keys.LeftShift, Keys.Q, Keys.W))
+            if (keyboardState.KeysPressed(Keys.LeftControl, Keys.Q, Keys.W))
                 Exit();
 
             GameManager.Update(gameTime);
