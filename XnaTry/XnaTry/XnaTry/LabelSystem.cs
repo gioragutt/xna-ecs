@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework;
@@ -36,15 +37,49 @@ namespace XnaTry
             var color = label.Color ?? DefaultColor;
             var textSize = font.MeasureString(label.Text);
 
-            SpriteBatch.DrawString(font, label.Text, CalculateLabelPosition(sprite, transform, textSize), color);
+            SpriteBatch.DrawString(font, label.Text, CalculateLabelPosition(sprite, transform, textSize, label.Placement), color);
         }
 
-        private static Vector2 CalculateLabelPosition(Sprite sprite, Transform transform, Vector2 textSize)
+        private static Vector2 FactorInLabelPlacement(Vector2 originPoint, Vector2 textSize, Sprite sprite, Transform transform, LabelPlacement placement)
+        {
+            switch (placement)
+            {
+                case LabelPlacement.TopLeft:
+                    return Vector2.Subtract(originPoint, textSize);
+                case LabelPlacement.TopCenter:
+                    return new Vector2(originPoint.X + sprite.Texture.Width * transform.Scale / 2f - textSize.X / 2f, originPoint.Y - textSize.Y);
+                case LabelPlacement.TopRight:
+                    return new Vector2(originPoint.X + sprite.Texture.Width * transform.Scale, originPoint.Y - textSize.Y);
+                case LabelPlacement.MiddleLeft:
+                    break;
+                case LabelPlacement.MiddleCenter:
+                    break;
+                case LabelPlacement.MiddleRight:
+                    break;
+                case LabelPlacement.BottomLeft:
+                    break;
+                case LabelPlacement.BottomCenter:
+                    break;
+                case LabelPlacement.BottomRight:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("placement");
+            }
+
+            return originPoint;
+        }
+
+        private static Vector2 CalculateLabelPosition(Sprite sprite, Transform transform, Vector2 textSize, LabelPlacement placement)
         {
             if (sprite == null)
                 return Vector2.Subtract(transform.Position, Vector2.Divide(textSize, 2f));
 
-            return new Vector2((transform.Position.X + sprite.Texture.Width - textSize.X) / 2f * transform.Scale, transform.Position.Y - textSize.Y);
+            return FactorInLabelPlacement(GetTopLeftPointOfSprite(sprite, transform), textSize, sprite, transform, placement);
+        }
+
+        private static Vector2 GetTopLeftPointOfSprite(Sprite sprite, Transform transform)
+        {
+            return transform.Position - sprite.Origin * transform.Scale;
         }
 
         public override ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
