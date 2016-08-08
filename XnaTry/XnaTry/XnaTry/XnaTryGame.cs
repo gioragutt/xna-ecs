@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -30,7 +32,7 @@ namespace XnaTry
         public readonly KeyboardLayoutOptions arrowKeys = KeyboardDirectionalInput.DefaultLayoutOptions;
         public readonly KeyboardLayoutOptions numpadArrowKeys = new KeyboardLayoutOptions(Keys.NumPad4, Keys.NumPad6, Keys.NumPad8, Keys.NumPad2);
 
-        void Initialize_ECS_Example(KeyboardLayoutOptions keys, Color debugColor, Vector2 initialPosition)
+        void Initialize_ECS_Example(KeyboardLayoutOptions keys, Color debugColor, Vector2 initialPosition, string name)
         {
             bool CreateAnnoyingComponents = false;
 
@@ -52,11 +54,8 @@ namespace XnaTry
             entity.Transform.Scale = 0.3f;
             entity.Transform.Position = initialPosition;
 
-            if (CreateAnnoyingComponents)
-                entity.Transform.Rotation = MathHelper.ToRadians(30);
-
             // Add Animation
-            const long msPerFrame = 100; 
+            const long msPerFrame = 100;
             var stateAnimation = new StateAnimation<MovementDirection>(sprite, 0, MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
                 {
@@ -70,7 +69,9 @@ namespace XnaTry
 
             // Link Input to Animation
             entity.Components.Add(new MovementToAnimationLinker(entity.Components.Get<DirectionalInput>(), stateAnimation));
-            entity.Components.Add(new Label(debugColor.ToString(), LabelPlacement.TopCenter, debugColor));
+
+            // Show name label
+            entity.Components.Add(new Label(name, LabelPlacement.TopCenter, debugColor));
 
             if (CreateAnnoyingComponents)
             {
@@ -83,8 +84,9 @@ namespace XnaTry
         {
             base.Initialize();
 
-            Initialize_ECS_Example(wasdKeys, Color.Red, new Vector2(100, 400));
-            Initialize_ECS_Example(arrowKeys, Color.Blue, new Vector2(700, 400));
+            Initialize_ECS_Example(wasdKeys, Color.Red, new Vector2(100, 400), "hello");
+            Initialize_ECS_Example(arrowKeys, Color.Blue, new Vector2(400, 400), "world");
+            Initialize_ECS_Example(numpadArrowKeys, Color.Yellow, new Vector2(700, 400), "hello world");
 
             GameManager.RegisterSystem(new MovementSystem());
             GameManager.RegisterSystem(new LinkerSystem());
