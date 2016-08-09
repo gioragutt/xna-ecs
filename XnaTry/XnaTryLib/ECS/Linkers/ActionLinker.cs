@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XnaTryLib.ECS.Components
+namespace XnaTryLib.ECS.Linkers
 {
     /// <summary>
     /// Create a linker between two components, and use a lambda to for the link operation

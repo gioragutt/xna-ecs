@@ -67,6 +67,8 @@
     <Compile Include="ECS\Components\DirectionalInput.cs" />
     <Compile Include="ECS\Components\KeyboardDirectionalInput.cs" />
     <Compile Include="ECS\Components\Linker.cs" />
+    <Compile Include="ECS\Components\Label.cs" />
+    <Compile Include="ECS\Linkers\MovementToAnimationLinker.cs" />
     <Compile Include="ECS\Components\RotateToMouse.cs" />
     <Compile Include="ECS\Components\StateAnimation.cs" />
     <Compile Include="ECS\Components\TextureCollectionAnimation.cs" />
@@ -82,6 +84,7 @@
     <Compile Include="ECS\Components\Sprite.cs" />
     <Compile Include="ECS\Components\Transform.cs" />
     <Compile Include="Extentions.cs" />
+    <Compile Include="MovementDirection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>

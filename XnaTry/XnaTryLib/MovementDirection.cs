@@ -1,4 +1,4 @@
-namespace XnaTry
+namespace XnaTryLib
 {
     public enum MovementDirection
     {

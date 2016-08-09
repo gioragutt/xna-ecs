@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using XnaTryLib.ECS.Components;
 
-namespace XnaTry
+namespace XnaTryLib.ECS.Components
 {
     public enum LabelPlacement
     {

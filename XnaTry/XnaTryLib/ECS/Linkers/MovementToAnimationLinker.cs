@@ -1,7 +1,6 @@
-﻿using XnaTryLib;
-using XnaTryLib.ECS.Components;
+﻿using XnaTryLib.ECS.Components;
 
-namespace XnaTry
+namespace XnaTryLib.ECS.Linkers
 {
     public class MovementToAnimationLinker : Linker<DirectionalInput, StateAnimation<MovementDirection>>
     {
