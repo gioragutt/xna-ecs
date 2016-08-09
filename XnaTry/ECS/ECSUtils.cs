@@ -1,5 +1,5 @@
-﻿using ECS.Interfaces;
-using System;
+﻿using System;
+using ECS.Interfaces;
 
 namespace ECS
 {

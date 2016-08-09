@@ -1,9 +1,9 @@
-﻿using ECS;
+﻿using System;
+using System.Linq;
+using ECS;
 using ECS.BaseTypes;
 using ECS.Interfaces;
 using NUnit.Framework;
-using System;
-using System.Linq;
 
 namespace ECSTest
 {

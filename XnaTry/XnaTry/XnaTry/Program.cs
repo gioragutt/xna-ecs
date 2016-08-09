@@ -1,6 +1,3 @@
-using System.Diagnostics;
-using ECS.Managers;
-
 namespace XnaTry
 {
 #if WINDOWS || XBOX

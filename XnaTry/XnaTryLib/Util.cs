@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 
 namespace XnaTryLib
 {

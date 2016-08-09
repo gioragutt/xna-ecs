@@ -1,7 +1,7 @@
-﻿using ECS.Interfaces;
+﻿using System;
+using ECS.Interfaces;
 using ECS.Managers;
 using Microsoft.Xna.Framework;
-using System;
 using XnaTryLib.ECS.Components;
 
 namespace XnaTryLib.ECS

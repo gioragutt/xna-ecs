@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using ECS.Interfaces;
 
 namespace ECS.BaseTypes
