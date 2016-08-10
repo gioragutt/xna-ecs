@@ -27,19 +27,12 @@ namespace XnaTry
             GameManager = new GameManager();
         }
 
-        private Texture2D CreateMutableTexture()
-        {
-            return new Texture2D(Graphics.GraphicsDevice, 1, 1);
-        }
-
         public readonly KeyboardLayoutOptions wasdKeys = new KeyboardLayoutOptions(Keys.A, Keys.D, Keys.W, Keys.S);
         public readonly KeyboardLayoutOptions arrowKeys = KeyboardDirectionalInput.DefaultLayoutOptions;
         public readonly KeyboardLayoutOptions numpadArrowKeys = new KeyboardLayoutOptions(Keys.NumPad4, Keys.NumPad6, Keys.NumPad8, Keys.NumPad2);
 
         void Initialize_ECS_Example(KeyboardLayoutOptions keys, Color debugColor, Vector2 initialPosition, string name, bool goodTeam = true)
         {
-            const bool CreateAnnoyingComponents = false;
-
             // Create an entity
             var entity = GameManager.CreateGameObject();
 
@@ -87,7 +80,7 @@ namespace XnaTry
                 HealthBarTextureAsset = "Player/GUI/HealthBar"
             });
 
-            if (CreateAnnoyingComponents)
+            if (false)
                 // If you really like it, you can have some fun rotating your character towards the mouse
                 entity.Components.Add(new RotateToMouse());
         }
