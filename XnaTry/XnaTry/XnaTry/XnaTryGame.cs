@@ -36,7 +36,7 @@ namespace XnaTry
         public readonly KeyboardLayoutOptions arrowKeys = KeyboardDirectionalInput.DefaultLayoutOptions;
         public readonly KeyboardLayoutOptions numpadArrowKeys = new KeyboardLayoutOptions(Keys.NumPad4, Keys.NumPad6, Keys.NumPad8, Keys.NumPad2);
 
-        void Initialize_ECS_Example(KeyboardLayoutOptions keys, Color debugColor, Vector2 initialPosition, string name)
+        void Initialize_ECS_Example(KeyboardLayoutOptions keys, Color debugColor, Vector2 initialPosition, string name, bool goodTeam = true)
         {
             const bool CreateAnnoyingComponents = false;
 
@@ -81,10 +81,11 @@ namespace XnaTry
                 Name = name
             });
 
-            entity.Components.Add(new StatusBarContainer(CreateMutableTexture(), new Vector2(70, 10), new List<StatusBar>
+            entity.Components.Add(new PlayerStatusBar
             {
-                new StatusBar(1, Color.Red, c => c.Get<Transform>().Position.X / 1000, CreateMutableTexture())
-            }));
+                FrameTextureAsset = goodTeam ? "Player/GUI/GreenTeam" : "Player/GUI/RedTeam",
+                HealthBarTextureAsset = "Player/GUI/HealthBar"
+            });
 
             if (CreateAnnoyingComponents)
                 // If you really like it, you can have some fun rotating your character towards the mouse
