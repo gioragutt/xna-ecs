@@ -34,6 +34,8 @@ namespace XnaTryLib.ECS.Components
             }
         }
 
+        private long TimePerFrame => (long)(MsPerFrame * AnimationSpeed);
+
         /// <summary>
         /// List of asset names to load
         /// </summary>
@@ -126,10 +128,11 @@ namespace XnaTryLib.ECS.Components
             }
 
             CurrentTick += delta;
-            if (CurrentTick >= MsPerFrame)
+            var tpr = TimePerFrame;
+            if (CurrentTick >= tpr)
             {
                 CurrentTextureIndex++;
-                CurrentTick -= MsPerFrame;
+                CurrentTick -= tpr;
             }
             else
                 return;

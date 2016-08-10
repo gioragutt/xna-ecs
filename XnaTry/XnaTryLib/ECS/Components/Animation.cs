@@ -15,6 +15,11 @@ namespace XnaTryLib.ECS.Components
         public long MsPerFrame { get; set; }
 
         /// <summary>
+        /// The Frames Per Second rate
+        /// </summary>
+        public float AnimationSpeed { get; set; }
+
+        /// <summary>
         /// Initializes variables of Animation
         /// </summary>
         /// <param name="sprite">Sprite to update</param>
@@ -27,6 +32,7 @@ namespace XnaTryLib.ECS.Components
             Sprite = sprite;
             MsPerFrame = msPerFrame;
             Enabled = false;
+            AnimationSpeed = 1f;
         }
 
         /// <summary>

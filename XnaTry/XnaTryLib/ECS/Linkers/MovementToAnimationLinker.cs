@@ -17,17 +17,36 @@ namespace XnaTryLib.ECS.Linkers
 
             Second.Enabled = true;
             var direction = Second.DefaultState;
-
-            if (First.Vertical > 0)
-                direction = MovementDirection.Down;
-            else if (First.Vertical < 0)
-                direction = MovementDirection.Up;
-            if (First.Horizontal > 0)
-                direction = MovementDirection.Right;
-            else if (First.Horizontal < 0)
-                direction = MovementDirection.Left;
+            var animationSpeed = 0f;
+            direction = UpdateAnimation(direction, ref animationSpeed);
 
             Second.CurrentState = direction;
+            Second.AnimationSpeed = animationSpeed;
+        }
+
+        private MovementDirection UpdateAnimation(MovementDirection direction, ref float animationSpeed)
+        {
+            if (First.Vertical > 0)
+            {
+                direction = MovementDirection.Down;
+                animationSpeed = First.Vertical;
+            }
+            else if (First.Vertical < 0)
+            {
+                direction = MovementDirection.Up;
+                animationSpeed = First.Vertical;
+            }
+            if (First.Horizontal > 0)
+            {
+                direction = MovementDirection.Right;
+                animationSpeed = First.Horizontal;
+            }
+            else if (First.Horizontal < 0)
+            {
+                direction = MovementDirection.Left;
+                animationSpeed = First.Horizontal;
+            }
+            return direction;
         }
 
         public MovementToAnimationLinker(DirectionalInput first, StateAnimation<MovementDirection> second) 
