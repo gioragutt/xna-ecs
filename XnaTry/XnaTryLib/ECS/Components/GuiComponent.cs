@@ -1,6 +1,6 @@
 using ECS.Interfaces;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using XnaTryLib.ECS.Components;
 
 namespace XnaTryLib.ECS.Components
 {
@@ -8,5 +8,7 @@ namespace XnaTryLib.ECS.Components
     {
         public abstract void Update(IComponentContainer entity);
         public abstract void Draw(SpriteBatch spriteBatch);
+
+        public virtual void LoadContent(ContentManager content) { }
     }
 }

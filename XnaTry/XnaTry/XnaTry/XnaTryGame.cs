@@ -126,7 +126,8 @@ namespace XnaTry
 
             GameManager.RegisterDrawingSystem(new GuiComponentsSystem
             {
-                SpriteBatch = spriteBatch
+                SpriteBatch = spriteBatch,
+                Content = Content
             });
 
             GameManager.RegisterDrawingSystem(new DebugPrintSystem
