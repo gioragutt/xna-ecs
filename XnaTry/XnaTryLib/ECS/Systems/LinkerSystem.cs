@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
-using XnaTryLib.ECS.Components;
+using XnaTryLib.ECS.Linkers;
 
 namespace XnaTryLib.ECS.Systems
 {
-    public class LinkerSystem : BaseSystem
+    public class LinkerSystem : System
     {
         public override void Update(ICollection<IComponentContainer> entities, long delta)
         {

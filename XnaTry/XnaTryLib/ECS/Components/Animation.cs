@@ -2,7 +2,7 @@
 
 namespace XnaTryLib.ECS.Components
 {
-    public abstract class Animation : BaseComponent
+    public abstract class Animation : Component
     {
         /// <summary>
         /// The sprite the animation is going to animate

@@ -1,9 +1,8 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace XnaTryLib.ECS.Components
 {
-    public class Transform : BaseComponent
+    public class Transform : Component
     {
         private float scale;
         private float rotation;

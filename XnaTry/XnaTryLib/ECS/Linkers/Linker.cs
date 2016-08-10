@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using XnaTryLib.ECS.Components;
 
-namespace XnaTryLib.ECS.Components
+namespace XnaTryLib.ECS.Linkers
 {
-    public abstract class Linker : BaseComponent
+    public abstract class Linker : Component
     {
         public abstract void Link();
 

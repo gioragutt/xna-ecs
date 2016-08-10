@@ -1,13 +1,13 @@
-﻿using ECS.Interfaces;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ECS.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using XnaTryLib.ECS.Components;
 
 namespace XnaTryLib.ECS.Systems
 {
-    public class DebugPrintSystem : BaseSystem
+    public class DebugPrintSystem : System
     {
         public SpriteBatch SpriteBatch { get; set; }
         public SpriteFont Font { get; set; }

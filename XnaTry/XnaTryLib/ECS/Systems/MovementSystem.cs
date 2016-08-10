@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework;
@@ -7,7 +6,7 @@ using XnaTryLib.ECS.Components;
 
 namespace XnaTryLib.ECS.Systems
 {
-    public class MovementSystem : BaseSystem
+    public class MovementSystem : System
     {
         public override void Update(ICollection<IComponentContainer> entities, long delta)
         {

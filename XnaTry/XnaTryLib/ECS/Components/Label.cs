@@ -16,7 +16,7 @@ namespace XnaTryLib.ECS.Components
         BottomRight
     }
 
-    public class Label : BaseComponent
+    public class Label : Component
     {
         public Label(string text = "", LabelPlacement placement = LabelPlacement.TopCenter, Color? color = null, SpriteFont font = null , bool enabled = true)
             : base(enabled)

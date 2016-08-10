@@ -3,11 +3,11 @@ using ECS.Interfaces;
 
 namespace XnaTryLib.ECS.Systems
 {
-    public abstract class BaseSystem : ISystem
+    public abstract class System : ISystem
     {
         public bool Enabled { get; set; }
 
-        protected BaseSystem(bool enabled = true) { Enabled = enabled; } 
+        protected System(bool enabled = true) { Enabled = enabled; } 
 
         /// <summary>
         /// By default, Calls update on all entities deemed relevant by GetRelevant

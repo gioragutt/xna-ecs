@@ -1,12 +1,12 @@
-﻿using ECS.Interfaces;
-using Microsoft.Xna.Framework.Content;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ECS.Interfaces;
+using Microsoft.Xna.Framework.Content;
 using XnaTryLib.ECS.Components;
 
 namespace XnaTryLib.ECS.Systems
 {
-    public class AnimationSystem : BaseSystem
+    public class AnimationSystem : System
     {
         public ContentManager Content { get; set; }
 

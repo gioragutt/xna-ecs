@@ -2,14 +2,16 @@
 
 namespace XnaTryLib.ECS.Components
 {
-    public abstract class BaseComponent : IComponent
+    public abstract class Component : IComponent
     {
         public IComponentContainer Container { get; set; }
         public bool Enabled { get; set; }
 
-        protected BaseComponent(bool enabled = true)
+        protected Component(bool enabled = true)
         {
             Enabled = enabled;
         }
+
+        public static bool IsEnabled(Component comp) { return comp != null && comp.Enabled; }
     }
 }

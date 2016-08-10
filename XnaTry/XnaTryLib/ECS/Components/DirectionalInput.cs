@@ -1,12 +1,11 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace XnaTryLib.ECS.Components
 {
     /// <summary>
     /// Base class for deriving directional movement input from an outer source
     /// </summary>
-    public abstract class DirectionalInput : BaseComponent
+    public abstract class DirectionalInput : Component
     {
         private static float ClampInput(float input)
         {

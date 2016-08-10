@@ -8,7 +8,7 @@ using XnaTryLib.ECS.Components;
 
 namespace XnaTryLib.ECS.Systems
 {
-    public class RendererSystem : BaseSystem
+    public class RendererSystem : System
     {
         public SpriteBatch SpriteBatch { get; set; }
         public ContentManager Content { get; set; }

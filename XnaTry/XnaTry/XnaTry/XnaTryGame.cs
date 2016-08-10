@@ -1,12 +1,11 @@
-using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using XnaTryLib;
 using XnaTryLib.ECS;
 using XnaTryLib.ECS.Components;
+using XnaTryLib.ECS.Linkers;
 using XnaTryLib.ECS.Systems;
 
 namespace XnaTry
@@ -28,13 +27,18 @@ namespace XnaTry
             GameManager = new GameManager();
         }
 
+        private Texture2D CreateMutableTexture()
+        {
+            return new Texture2D(Graphics.GraphicsDevice, 1, 1);
+        }
+
         public readonly KeyboardLayoutOptions wasdKeys = new KeyboardLayoutOptions(Keys.A, Keys.D, Keys.W, Keys.S);
         public readonly KeyboardLayoutOptions arrowKeys = KeyboardDirectionalInput.DefaultLayoutOptions;
         public readonly KeyboardLayoutOptions numpadArrowKeys = new KeyboardLayoutOptions(Keys.NumPad4, Keys.NumPad6, Keys.NumPad8, Keys.NumPad2);
 
         void Initialize_ECS_Example(KeyboardLayoutOptions keys, Color debugColor, Vector2 initialPosition, string name)
         {
-            bool CreateAnnoyingComponents = false;
+            const bool CreateAnnoyingComponents = false;
 
             // Create an entity
             var entity = GameManager.CreateGameObject();
@@ -73,11 +77,14 @@ namespace XnaTry
             // Show name label
             entity.Components.Add(new Label(name, LabelPlacement.TopCenter, debugColor));
 
-            if (CreateAnnoyingComponents)
+            entity.Components.Add(new StatusBarContainer(CreateMutableTexture(), new Vector2(70, 10), new List<StatusBar>
             {
+                new StatusBar(1, Color.Red, c => c.Get<Transform>().Position.X / 1000, CreateMutableTexture())
+            }));
+
+            if (CreateAnnoyingComponents)
                 // If you really like it, you can have some fun rotating your character towards the mouse
                 entity.Components.Add(new RotateToMouse());
-            }
         }
 
         protected override void Initialize()
@@ -113,9 +120,8 @@ namespace XnaTry
                 SpriteBatch = spriteBatch
             });
 
-            GameManager.RegisterDrawingSystem(new LabelSystem
+            GameManager.RegisterDrawingSystem(new GuiComponentsSystem
             {
-                DefaultFont = defaultFont,
                 SpriteBatch = spriteBatch
             });
 

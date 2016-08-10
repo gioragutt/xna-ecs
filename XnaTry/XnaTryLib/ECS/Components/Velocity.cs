@@ -2,7 +2,7 @@
 
 namespace XnaTryLib.ECS.Components
 {
-    public class Velocity : BaseComponent
+    public class Velocity : Component
     {
         public Vector2 VelocityVector { get; set; }
         public float X => VelocityVector.X;

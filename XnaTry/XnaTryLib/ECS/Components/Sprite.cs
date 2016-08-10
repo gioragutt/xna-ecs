@@ -6,7 +6,7 @@ namespace XnaTryLib.ECS.Components
     /// <summary>
     /// The base sprite component of entities in the game
     /// </summary>
-    public class Sprite : BaseComponent
+    public class Sprite : Component
     {
         /// <summary>
         /// Name of the asset you want to load
