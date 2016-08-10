@@ -60,21 +60,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="ECS\Components\ActionLinker.cs" />
     <Compile Include="ECS\Components\Animation.cs" />
-    <Compile Include="ECS\Components\BaseComponent.cs" />
+    <Compile Include="ECS\Components\Component.cs" />
     <Compile Include="ECS\Components\DebugPrintText.cs" />
     <Compile Include="ECS\Components\DirectionalInput.cs" />
+    <Compile Include="ECS\Components\GuiComponent.cs" />
+    <Compile Include="ECS\Components\GuiComponentCollection.cs" />
     <Compile Include="ECS\Components\KeyboardDirectionalInput.cs" />
-    <Compile Include="ECS\Components\Linker.cs" />
     <Compile Include="ECS\Components\Label.cs" />
+    <Compile Include="ECS\Linkers\ActionLinker.cs" />
+    <Compile Include="ECS\Linkers\Linker.cs" />
     <Compile Include="ECS\Linkers\MovementToAnimationLinker.cs" />
     <Compile Include="ECS\Components\RotateToMouse.cs" />
     <Compile Include="ECS\Components\StateAnimation.cs" />
     <Compile Include="ECS\Components\TextureCollectionAnimation.cs" />
     <Compile Include="ECS\Components\Velocity.cs" />
     <Compile Include="ECS\Systems\AnimationSystem.cs" />
-    <Compile Include="ECS\Systems\BaseSystem.cs" />
+    <Compile Include="ECS\Systems\GuiComponentsSystem.cs" />
+    <Compile Include="ECS\Systems\System.cs" />
     <Compile Include="ECS\GameManager.cs" />
     <Compile Include="ECS\GameObject.cs" />
     <Compile Include="ECS\Systems\DebugPrintSystem.cs" />

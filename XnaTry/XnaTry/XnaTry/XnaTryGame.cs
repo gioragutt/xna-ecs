@@ -74,8 +74,12 @@ namespace XnaTry
             // Link Input to Animation
             entity.Components.Add(new MovementToAnimationLinker(entity.Components.Get<DirectionalInput>(), stateAnimation));
 
-            // Show name label
-            entity.Components.Add(new Label(name, LabelPlacement.TopCenter, debugColor));
+            entity.Components.Add(new PlayerAttributes
+            {
+                Health = 50,
+                MaxHealth = 100,
+                Name = name
+            });
 
             entity.Components.Add(new StatusBarContainer(CreateMutableTexture(), new Vector2(70, 10), new List<StatusBar>
             {
