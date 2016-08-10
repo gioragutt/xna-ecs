@@ -63,10 +63,10 @@ namespace XnaTry
             var stateAnimation = new StateAnimation<MovementDirection>(sprite, 0, MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
                 {
-                    { MovementDirection.Down, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Down_{0:D3}", 1, 4), msPerFrame) },
-                    { MovementDirection.Up, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Up_{0:D3}", 1, 4), msPerFrame) },
-                    { MovementDirection.Left, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Left_{0:D3}", 1, 4), msPerFrame) },
-                    { MovementDirection.Right, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Right_{0:D3}", 1, 4), msPerFrame) }
+                    { MovementDirection.Down, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame) },
+                    { MovementDirection.Up, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame) },
+                    { MovementDirection.Left, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame) },
+                    { MovementDirection.Right, new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame) }
                 });
 
             entity.Components.Add(stateAnimation);

@@ -37,89 +37,89 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Player\Down_001.png">
+    <Compile Include="Player\Images\Down_001.png">
       <Name>Down_001</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Down_002.png">
+    <Compile Include="Player\Images\Down_002.png">
       <Name>Down_002</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Down_003.png">
+    <Compile Include="Player\Images\Down_003.png">
       <Name>Down_003</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Down_004.png">
+    <Compile Include="Player\Images\Down_004.png">
       <Name>Down_004</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Left_001.png">
+    <Compile Include="Player\Images\Left_001.png">
       <Name>Left_001</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Left_002.png">
+    <Compile Include="Player\Images\Left_002.png">
       <Name>Left_002</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Left_003.png">
+    <Compile Include="Player\Images\Left_003.png">
       <Name>Left_003</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Left_004.png">
+    <Compile Include="Player\Images\Left_004.png">
       <Name>Left_004</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Right_001.png">
+    <Compile Include="Player\Images\Right_001.png">
       <Name>Right_001</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Right_002.png">
+    <Compile Include="Player\Images\Right_002.png">
       <Name>Right_002</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Right_003.png">
+    <Compile Include="Player\Images\Right_003.png">
       <Name>Right_003</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Right_004.png">
+    <Compile Include="Player\Images\Right_004.png">
       <Name>Right_004</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Up_001.png">
+    <Compile Include="Player\Images\Up_001.png">
       <Name>Up_001</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Up_002.png">
+    <Compile Include="Player\Images\Up_002.png">
       <Name>Up_002</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Up_003.png">
+    <Compile Include="Player\Images\Up_003.png">
       <Name>Up_003</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Player\Up_004.png">
+    <Compile Include="Player\Images\Up_004.png">
       <Name>Up_004</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Player\FloatingNameFont.spritefont">
+    <Compile Include="Player\Fonts\FloatingNameFont.spritefont">
       <Name>NameFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
