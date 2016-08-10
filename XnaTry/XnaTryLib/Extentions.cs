@@ -23,9 +23,16 @@ namespace XnaTryLib
             return (float)Math.Atan2(vector.X, -vector.Y);
         }
 
+        public static bool NotZero(this float number)
+        {
+            return Math.Abs(number) > float.Epsilon; 
+        }
+
         public static bool IsMoving(this DirectionalInput input)
         {
-            return input.Horizontal != 0 || input.Vertical != 0; 
+            if (!Util.NotNull(input))
+                return false;
+            return input.Horizontal.NotZero() || input.Vertical.NotZero(); 
         }
 
         public static bool KeysPressed(this KeyboardState state, params Keys[] keys)
