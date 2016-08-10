@@ -42,8 +42,9 @@ namespace XnaTryLib
         public static IList<string> FormatRange(string format, int min, int max)
         {
             var diff = max - min;
+            var itr = Math.Sign(diff);
             var items = new List<int>();
-            for (var i = min; i != max + Math.Sign(diff); i += Math.Sign(diff))
+            for (var i = min; i != max + itr; i += itr)
             {
                 items.Add(i);
             }
