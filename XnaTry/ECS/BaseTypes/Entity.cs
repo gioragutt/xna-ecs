@@ -34,10 +34,12 @@ namespace ECS.BaseTypes
         #endregion
 
         public Guid Id { get; }
+        public IEntityPool Parent { get; set; }
 
-        public Entity(Guid id)
+        public Entity(Guid id, IEntityPool parent =  null)
         {
             Id = id;
+            Parent = parent;
         }
     }
 }

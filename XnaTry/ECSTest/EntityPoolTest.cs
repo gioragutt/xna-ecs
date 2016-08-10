@@ -160,4 +160,18 @@ namespace ECSTest
             Assert.AreEqual(pool.AllThat(c => c.Has<DummyComponent>()).Count(), 1);
         }
     }
+
+    [TestFixture]
+    public class RemoveTests : EntityPoolTests
+    {
+        [Test]
+        public void TwoEntitiesInPoolBothHaveDummies()
+        {
+            Assert.IsFalse(pool.Exists(entity));
+            pool.Add(entity);
+            Assert.IsTrue(pool.Exists(entity));
+            pool.Remove(entity);
+            Assert.IsFalse(pool.Exists(entity));
+        }
+    }
 }

@@ -7,6 +7,12 @@ namespace ECS.BaseTypes
 {
     public class EntityPool : IEntityPool
     {
+        public void Remove(IEntity entity)
+        {
+            if (entities.ContainsKey(entity))
+                entities.Remove(entity);
+        }
+
         protected readonly Dictionary<IEntity, IComponentContainer> entities;
 
         public EntityPool()
@@ -55,6 +61,7 @@ namespace ECS.BaseTypes
             AssertParameterNotNull(entity, "entity");
             AssertParameterNotNull(container, "container");
 
+            entity.Parent = this;
             entities.Add(entity, container);
         }
 

@@ -52,5 +52,11 @@ namespace ECS.Interfaces
         /// Count of entities in the pool
         /// </summary>
         int Count { get; }
+
+        /// <summary>
+        /// Removes an entity from the pool
+        /// </summary>
+        /// <param name="entity">Entity to remove</param>
+        void Remove(IEntity entity);
     }
 }
