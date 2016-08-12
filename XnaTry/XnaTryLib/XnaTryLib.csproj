@@ -64,6 +64,7 @@
     <Compile Include="ECS\Components\Component.cs" />
     <Compile Include="ECS\Components\DebugPrintText.cs" />
     <Compile Include="ECS\Components\DirectionalInput.cs" />
+    <Compile Include="ECS\Components\FakeInput.cs" />
     <Compile Include="ECS\Components\GuiComponent.cs" />
     <Compile Include="ECS\Components\GuiComponentCollection.cs" />
     <Compile Include="ECS\Components\KeyboardDirectionalInput.cs" />
