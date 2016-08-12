@@ -7,7 +7,7 @@ namespace XnaTryLib.ECS.Components
     /// <summary>
     /// The base sprite component of entities in the game
     /// </summary>
-    public class Sprite : Component, IContentRequeser
+    public class Sprite : Component, IContentRequester
     {
 
         /// <summary>

@@ -90,7 +90,7 @@
     <Compile Include="ECS\Components\Sprite.cs" />
     <Compile Include="ECS\Components\Transform.cs" />
     <Compile Include="Extentions.cs" />
-    <Compile Include="IContentRequeser.cs" />
+    <Compile Include="IContentRequester.cs" />
     <Compile Include="IResourcesManager.cs" />
     <Compile Include="MovementDirection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

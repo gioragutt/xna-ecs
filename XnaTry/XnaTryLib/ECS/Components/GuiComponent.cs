@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace XnaTryLib.ECS.Components
 {
-    public abstract class GuiComponent : Component, IContentRequeser
+    public abstract class GuiComponent : Component, IContentRequester
     {
         public virtual void Update(IComponentContainer entity) { }
         public abstract void Draw(SpriteBatch spriteBatch);
