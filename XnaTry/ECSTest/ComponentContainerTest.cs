@@ -10,9 +10,10 @@ namespace ECSTest
     public class ComponentContainerTest
     {
         protected IComponentContainer container;
+        private readonly IEntity entity = new Entity(Guid.Empty);
 
         [SetUp]
-        public void Init() { container = new ComponentContainer(); }
+        public void Init() { container = new ComponentContainer(entity); }
     }
 
     [TestFixture]

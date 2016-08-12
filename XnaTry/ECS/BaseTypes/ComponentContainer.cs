@@ -7,6 +7,13 @@ namespace ECS.BaseTypes
 {
     public class ComponentContainer : TypedContainer<IComponent>, IComponentContainer
     {
+        public IEntity Parent { get; set; }
+
+        public ComponentContainer(IEntity parent)
+        {
+            Parent = parent;
+        }
+
         public override void Add<TDerived>(TDerived instance)
         {
             if (instance == null)

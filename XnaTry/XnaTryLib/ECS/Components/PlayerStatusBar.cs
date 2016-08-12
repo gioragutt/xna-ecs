@@ -1,55 +1,27 @@
-﻿using System;
-using ECS.Interfaces;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using XnaTryLib;
-using XnaTryLib.ECS.Components;
 
-namespace XnaTry.ECS.Components
+namespace XnaTryLib.ECS.Components
 {
     public class PlayerStatusBar : GuiComponent
     {
         #region Components
 
-        private PlayerAttributes Attributes
-        {
-            get; set;
-        }
-        private Sprite Sprite
-        {
-            get; set;
-        }
-        private Transform Transform
-        {
-            get; set;
-        }
+        private PlayerAttributes Attributes { get; }
+        private Sprite Sprite { get; }
+        private Transform Transform { get; }
 
         #endregion
 
         #region Content
 
-        private string HealthBarTextureAsset
-        {
-            get; set;
-        }
-        private string NameFontAsset
-        {
-            get; set;
-        }
+        private string HealthBarTextureAsset { get; }
+        private string NameFontAsset { get; }
 
-        private Texture2D FrameTexture
-        {
-            get; set;
-        }
-        private Texture2D HealthBarTexture
-        {
-            get; set;
-        }
-        private SpriteFont NameFont
-        {
-            get; set;
-        }
+        private Texture2D FrameTexture { get; set; }
+        private Texture2D HealthBarTexture { get; set; }
+        private SpriteFont NameFont { get; set; }
 
         #endregion
 
@@ -57,7 +29,7 @@ namespace XnaTry.ECS.Components
 
         private const int HealthBarHeight = 12;
         private const int NamePaddingHealthBar = -3;
-        private const int HealthBarWidthPadding = 2;
+        private const int HealthBarWidthPadding = 3;
         private const int HealthBarHeightPadding = -2;
 
         #endregion

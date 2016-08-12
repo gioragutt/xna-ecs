@@ -13,8 +13,8 @@ namespace XnaTryLib.ECS
 
         public GameObject()
         {
-            Components = new ComponentContainer();
             Entity = new Entity(Guid.NewGuid());
+            Components = new ComponentContainer(Entity);
             Transform = new Transform();
             Components.Add(Transform);
         }

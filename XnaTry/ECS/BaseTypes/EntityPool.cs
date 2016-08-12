@@ -72,7 +72,7 @@ namespace ECS.BaseTypes
             if (Exists(entity))
                 return;
 
-            Add(entity, new ComponentContainer());
+            Add(entity, new ComponentContainer(entity));
         }
 
         public int Count => entities.Count;
