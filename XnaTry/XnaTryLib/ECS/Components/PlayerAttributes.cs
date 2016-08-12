@@ -43,5 +43,7 @@ namespace XnaTry.ECS.Components
                 return Health / MaxHealth;
             }
         }
+
+        public TeamData Team { get; set; }
     }
 }

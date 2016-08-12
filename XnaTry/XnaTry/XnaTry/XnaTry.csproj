@@ -72,8 +72,6 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ECS\Components\PlayerAttributes.cs" />
-    <Compile Include="ECS\Components\PlayerStatusBar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="XnaTryGame.cs" />
