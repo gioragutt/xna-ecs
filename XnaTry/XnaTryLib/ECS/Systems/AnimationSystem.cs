@@ -8,8 +8,6 @@ namespace XnaTryLib.ECS.Systems
 {
     public class AnimationSystem : System
     {
-        public ContentManager Content { get; set; }
-
         public override void Update(ICollection<IComponentContainer> entities, long delta)
         {
             foreach (var entity in entities)
@@ -18,16 +16,14 @@ namespace XnaTryLib.ECS.Systems
             }
         }
 
-        private void HandleAnimation(IComponentContainer entity, long delta)
+        public void HandleAnimation(IComponentContainer entity, long delta)
         {
-            var animation = entity.Get<Animation>();
-            animation.LoadContent(Content);
-            animation.Update(delta);
+            entity.Get<Animation>().Update(delta);
         }
 
         public override ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
         {
-            return pool.AllThat(c => c.Has<Animation>() && c.Has<Sprite>()).ToList();
+            return pool.AllThat(c => c.Has<Animation>()).ToList();
         }
     }
 }

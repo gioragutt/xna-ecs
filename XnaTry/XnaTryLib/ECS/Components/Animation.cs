@@ -2,7 +2,7 @@
 
 namespace XnaTryLib.ECS.Components
 {
-    public abstract class Animation : Component
+    public abstract class Animation : Component, IContentRequester
     {
         /// <summary>
         /// The sprite the animation is going to animate
@@ -36,7 +36,7 @@ namespace XnaTryLib.ECS.Components
         }
 
         /// <summary>
-        /// Loads the required resources for the animation, if needed
+        /// Loads the required resources for the animation
         /// </summary>
         /// <param name="content">Content manager to use</param>
         public abstract void LoadContent(ContentManager content);

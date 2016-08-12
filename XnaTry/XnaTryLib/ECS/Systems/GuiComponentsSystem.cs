@@ -10,7 +10,6 @@ namespace XnaTryLib.ECS.Systems
     public class GuiComponentsSystem : System
     {
         public SpriteBatch SpriteBatch { get; set;  }
-        public ContentManager Content { get; set; }
 
         public override void Update(ICollection<IComponentContainer> entities, long delta)
         {
@@ -18,7 +17,6 @@ namespace XnaTryLib.ECS.Systems
             SpriteBatch.Begin();
             foreach (var guiComponent in allGuiComponents)
             {
-                guiComponent.LoadContent(Content);
                 guiComponent.Update(guiComponent.Container);
                 guiComponent.Draw(SpriteBatch);
             }

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using ECS.Interfaces;
 using ECS.Managers;
 using Microsoft.Xna.Framework;
+using XnaTry.ECS.Components;
 using XnaTryLib.ECS.Components;
 
 namespace XnaTryLib.ECS
@@ -14,9 +17,23 @@ namespace XnaTryLib.ECS
 
         public GameManager()
         {
-            entityManager = new EntityManager();    
+            entityManager = new EntityManager();   
             nonDrawingSystems = new SystemManager(entityManager.EntityPool);
             drawingSystems = new SystemManager(entityManager.EntityPool);
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            var allplayers = entityManager.EntityPool.AllThat(c => c.Has<PlayerAttributes>()).ToList();
+            builder.AppendFormat("Total entities: {0} of which {1} are players{2}", entityManager.EntityPool.Count, allplayers.Count, Environment.NewLine);
+
+            foreach (var entity in allplayers)
+            {
+                builder.AppendFormat("{0} - ( {1} ) {2}{3}", entity.Get<PlayerAttributes>().Name, entity.Count, entity.Get<Transform>(), Environment.NewLine);
+            }
+
+            return builder.ToString();
         }
 
         /// <summary>
