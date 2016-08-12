@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using XnaTryLib.ECS.Components;
 
-namespace XnaTry.ECS.Components
+namespace XnaTryLib.ECS.Components
 {
     public class PlayerAttributes : Component
     {

@@ -145,31 +145,16 @@ namespace XnaTry
         /// </summary>
         protected override void LoadContent()
         {
+            base.LoadContent();
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            ResourceManager.SetContentManager(Content);
-
             var defaultFont = Content.Load<SpriteFont>("DefaultFont");
 
+            ResourceManager.SetContentManager(Content);
             GameManager.RegisterDrawingSystem(new AnimationSystem());
-
-            GameManager.RegisterDrawingSystem(new RendererSystem
-            {
-                SpriteBatch = spriteBatch
-            });
-
-            GameManager.RegisterDrawingSystem(new GuiComponentsSystem
-            {
-                SpriteBatch = spriteBatch,
-            });
-
-            GameManager.RegisterDrawingSystem(new DebugPrintSystem
-            {
-                SpriteBatch = spriteBatch,
-                Font = defaultFont
-            });
-
-            base.LoadContent();
+            GameManager.RegisterDrawingSystem(new RendererSystem(spriteBatch));
+            GameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch));
+            GameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace XnaTry
+namespace XnaTryLib
 {
     public struct TeamData : IEquatable<TeamData>
     {

@@ -9,7 +9,13 @@ namespace XnaTryLib.ECS.Systems
 {
     public class GuiComponentsSystem : System
     {
-        public SpriteBatch SpriteBatch { get; set;  }
+        public SpriteBatch SpriteBatch { get; }
+
+        public GuiComponentsSystem(SpriteBatch spriteBatch, bool enabled = true) 
+            : base(enabled)
+        {
+            SpriteBatch = spriteBatch;
+        }
 
         public override void Update(ICollection<IComponentContainer> entities, long delta)
         {

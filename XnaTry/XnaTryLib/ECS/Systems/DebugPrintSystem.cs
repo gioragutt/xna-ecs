@@ -12,9 +12,11 @@ namespace XnaTryLib.ECS.Systems
         public SpriteBatch SpriteBatch { get; set; }
         public SpriteFont Font { get; set; }
 
-        public DebugPrintSystem() : base(true)
+        public DebugPrintSystem(SpriteBatch spriteBatch, SpriteFont font, bool enabled = true) 
+            : base(enabled)
         {
-            
+            SpriteBatch = spriteBatch;
+            Font = font;
         }
 
         public override void Update(ICollection<IComponentContainer> entities, long delta)

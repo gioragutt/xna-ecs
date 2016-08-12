@@ -1,7 +1,6 @@
 ﻿using System;
-using XnaTryLib.ECS.Components;
 
-namespace XnaTry
+namespace XnaTryLib.ECS.Components
 {
     public class FakeInput : DirectionalInput
     {
