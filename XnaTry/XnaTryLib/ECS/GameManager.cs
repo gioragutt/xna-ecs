@@ -30,7 +30,9 @@ namespace XnaTryLib.ECS
 
             foreach (var entity in allplayers)
             {
-                builder.AppendFormat("{0} - ( {1} ) {2}{3}", entity.Get<PlayerAttributes>().Name, entity.Count, entity.Get<Transform>(), Environment.NewLine);
+                var attributes = entity.Get<PlayerAttributes>();
+
+                builder.AppendFormat("{0} - ( {1} ) {2}% HP{3}", attributes.Name, entity.Count, attributes.HealthPercentage * 100f, Environment.NewLine);
             }
 
             return builder.ToString();

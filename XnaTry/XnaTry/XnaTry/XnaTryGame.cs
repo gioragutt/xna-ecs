@@ -130,7 +130,7 @@ namespace XnaTry
         {
             base.Initialize();
 
-            //GameManager.CreateDebugPrint(() => GameManager.ToString());
+            GameManager.CreateDebugPrint(() => GameManager.ToString());
 
             CreatePlayerControllerPlayer(arrowKeys, new Vector2(400, 400), "world", goodTeam);
             CreatePlayerControllerPlayer(wasdKeys, new Vector2(100, 400), "hello", badTeam);
