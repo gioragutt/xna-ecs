@@ -10,14 +10,14 @@ namespace XnaTryLib
     {
         private ContentManager Content { get; set; }
 
-        private Queue<IContentRequeser> ContentRequesters { get; }
+        private Queue<IContentRequester> ContentRequesters { get; }
 
         /// <summary>
         /// Initialize ResourceManagers properties
         /// </summary>
         public ResourcesManager()
         {
-            ContentRequesters = new Queue<IContentRequeser>();
+            ContentRequesters = new Queue<IContentRequester>();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace XnaTryLib
         /// Registers a content requester to load content
         /// </summary>
         /// <param name="contentRequeser">A component that derived from IContentRequester</param>
-        public T Register<T>(T contentRequeser) where T : IContentRequeser
+        public T Register<T>(T contentRequeser) where T : IContentRequester
         {
             Util.AssertArgumentNotNull(contentRequeser, "contentRequeser");
             ContentRequesters.Enqueue(contentRequeser);

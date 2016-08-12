@@ -1,5 +1,4 @@
 Content\DefaultFont.xnb
-Content\Player\Fonts\NameFont.xnb
 Content\Player\Images\Down_001.xnb
 Content\Player\Images\Down_002.xnb
 Content\Player\Images\Down_003.xnb
@@ -21,3 +20,4 @@ Content\Player\GUI\GreenTeamV2.xnb
 Content\Player\GUI\RedTeam.xnb
 Content\Player\GUI\RedTeamV2.xnb
 Content\Player\GUI\HealthBar.xnb
+Content\Player\Fonts\NameFont.xnb

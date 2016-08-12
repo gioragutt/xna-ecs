@@ -119,7 +119,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Player\Fonts\FloatingNameFont.spritefont">
+    <Compile Include="Player\Fonts\NameFont.spritefont">
       <Name>NameFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>

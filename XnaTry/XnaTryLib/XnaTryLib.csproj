@@ -68,6 +68,8 @@
     <Compile Include="ECS\Components\GuiComponentCollection.cs" />
     <Compile Include="ECS\Components\KeyboardDirectionalInput.cs" />
     <Compile Include="ECS\Components\Label.cs" />
+    <Compile Include="ECS\Components\PlayerAttributes.cs" />
+    <Compile Include="ECS\Components\PlayerStatusBar.cs" />
     <Compile Include="ECS\Linkers\ActionLinker.cs" />
     <Compile Include="ECS\Linkers\Linker.cs" />
     <Compile Include="ECS\Linkers\MovementToAnimationLinker.cs" />
@@ -87,8 +89,11 @@
     <Compile Include="ECS\Components\Sprite.cs" />
     <Compile Include="ECS\Components\Transform.cs" />
     <Compile Include="Extentions.cs" />
+    <Compile Include="IContentRequeser.cs" />
+    <Compile Include="IResourcesManager.cs" />
     <Compile Include="MovementDirection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourcesManager.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup />
