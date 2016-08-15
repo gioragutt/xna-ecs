@@ -152,11 +152,6 @@ namespace XnaClientLib.ECS
             Update(gameTime.ElapsedGameTime.Milliseconds);
         }
 
-        protected override void Update(long delta)
-        {
-            nonDrawingSystems.Update(delta);
-        }
-
         public void Draw(GameTime gameTime)
         {
             Draw(gameTime.ElapsedGameTime.Milliseconds);

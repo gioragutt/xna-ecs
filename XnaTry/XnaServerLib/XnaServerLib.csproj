@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ECS\ServerGameManager.cs" />
     <Compile Include="Exceptions\BaseXnaServerException.cs" />
     <Compile Include="Exceptions\ConnectionEstablishmentErrorException.cs" />
     <Compile Include="Exceptions\InvalidPortException.cs" />
@@ -48,7 +49,6 @@
     <Compile Include="GameClient.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerGameManager.cs" />
     <Compile Include="ServerUtil.cs" />
   </ItemGroup>
   <ItemGroup>

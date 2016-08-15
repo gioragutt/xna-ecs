@@ -46,6 +46,9 @@ namespace XnaCommonLib.ECS
             nonDrawingSystems.AddSystem(system);
         }
 
-        protected abstract void Update(long delta);
+        protected virtual void Update(long delta)
+        {
+            nonDrawingSystems.Update(delta);
+        }
     }
 }
