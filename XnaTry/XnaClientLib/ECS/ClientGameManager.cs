@@ -188,10 +188,8 @@ namespace XnaClientLib.ECS
             // Add Animation
             AddAnimation(sprite, components);
 
-            var attributes = go.Components.Get<PlayerAttributes>();
-            attributes.Team = Teams[attributes.Team.Name];
 
-            AddStatusBar(components, sprite, attributes);
+            AddStatusBar(components, sprite, go.Components.Get<PlayerAttributes>());
 
             components.Add(new LocalPlayer(go));
         }
@@ -203,7 +201,6 @@ namespace XnaClientLib.ECS
         public void InitializeRemoteClient(GameObject go)
         {
             var components = go.Components;
-
             var sprite = ResourceManager.Register(new Sprite("Player/Images/Down_001"));
             components.Add(sprite);
 
@@ -237,6 +234,7 @@ namespace XnaClientLib.ECS
         /// <param name="attributes">The player attributes of the object</param>
         private void AddStatusBar(IComponentContainer components, Sprite sprite, PlayerAttributes attributes)
         {
+            attributes.Team = Teams[attributes.Team.Name];
             components.Add(
                 ResourceManager.Register(new PlayerStatusBar(attributes, sprite, components.Get<Transform>(),
                     Constants.Assets.PlayerHealthBarAsset, Constants.Assets.PlayerNameFontAsset,
