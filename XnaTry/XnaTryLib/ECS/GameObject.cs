@@ -1,9 +1,9 @@
 ﻿using System;
 using ECS.BaseTypes;
 using ECS.Interfaces;
-using XnaTryLib.ECS.Components;
+using XnaCommonLib.ECS.Components;
 
-namespace XnaTryLib.ECS
+namespace XnaCommonLib.ECS
 {
     public class GameObject
     {
@@ -11,12 +11,13 @@ namespace XnaTryLib.ECS
         public IEntity Entity { get; }
         public Transform Transform { get; }
 
-        public GameObject()
+        public GameObject(Guid id)
         {
-            Entity = new Entity(Guid.NewGuid());
+            Entity = new Entity(id);
             Components = new ComponentContainer(Entity);
             Transform = new Transform();
             Components.Add(Transform);
+
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace XnaTryLib
+namespace XnaCommonLib
 {
     public static class Constants
     {
@@ -15,5 +15,14 @@ namespace XnaTryLib
         public const float FullNegativeInput = -1;
 
         public const float MaxRotation = MathHelper.TwoPi;
+
+        public const int UpdateThreadSleepTime = 1000 / 100;
+
+
+        public static class Assets
+        {
+            public const string PlayerHealthBarAsset = "Player/GUI/HealthBar";
+            public const string PlayerNameFontAsset = "Player/Fonts/NameFont";
+        }
     }
 }

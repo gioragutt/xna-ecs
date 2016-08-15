@@ -87,9 +87,13 @@
       <Project>{ceb4acaa-e8e2-477d-bd7e-07ebf4fca9d0}</Project>
       <Name>ECS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\XnaTryLib\XnaTryLib.csproj">
+    <ProjectReference Include="..\..\XnaClientLib\XnaClientLib.csproj">
+      <Project>{5aa7cc48-3c03-4865-863d-a19a7377bf18}</Project>
+      <Name>XnaClientLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\XnaTryLib\XnaCommonLib.csproj">
       <Project>{0c3b9106-ee61-42ea-9593-2c45f8b8100b}</Project>
-      <Name>XnaTryLib</Name>
+      <Name>XnaCommonLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\XnaTryContent\XnaTryContent.contentproj">
       <Name>XnaTryContent</Name>

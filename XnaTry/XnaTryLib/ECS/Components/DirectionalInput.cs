@@ -1,11 +1,12 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.IO;
+using Microsoft.Xna.Framework;
 
-namespace XnaTryLib.ECS.Components
+namespace XnaCommonLib.ECS.Components
 {
     /// <summary>
     /// Base class for deriving directional movement input from an outer source
     /// </summary>
-    public abstract class DirectionalInput : Component
+    public abstract class DirectionalInput : Component, ISharedComponent
     {
         private static float ClampInput(float input)
         {
@@ -57,5 +58,21 @@ namespace XnaTryLib.ECS.Components
         }
 
         public abstract void Update(long delta);
+
+        #region ISharedComponent Methods
+
+        public void Write(BinaryWriter writer)
+        {
+            writer.Write(Horizontal);
+            writer.Write(Vertical);
+        }
+
+        public void Read(BinaryReader reader)
+        {
+            Horizontal = reader.ReadSingle();
+            Vertical = reader.ReadSingle();
+        }
+
+        #endregion ISharedComponent Methods
     }
 }

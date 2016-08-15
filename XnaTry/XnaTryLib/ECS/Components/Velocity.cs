@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace XnaTryLib.ECS.Components
+namespace XnaCommonLib.ECS.Components
 {
     public class Velocity : Component
     {

@@ -25,7 +25,7 @@ namespace ECS.BaseTypes
 
         private IEnumerable<TDerived> AllDerivedOf<TDerived>() where TDerived : class, TBase
         {
-            return Enumerable.Select(Keys.Where(ImplementsType<TDerived>), type => this[type] as TDerived);
+            return Keys.Where(ImplementsType<TDerived>).Select(type => this[type] as TDerived);
         }
 
         public TDerived Get<TDerived>() where TDerived : class, TBase

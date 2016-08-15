@@ -5,6 +5,11 @@ namespace ECS.BaseTypes
 {
     public class Entity : IEntity, IEquatable<IEntity>
     {
+        public void Dispose()
+        {
+            Parent?.Remove(this);
+        }
+
         #region Equality Members
 
         public bool Equals(IEntity other)

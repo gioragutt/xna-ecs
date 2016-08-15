@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ECS.Interfaces;
 
-namespace XnaTryLib.ECS.Systems
+namespace XnaCommonLib.ECS.Systems
 {
     public abstract class System : ISystem
     {

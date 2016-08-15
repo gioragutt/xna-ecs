@@ -7,12 +7,6 @@ namespace ECS.BaseTypes
 {
     public class EntityPool : IEntityPool
     {
-        public void Remove(IEntity entity)
-        {
-            if (entities.ContainsKey(entity))
-                entities.Remove(entity);
-        }
-
         protected readonly Dictionary<IEntity, IComponentContainer> entities;
 
         public EntityPool()
@@ -75,6 +69,26 @@ namespace ECS.BaseTypes
             Add(entity, new ComponentContainer(entity));
         }
 
-        public int Count => entities.Count;
+        public int Count
+        {
+            get
+            {
+                return entities.Count;
+            }
+        }
+
+        public void Remove(IEntity entity)
+        {
+            if (entities.ContainsKey(entity))
+                entities.Remove(entity);
+        }
+
+        public IEnumerable<IEntity> AllEntities
+        {
+            get
+            {
+                return entities.Keys.ToList();
+            }
+        }
     }
 }

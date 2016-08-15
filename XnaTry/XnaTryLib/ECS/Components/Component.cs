@@ -1,6 +1,6 @@
 ﻿using ECS.Interfaces;
 
-namespace XnaTryLib.ECS.Components
+namespace XnaCommonLib.ECS.Components
 {
     public abstract class Component : IComponent
     {

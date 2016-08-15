@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 using ECS.Interfaces;
+using Microsoft.Xna.Framework;
 
-namespace XnaTryLib
+namespace XnaCommonLib
 {
     public static class Util
     {
@@ -49,6 +52,31 @@ namespace XnaTryLib
                 items.Add(i);
             }
             return items.Select(item => string.Format(format, item)).ToList();
+        }
+
+        public static void WriteString(BinaryWriter writer, string str)
+        {
+            writer.Write(str.Length);
+            writer.Write(Encoding.ASCII.GetBytes(str));
+        }
+
+        public static string ReadString(BinaryReader reader)
+        {
+            var length = reader.ReadInt32();
+            return Encoding.ASCII.GetString(reader.ReadBytes(length));
+        }
+
+        public static void WriteVector2(BinaryWriter writer, Vector2 vec)
+        {
+            writer.Write(vec.X);
+            writer.Write(vec.Y);
+        }
+
+        public static Vector2 ReadVector2(BinaryReader reader)
+        {
+            var x = reader.ReadSingle();
+            var y = reader.ReadSingle();
+            return new Vector2(x, y);
         }
     }
 }

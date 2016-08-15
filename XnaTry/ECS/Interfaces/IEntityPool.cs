@@ -58,5 +58,10 @@ namespace ECS.Interfaces
         /// </summary>
         /// <param name="entity">Entity to remove</param>
         void Remove(IEntity entity);
+
+        /// <summary>
+        /// Gets all entities in the pool
+        /// </summary>
+        IEnumerable<IEntity> AllEntities { get; } 
     }
 }

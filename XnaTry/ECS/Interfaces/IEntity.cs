@@ -2,7 +2,7 @@
 
 namespace ECS.Interfaces
 {
-    public interface IEntity
+    public interface IEntity : IDisposable
     {
         /// <summary>
         /// The only member an entity should have is an ID, to diffrentiate it from other entities

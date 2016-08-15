@@ -1,9 +1,24 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.IO;
+using Microsoft.Xna.Framework;
 
-namespace XnaTryLib.ECS.Components
+namespace XnaCommonLib.ECS.Components
 {
-    public class Transform : Component
+    public class Transform : Component, ISharedComponent
     {
+        public void Write(BinaryWriter writer)
+        {
+            Util.WriteVector2(writer, Position);
+            writer.Write(Rotation);
+            writer.Write(Scale);
+        }
+
+        public void Read(BinaryReader reader)
+        {
+            Position = Util.ReadVector2(reader);
+            Rotation = reader.ReadSingle();
+            Scale = reader.ReadSingle();
+        }
+
         private float scale;
         private float rotation;
 

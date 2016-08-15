@@ -1,37 +1,13 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.IO;
 
-namespace XnaTryLib.ECS.Components
+namespace XnaCommonLib.ECS.Components
 {
-    public class PlayerAttributes : Component
+    public class PlayerAttributes : Component, ISharedComponent
     {
-        private float health;
-        private float maxHealth;
-
         public string Name { get; set; }
-
-        public float Health
-        {
-            get
-            {
-                return health;
-            }
-            set
-            {
-                health = MathHelper.Clamp(value, 0, MaxHealth);
-            }
-        }
-
-        public float MaxHealth  
-        {
-            get
-            {
-                return maxHealth;
-            }
-            set
-            {
-                maxHealth = value < 0 ? 0 : value;
-            }
-        }
+        public float Health { get; set; }
+        public float MaxHealth { get; set; }
+        public TeamData Team { get; set; } = new TeamData();
 
         public float HealthPercentage
         {
@@ -43,6 +19,20 @@ namespace XnaTryLib.ECS.Components
             }
         }
 
-        public TeamData Team { get; set; }
+        public void Write(BinaryWriter writer)
+        {
+            Util.WriteString(writer, Name);
+            writer.Write(MaxHealth);
+            writer.Write(Health);
+            Team.Write(writer);
+        }
+
+        public void Read(BinaryReader reader)
+        {
+            Name = Util.ReadString(reader);
+            MaxHealth = reader.ReadSingle();
+            Health = reader.ReadSingle();
+            Team.Read(reader);
+        }
     }
 }

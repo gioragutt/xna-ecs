@@ -3,64 +3,90 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using XnaTry.ECS.Components;
-using XnaTryLib;
-using XnaTryLib.ECS;
-using XnaTryLib.ECS.Components;
-using XnaTryLib.ECS.Linkers;
-using XnaTryLib.ECS.Systems;
+using XnaClientLib;
+using XnaClientLib.ECS;
+using XnaClientLib.ECS.Compnents;
+using XnaClientLib.ECS.Linkers;
+using XnaClientLib.ECS.Systems;
+using XnaCommonLib;
+using XnaCommonLib.ECS;
+using XnaCommonLib.ECS.Components;
 
 namespace XnaTry
 {
-    /// <summary>
+   /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class XnaTryGame : Game
     {
         public GraphicsDeviceManager Graphics { get; }
         SpriteBatch spriteBatch;
-        private GameManager GameManager { get; }
+        private ClientGameManager ClientGameManager { get; }
         private ResourcesManager ResourceManager { get; }
         private KeyboardState previousKeyboardState;
         private KeyboardState currentKeyboardState;
+        private ConnectionHandler ConnectionHandler { get; }
 
-        public XnaTryGame()
+        public TeamData goodTeam = new TeamData
         {
-            IsMouseVisible = true;
-            Graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            GameManager = new GameManager();
-            ResourceManager = new ResourcesManager();
-            currentKeyboardState = Keyboard.GetState();
-            previousKeyboardState = currentKeyboardState;
-        }
+            Color = Color.Blue,
+            Name = "Good Team"
+        };
 
-        #region Contants Configurations
+        public TeamData badTeam = new TeamData
+        {
+            Color = Color.Red,
+            Name = "Bad Team"
+        };
+
+        public Dictionary<string, string> TeamFrameTextures { get; }
+
+       public Dictionary<string, TeamData> Teams { get; }
+
+       public XnaTryGame()
+       {
+           IsMouseVisible = true;
+
+           Teams = new Dictionary<string, TeamData>
+           {
+               [goodTeam.Name] = goodTeam,
+               [badTeam.Name] = badTeam
+           };
+
+           TeamFrameTextures = new Dictionary<string, string>
+           {
+               [goodTeam.Name] = "Player/GUI/GreenTeam",
+               [badTeam.Name] = "Player/GUI/RedTeam",
+           };
+
+           Graphics = new GraphicsDeviceManager(this);
+           Content.RootDirectory = "Content";
+           ResourceManager = new ResourcesManager();
+           ClientGameManager = new ClientGameManager(ResourceManager)
+           {
+               Teams = Teams,
+               TeamFrameTextures = TeamFrameTextures
+           };
+           currentKeyboardState = Keyboard.GetState();
+           previousKeyboardState = currentKeyboardState;
+
+           ConnectionHandler = new ConnectionHandler(null, 27015, ClientGameManager);
+       }
+
+       #region Contants Configurations
 
         public readonly KeyboardLayoutOptions wasdKeys = new KeyboardLayoutOptions(Keys.A, Keys.D, Keys.W, Keys.S);
         public readonly KeyboardLayoutOptions arrowKeys = KeyboardDirectionalInput.DefaultLayoutOptions;
         public readonly KeyboardLayoutOptions numpadArrowKeys = new KeyboardLayoutOptions(Keys.NumPad4, Keys.NumPad6, Keys.NumPad8, Keys.NumPad2);
 
-        public readonly TeamData goodTeam = new TeamData
-        {
-            Color = Color.Blue,
-            Name = "Good Team",
-            TeamFrameTextureAsset = "Player/GUI/GreenTeam"
-        };
-
-        public readonly TeamData badTeam = new TeamData
-        {
-            Color = Color.Red,
-            Name = "Bad Team",
-            TeamFrameTextureAsset = "Player/GUI/RedTeam"
-        };
-
         #endregion
+
+
 
         GameObject CreatePlayer(DirectionalInput input, Vector2 initialPosition, TeamData team, string name = null, float health = 50)
         {
             // Create an entity
-            var entity = GameManager.CreateGameObject();
+            var entity = ClientGameManager.CreateGameObject();
             var components = entity.Components;
 
             // Now add input
@@ -101,26 +127,22 @@ namespace XnaTry
 
             components.Add(attributes);
 
-            components.Add(ResourceManager.Register(new PlayerStatusBar(attributes, sprite, entity.Transform, "Player/GUI/HealthBar",
-                "Player/Fonts/NameFont")));
+            components.Add(ResourceManager.Register(new PlayerStatusBar(attributes, sprite, entity.Transform, Constants.Assets.PlayerHealthBarAsset,
+                Constants.Assets.PlayerNameFontAsset, TeamFrameTextures[attributes.Team.Name])));
 
             return entity;
         }
 
-        void CreatePlayerControllerPlayer(KeyboardLayoutOptions keys, Vector2 initialPosition, string name, TeamData team)
-        {
-            var playerControllerPlayer = CreatePlayer(new KeyboardDirectionalInput(keys), initialPosition, team, name);
-            playerControllerPlayer.Components.Get<PlayerAttributes>().Name = "[PC] " + playerControllerPlayer.Components.Get<PlayerAttributes>().Name;
-        }
-
-        void CreateStupidAIPlayer()
+        void CreateStupidAiPlayer()
         {
             var rnd = new Random();
             var isGoodTeam = Convert.ToBoolean(rnd.Next(0, 2));
             var team = isGoodTeam ? goodTeam : badTeam;
+
             var initialX = rnd.Next(100, 700);
             var initialY = rnd.Next(100, 400);
             var initialPosition = new Vector2(initialX, initialY);
+
             var health = (float)rnd.NextDouble() * 100;
             var aiPlayer = CreatePlayer(new FakeInput(), initialPosition, team, null, health);
             aiPlayer.Components.Get<PlayerAttributes>().Name = "[AI] " + aiPlayer.Components.Get<PlayerAttributes>().Name;
@@ -130,13 +152,10 @@ namespace XnaTry
         {
             base.Initialize();
 
-            GameManager.CreateDebugPrint(() => GameManager.ToString());
+            ClientGameManager.CreateDebugPrint(() => ClientGameManager.ToString());
 
-            CreatePlayerControllerPlayer(arrowKeys, new Vector2(400, 400), "world", goodTeam);
-            CreatePlayerControllerPlayer(wasdKeys, new Vector2(100, 400), "hello", badTeam);
-
-            GameManager.RegisterSystem(new MovementSystem());
-            GameManager.RegisterSystem(new LinkerSystem());
+            ClientGameManager.RegisterSystem(new MovementSystem());
+            ClientGameManager.RegisterSystem(new LinkerSystem());
         }
 
         /// <summary>
@@ -151,10 +170,10 @@ namespace XnaTry
             var defaultFont = Content.Load<SpriteFont>("DefaultFont");
 
             ResourceManager.SetContentManager(Content);
-            GameManager.RegisterDrawingSystem(new AnimationSystem());
-            GameManager.RegisterDrawingSystem(new RendererSystem(spriteBatch));
-            GameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch));
-            GameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
+            ClientGameManager.RegisterDrawingSystem(new AnimationSystem());
+            ClientGameManager.RegisterDrawingSystem(new RendererSystem(spriteBatch));
+            ClientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch));
+            ClientGameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
         }
 
         /// <summary>
@@ -175,27 +194,46 @@ namespace XnaTry
         {
             previousKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
+
             // Allows the game to exit
             if (currentKeyboardState.KeysPressed(Keys.LeftControl, Keys.Q, Keys.W))
                 Exit();
 
-            if (currentKeyboardState.IsKeyDown(Keys.P) && !previousKeyboardState.IsKeyDown(Keys.P))
-                CreateStupidAIPlayer();
+            if (currentKeyboardState.IsKeyDown(Keys.C) && !ConnectionHandler.Connected)
+            {
+                ConnectToServer();
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.P))// && !previousKeyboardState.IsKeyDown(Keys.P))
+                for (var i = 0; i < 5; i++ ) CreateStupidAiPlayer();
 
             ResourceManager.LoadContent();
-            GameManager.Update(gameTime);
+            ClientGameManager.Update(gameTime);
+
+            Window.Title = "XnaTryGame - " + ClientGameManager.EntitiesCount + " Entities";
+
             base.Update(gameTime);
         }
 
-        /// <summary>
+       private void ConnectToServer()
+       {
+            ConnectionHandler.ConnectAndInitializeLocalPlayer("[PC] GioraG", goodTeam.Name);
+       }
+
+       protected override void EndRun()
+       {
+            ConnectionHandler.Dispose();
+            base.EndRun();
+       }
+
+       /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            GameManager.Draw(gameTime);
+            ClientGameManager.Draw(gameTime);
             base.Draw(gameTime);
         }
     }

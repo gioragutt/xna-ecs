@@ -2,9 +2,9 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using XnaTryLib.ECS.Components;
+using XnaCommonLib.ECS.Components;
 
-namespace XnaTryLib
+namespace XnaCommonLib
 {
     public static class Extentions
     {
