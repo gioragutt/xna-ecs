@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using XnaServerLib.ECS;
 
 namespace XnaServerLib
 {

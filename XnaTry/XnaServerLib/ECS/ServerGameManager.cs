@@ -1,7 +1,6 @@
-﻿using ECS.Interfaces;
-using XnaCommonLib.ECS;
+﻿using XnaCommonLib.ECS;
 
-namespace XnaServerLib
+namespace XnaServerLib.ECS
 {
     public class ServerGameManager : GameManagerBase
     {

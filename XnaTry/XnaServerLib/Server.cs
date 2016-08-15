@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using XnaCommonLib.ECS.Components;
+using XnaServerLib.ECS;
 using XnaServerLib.Exceptions;
 
 namespace XnaServerLib
