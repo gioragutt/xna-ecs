@@ -171,8 +171,8 @@ namespace XnaTry
 
             ResourceManager.SetContentManager(Content);
             ClientGameManager.RegisterDrawingSystem(new AnimationSystem());
-            ClientGameManager.RegisterDrawingSystem(new RendererSystem(spriteBatch));
-            ClientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch));
+            ClientGameManager.RegisterDrawingSystem(new RendererSystem(spriteBatch, ClientGameManager.Camera));
+            ClientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, ClientGameManager.Camera));
             ClientGameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
         }
 
@@ -208,7 +208,7 @@ namespace XnaTry
                 for (var i = 0; i < 5; i++ ) CreateStupidAiPlayer();
 
             ResourceManager.LoadContent();
-            ClientGameManager.Update(gameTime);
+            ClientGameManager.Update(gameTime, GraphicsDevice.Viewport);
 
             Window.Title = "XnaTryGame - " + ClientGameManager.EntitiesCount + " Entities";
 

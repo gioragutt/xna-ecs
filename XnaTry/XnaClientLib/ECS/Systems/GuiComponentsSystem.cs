@@ -9,17 +9,19 @@ namespace XnaClientLib.ECS.Systems
     public class GuiComponentsSystem : XnaCommonLib.ECS.Systems.System
     {
         public SpriteBatch SpriteBatch { get; }
+        public Camera Camera { get; }
 
-        public GuiComponentsSystem(SpriteBatch spriteBatch, bool enabled = true) 
+        public GuiComponentsSystem(SpriteBatch spriteBatch, Camera camera, bool enabled = true) 
             : base(enabled)
         {
             SpriteBatch = spriteBatch;
+            Camera = camera;
         }
 
         public override void Update(ICollection<IComponentContainer> entities, long delta)
         {
             var allGuiComponents = entities.SelectMany(c => c.GetAllOf<GuiComponent>());
-            SpriteBatch.Begin();
+            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
             foreach (var guiComponent in allGuiComponents)
             {
                 guiComponent.Update(guiComponent.Container);

@@ -59,6 +59,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
     <Compile Include="ConnectionHandler.cs" />
     <Compile Include="ECS\ClientGameManager.cs" />
     <Compile Include="ECS\Compnents\Animation.cs" />

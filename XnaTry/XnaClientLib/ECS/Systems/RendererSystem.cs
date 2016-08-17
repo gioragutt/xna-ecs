@@ -11,16 +11,18 @@ namespace XnaClientLib.ECS.Systems
     public class RendererSystem : XnaCommonLib.ECS.Systems.System
     {
         public SpriteBatch SpriteBatch { get; }
+        public Camera Camera { get; }
 
-        public RendererSystem(SpriteBatch spriteBatch, bool enabled = true) 
+        public RendererSystem(SpriteBatch spriteBatch, Camera camera, bool enabled = true) 
             : base(enabled)
         {
             SpriteBatch = spriteBatch;
+            Camera = camera;
         }
 
         public override void Update(ICollection<IComponentContainer> entities, long delta)
         {
-            SpriteBatch.Begin();
+            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
             foreach (var entity in entities)
             {
                 UpdateEntity(entity);

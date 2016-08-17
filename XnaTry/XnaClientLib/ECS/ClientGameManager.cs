@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Graphics;
 using XnaClientLib.ECS.Compnents;
 using XnaClientLib.ECS.Linkers;
 using XnaCommonLib;
@@ -21,6 +22,8 @@ namespace XnaClientLib.ECS
         private ResourcesManager ResourceManager { get; }
         public Dictionary<string, TeamData> Teams { get; set; }
         public Dictionary<string, string> TeamFrameTextures { get; set; }
+        public Camera Camera { get; }
+        private GameObject LocalPlayer { get; set; }
 
         #endregion
 
@@ -34,6 +37,7 @@ namespace XnaClientLib.ECS
         {
             ResourceManager = resourceManager;
             drawingSystems = new SystemManager(EntityPool);
+            Camera = new Camera();
         }
 
         #endregion
@@ -147,9 +151,11 @@ namespace XnaClientLib.ECS
 
         #region Game Loop API
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Viewport viewport)
         {
             Update(gameTime.ElapsedGameTime.Milliseconds);
+            if (LocalPlayer != null)
+                Camera.UpdateCamera(LocalPlayer, viewport);
         }
 
         public void Draw(GameTime gameTime)
@@ -188,10 +194,13 @@ namespace XnaClientLib.ECS
             // Add Animation
             AddAnimation(sprite, components);
 
+            //components.Add(new RotateToMouse());
 
             AddStatusBar(components, sprite, go.Components.Get<PlayerAttributes>());
 
             components.Add(new LocalPlayer(go));
+
+            LocalPlayer = go;
         }
 
         /// <summary>
