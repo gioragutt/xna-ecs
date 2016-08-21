@@ -139,6 +139,10 @@ namespace EMS
                 subscriptions.Remove(messageName);
         }
 
+        /// <summary>
+        /// Unsubscribes a client from listening to all broadcasts
+        /// </summary>
+        /// <param name="client">Client that listened to all broadcasts</param>
         public void UnsubscribeFromAll(IEmsClient client)
         {
             var existing = FindClientInAll(client);
