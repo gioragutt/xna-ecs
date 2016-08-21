@@ -18,7 +18,6 @@ namespace XnaClientLib.ECS.Compnents
 
         #region Content
 
-        private string TeamFrameTextureAsset { get; set; }
         private string HealthBarTextureAsset { get; }
         private string NameFontAsset { get; }
 
@@ -45,25 +44,23 @@ namespace XnaClientLib.ECS.Compnents
         /// <param name="transform"></param>
         /// <param name="healthBarTextureAsset"></param>
         /// <param name="nameFontAsset"></param>
-        public PlayerStatusBar(PlayerAttributes attributes, Sprite sprite, Transform transform, string healthBarTextureAsset, string nameFontAsset, string teamFrameTextureAsset)
+        public PlayerStatusBar(PlayerAttributes attributes, Sprite sprite, Transform transform, string healthBarTextureAsset, string nameFontAsset)
         {
             Util.AssertStringArgumentNotNull(healthBarTextureAsset, "healthBarTextureAsset");
             Util.AssertStringArgumentNotNull(nameFontAsset, "nameFontAsset");
-            Util.AssertStringArgumentNotNull(teamFrameTextureAsset, "teamFrameTextureAsset");
 
             Attributes = attributes;
             Sprite = sprite;
             Transform = transform;
             HealthBarTextureAsset = healthBarTextureAsset;
             NameFontAsset = nameFontAsset;
-            TeamFrameTextureAsset = teamFrameTextureAsset;
         }
 
         private Vector2 healthBarPaddingInFrame = Vector2.Zero;
 
         public override void LoadContent(ContentManager content)
         {
-            FrameTexture = content.Load<Texture2D>(TeamFrameTextureAsset);
+            FrameTexture = content.Load<Texture2D>(Attributes.Team.Frame);
 
             healthBarPaddingInFrame = new Vector2(HealthBarWidthPadding,
                 FrameTexture.Height + HealthBarHeightPadding - HealthBarHeight);

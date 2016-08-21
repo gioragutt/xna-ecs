@@ -19,9 +19,8 @@ namespace XnaClientLib.ECS
         #region Properties and Variables
 
         private readonly SystemManager drawingSystems;
-        private ResourcesManager ResourceManager { get; }
+        public ResourcesManager ResourceManager { get; }
         public Dictionary<string, TeamData> Teams { get; set; }
-        public Dictionary<string, string> TeamFrameTextures { get; set; }
         public Camera Camera { get; }
         private GameObject LocalPlayer { get; set; }
 
@@ -246,8 +245,7 @@ namespace XnaClientLib.ECS
             attributes.Team = Teams[attributes.Team.Name];
             components.Add(
                 ResourceManager.Register(new PlayerStatusBar(attributes, sprite, components.Get<Transform>(),
-                    Constants.Assets.PlayerHealthBarAsset, Constants.Assets.PlayerNameFontAsset,
-                    TeamFrameTextures[attributes.Team.Name])));
+                    Constants.Assets.PlayerHealthBarAsset, Constants.Assets.PlayerNameFontAsset)));
         }
 
         /// <summary>

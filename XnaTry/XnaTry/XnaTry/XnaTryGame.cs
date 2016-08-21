@@ -14,74 +14,73 @@ using XnaCommonLib.ECS.Components;
 
 namespace XnaTry
 {
-   /// <summary>
+    /// <summary>
     /// This is the main type for your game
     /// </summary>
     public class XnaTryGame : Game
     {
         public GraphicsDeviceManager Graphics { get; }
         SpriteBatch spriteBatch;
+
         private ClientGameManager ClientGameManager { get; }
         private ResourcesManager ResourceManager { get; }
+        private ConnectionHandler ConnectionHandler { get; }
+
         private KeyboardState previousKeyboardState;
         private KeyboardState currentKeyboardState;
-        private ConnectionHandler ConnectionHandler { get; }
 
         public TeamData goodTeam = new TeamData
         {
             Color = Color.Blue,
-            Name = "Good Team"
+            Name = "Good Team",
+            Frame = "Player/GUI/GreenTeam"
         };
 
         public TeamData badTeam = new TeamData
         {
             Color = Color.Red,
-            Name = "Bad Team"
+            Name = "Bad Team",
+            Frame = "Player/GUI/RedTeam"
         };
 
-        public Dictionary<string, string> TeamFrameTextures { get; }
+        public Dictionary<string, TeamData> Teams { get; }
 
-       public Dictionary<string, TeamData> Teams { get; }
+        public void InitializeGameSettings(int width, int height)
+        {
+            Graphics.PreferredBackBufferHeight = height;
+            Graphics.PreferredBackBufferWidth = width;
+            Graphics.ApplyChanges();
+            IsMouseVisible = true;
+        }
 
-       public XnaTryGame()
-       {
-           IsMouseVisible = true;
+        public XnaTryGame()
+        {
+            Teams = new Dictionary<string, TeamData>
+            {
+                [goodTeam.Name] = goodTeam,
+                [badTeam.Name] = badTeam
+            };
 
-           Teams = new Dictionary<string, TeamData>
-           {
-               [goodTeam.Name] = goodTeam,
-               [badTeam.Name] = badTeam
-           };
+            Graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            ResourceManager = new ResourcesManager();
+            ClientGameManager = new ClientGameManager(ResourceManager)
+            {
+                Teams = Teams
+            };
+            currentKeyboardState = Keyboard.GetState();
+            previousKeyboardState = currentKeyboardState;
 
-           TeamFrameTextures = new Dictionary<string, string>
-           {
-               [goodTeam.Name] = "Player/GUI/GreenTeam",
-               [badTeam.Name] = "Player/GUI/RedTeam",
-           };
+            ConnectionHandler = new ConnectionHandler(null, 27015, ClientGameManager);
+        }
 
-           Graphics = new GraphicsDeviceManager(this);
-           Content.RootDirectory = "Content";
-           ResourceManager = new ResourcesManager();
-           ClientGameManager = new ClientGameManager(ResourceManager)
-           {
-               Teams = Teams,
-               TeamFrameTextures = TeamFrameTextures
-           };
-           currentKeyboardState = Keyboard.GetState();
-           previousKeyboardState = currentKeyboardState;
-
-           ConnectionHandler = new ConnectionHandler(null, 27015, ClientGameManager);
-       }
-
-       #region Contants Configurations
+        #region Contants Configurations
 
         public readonly KeyboardLayoutOptions wasdKeys = new KeyboardLayoutOptions(Keys.A, Keys.D, Keys.W, Keys.S);
         public readonly KeyboardLayoutOptions arrowKeys = KeyboardDirectionalInput.DefaultLayoutOptions;
         public readonly KeyboardLayoutOptions numpadArrowKeys = new KeyboardLayoutOptions(Keys.NumPad4, Keys.NumPad6, Keys.NumPad8, Keys.NumPad2);
 
         #endregion
-
-
 
         GameObject CreatePlayer(DirectionalInput input, Vector2 initialPosition, TeamData team, string name = null, float health = 50)
         {
@@ -128,7 +127,7 @@ namespace XnaTry
             components.Add(attributes);
 
             components.Add(ResourceManager.Register(new PlayerStatusBar(attributes, sprite, entity.Transform, Constants.Assets.PlayerHealthBarAsset,
-                Constants.Assets.PlayerNameFontAsset, TeamFrameTextures[attributes.Team.Name])));
+                Constants.Assets.PlayerNameFontAsset)));
 
             return entity;
         }
@@ -205,7 +204,8 @@ namespace XnaTry
             }
 
             if (currentKeyboardState.IsKeyDown(Keys.P))// && !previousKeyboardState.IsKeyDown(Keys.P))
-                for (var i = 0; i < 5; i++ ) CreateStupidAiPlayer();
+                for (var i = 0; i < 5; i++)
+                    CreateStupidAiPlayer();
 
             ResourceManager.LoadContent();
             ClientGameManager.Update(gameTime, GraphicsDevice.Viewport);
@@ -215,18 +215,18 @@ namespace XnaTry
             base.Update(gameTime);
         }
 
-       private void ConnectToServer()
-       {
+        private void ConnectToServer()
+        {
             ConnectionHandler.ConnectAndInitializeLocalPlayer("[PC] GioraG", goodTeam.Name);
-       }
+        }
 
-       protected override void EndRun()
-       {
+        protected override void EndRun()
+        {
             ConnectionHandler.Dispose();
             base.EndRun();
-       }
+        }
 
-       /// <summary>
+        /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>

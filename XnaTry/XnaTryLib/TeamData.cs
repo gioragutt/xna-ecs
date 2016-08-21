@@ -9,7 +9,8 @@ namespace XnaCommonLib
     {
         public string Name { get; set; }
         public Color Color { get; set; }
-        
+        public string Frame { get; set; }
+
         public bool Equals(TeamData other) { return Name.Equals(other.Name); }
 
         public void Read(BinaryReader reader)
