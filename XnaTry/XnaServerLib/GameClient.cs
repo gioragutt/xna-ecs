@@ -3,6 +3,8 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using ECS.Interfaces;
+using EMS;
 using Microsoft.Xna.Framework;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
@@ -11,7 +13,7 @@ using XnaServerLib.ECS;
 
 namespace XnaServerLib
 {
-    public class GameClient : IDisposable
+    public class GameClient : EmsClient, IDisposable
     {
         public void Dispose()
         {
@@ -53,6 +55,11 @@ namespace XnaServerLib
         /// </summary>
         private Thread UpdateThread { get; }
 
+        /// <summary>
+        /// The EmsServer Endpoint
+        /// </summary>
+        private EmsServerEndpoint EmsServerEndpoint { get; }
+
         #endregion Properties
 
         #region Constructor
@@ -68,6 +75,8 @@ namespace XnaServerLib
             Util.AssertArgumentNotNull(connection, "connection");
             Util.AssertArgumentNotNull(gameObject, "gameObject");
 
+            EmsServerEndpoint = new EmsServerEndpoint();
+
             GameObject = gameObject;
             GameManager = gameManager;
             Connection = connection;
@@ -78,9 +87,12 @@ namespace XnaServerLib
 
             ReadClientLoginDataAndInitializePlayer();
             SendClientLoginResponse();
+
             UpdateThread = new Thread(GameClient_InteractWithClient);
             UpdateThread.Start();
         }
+
+        #endregion Constructor
 
         private void GameClient_InteractWithClient()
         {
@@ -109,18 +121,21 @@ namespace XnaServerLib
             
             Console.WriteLine("Player {0} disconnected", GameObject.Components.Get<PlayerAttributes>().Name);
 
-            GameObject.Entity.Dispose();
+
+            GameManager.DisposeOfClient(this);
             GameObject = null;
         }
 
         private void ReadPlayerData()
         {
+            EmsServerEndpoint.BroadcastIncomingEvents(Reader);
             var components = GameObject.Components;
             components.Get<DirectionalInput>().Read(Reader);
         }
 
         private void WriteAllPlayerData()
         {
+            EmsServerEndpoint.Flush(Writer);
             var amountOfPlayers = GameManager.EntitiesCount;
             Writer.Write(amountOfPlayers);
 
@@ -128,12 +143,16 @@ namespace XnaServerLib
 
             foreach (var entity in allEntities)
             {
-                var entityComponents = GameManager.EntityPool.GetComponents(entity);
-                Util.WriteString(Writer, entity.Id.ToString());
-                entityComponents.Get<Transform>().Write(Writer);
-                entityComponents.Get<PlayerAttributes>().Write(Writer);
-                entityComponents.Get<DirectionalInput>().Write(Writer);
+                WriteEntity(entity, GameManager.EntityPool.GetComponents(entity));
             }
+        }
+
+        private void WriteEntity(IEntity entity, IComponentContainer entityComponents)
+        {
+            Util.WriteString(Writer, entity.Id.ToString());
+            entityComponents.Get<Transform>().Write(Writer);
+            entityComponents.Get<PlayerAttributes>().Write(Writer);
+            entityComponents.Get<DirectionalInput>().Write(Writer);
         }
 
         private void SendClientLoginResponse()
@@ -170,7 +189,5 @@ namespace XnaServerLib
             GameObject.Components.Add(new InputData());
             GameObject.Components.Add(new Velocity(new Vector2(5)));
         }
-
-        #endregion Constructor
     }
 }

@@ -51,6 +51,10 @@
       <Project>{CEB4ACAA-E8E2-477D-BD7E-07EBF4FCA9D0}</Project>
       <Name>ECS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EMS\EMS.csproj">
+      <Project>{9dd1b6d5-18d4-4ff1-86ca-c382ecd42fe4}</Project>
+      <Name>EMS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XnaTryLib\XnaCommonLib.csproj">
       <Project>{0c3b9106-ee61-42ea-9593-2c45f8b8100b}</Project>
       <Name>XnaCommonLib</Name>
