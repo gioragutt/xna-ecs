@@ -74,6 +74,10 @@
       <Project>{ceb4acaa-e8e2-477d-bd7e-07ebf4fca9d0}</Project>
       <Name>ECS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EMS\EMS.csproj">
+      <Project>{9dd1b6d5-18d4-4ff1-86ca-c382ecd42fe4}</Project>
+      <Name>EMS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />

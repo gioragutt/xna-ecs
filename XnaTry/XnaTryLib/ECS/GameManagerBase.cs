@@ -1,13 +1,14 @@
 using System;
 using ECS.Interfaces;
 using ECS.Managers;
+using EMS;
 
 namespace XnaCommonLib.ECS
 {
     /// <summary>
     /// Base class for game managers
     /// </summary>
-    public abstract class GameManagerBase
+    public abstract class GameManagerBase : EmsClient
     {
         protected EntityManager entityManager;
         protected SystemManager nonDrawingSystems;
