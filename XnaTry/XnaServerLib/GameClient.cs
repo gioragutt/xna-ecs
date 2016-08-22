@@ -178,7 +178,7 @@ namespace XnaServerLib
 
             GameObject.Components.Add(new PlayerAttributes
             {
-                Name = name,
+                Name = GameManager.GetAvailablePlayerName(name),
                 Team = new TeamData
                 {
                     Name = teamName,

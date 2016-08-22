@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ECS.BaseTypes;
 using EMS;
 using XnaCommonLib;
@@ -33,6 +34,28 @@ namespace XnaServerLib.ECS
         public void Update(TimeSpan delta)
         {
             Update((long)delta.TotalMilliseconds);
+        }
+
+        public string GetAvailablePlayerName(string loginName)
+        {
+            if (IsNameAvailable(loginName))
+                return loginName;
+
+            var count = 1;
+            string name;
+            do
+            {
+                name = string.Format("{0}({1})", loginName, count++);
+            }
+            while (!IsNameAvailable(name));
+
+            return name;
+        }
+
+        private bool IsNameAvailable(string name)
+        {
+            var allEntities = EntityPool.GetAllOf<PlayerAttributes>();
+            return allEntities.All(entity => entity.Name != name);
         }
     }
 }
