@@ -154,7 +154,6 @@ namespace XnaClientLib
         private void WritePlayerData()
         {
             var components = GameObject.Components;
-            //components.Get<Transform>().Write(Writer);
             components.Get<DirectionalInput>().Write(Writer);
         }
     }

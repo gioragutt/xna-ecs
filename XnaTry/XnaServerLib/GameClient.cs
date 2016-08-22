@@ -115,9 +115,7 @@ namespace XnaServerLib
 
         private void ReadPlayerData()
         {
-            Console.WriteLine("Writing to client");
             var components = GameObject.Components;
-            //components.Get<Transform>().Read(Reader);
             components.Get<DirectionalInput>().Read(Reader);
         }
 
@@ -125,7 +123,6 @@ namespace XnaServerLib
         {
             var amountOfPlayers = GameManager.EntitiesCount;
             Writer.Write(amountOfPlayers);
-            Console.WriteLine("Writing {0} Players", amountOfPlayers);
 
             var allEntities = GameManager.EntityPool.AllEntities;
 
@@ -157,12 +154,14 @@ namespace XnaServerLib
 
             GameObject.Transform.Scale = 0.4f;
 
+            var teamName = GameManager.EntitiesCount % 2 == 0 ? "Bad Team" : "Good Team";
+
             GameObject.Components.Add(new PlayerAttributes
             {
                 Name = name,
                 Team = new TeamData
                 {
-                    Name = team,
+                    Name = teamName,
                 },
                 MaxHealth = 100,
                 Health = 50
