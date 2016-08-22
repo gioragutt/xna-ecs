@@ -27,8 +27,16 @@ namespace ECS.BaseTypes
 
         public ICollection<TComponent> GetAllOf<TComponent>() where TComponent : class, IComponent
         {
-            return entities.Values.Where(components => components.Has<TComponent>()).
-                SelectMany(components => components.GetAllOf<TComponent>()).ToList();
+            try
+            {
+                return
+                    entities.Values.Where(components => components.Has<TComponent>()).SelectMany(
+                        components => components.GetAllOf<TComponent>()).ToList();
+            }
+            catch
+            {
+                return new List<TComponent>();
+            }
         }
 
         public IEnumerable<IComponentContainer> AllThat(Predicate<IComponentContainer> predicate)
