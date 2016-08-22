@@ -78,5 +78,15 @@ namespace XnaCommonLib
             var y = reader.ReadSingle();
             return new Vector2(x, y);
         }
+
+        public static void WriterGuid(BinaryWriter writer, Guid guid)
+        {
+            writer.Write(guid.ToByteArray());
+        }
+
+        public static Guid ReadGuid(BinaryReader reader)
+        {
+            return new Guid(reader.ReadBytes(16));
+        }
     }
 }
