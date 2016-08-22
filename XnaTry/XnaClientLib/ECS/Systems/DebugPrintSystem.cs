@@ -21,7 +21,7 @@ namespace XnaClientLib.ECS.Systems
             Font = font;
         }
 
-        public override void Update(ICollection<IComponentContainer> entities, long delta)
+        public override void Update(IList<IComponentContainer> entities, long delta)
         {
             SpriteBatch.Begin();
             var textPos = new Vector2(Constants.DebugPrintInitialX, Constants.DebugPrintInitialY);

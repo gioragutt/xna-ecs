@@ -18,13 +18,13 @@ namespace ECS.Interfaces
         /// </summary>
         /// <param name="entities">The components that this system is in charge of</param>
         /// <param name="delta">Milliseconds since last update</param>
-        void Update(ICollection<IComponentContainer> entities, long delta);
+        void Update(IList<IComponentContainer> entities, long delta);
 
         /// <summary>
         /// Allows to get only the relevant components
         /// </summary>
         /// <param name="pool">The available pool of entities</param>
         /// <returns>An ICollection of all relevant components for the system</returns>
-        ICollection<IComponentContainer> GetRelevant(IEntityPool pool);
+        IList<IComponentContainer> GetRelevant(IEntityPool pool);
     }
 }

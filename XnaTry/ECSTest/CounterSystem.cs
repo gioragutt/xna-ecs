@@ -13,12 +13,12 @@ namespace ECSTest
             Update(GetRelevant(pool), delta);
         }
 
-        public ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
+        public IList<IComponentContainer> GetRelevant(IEntityPool pool)
         {
             return pool.AllThat(c => c.Has<CounterComponent>()).ToList();
         }
 
-        public void Update(ICollection<IComponentContainer> entities, long delta)
+        public void Update(IList<IComponentContainer> entities, long delta)
         {
             foreach (var container in entities)
             {

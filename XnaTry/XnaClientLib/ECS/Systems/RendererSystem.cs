@@ -21,13 +21,11 @@ namespace XnaClientLib.ECS.Systems
             Camera = camera;
         }
 
-        public override void Update(ICollection<IComponentContainer> entities, long delta)
+        public override void Update(IList<IComponentContainer> entities, long delta)
         {
             SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
-            foreach (var entity in entities)
-            {
-                UpdateEntity(entity);
-            }
+            for (var index = 0; index < entities.Count; index++)
+                UpdateEntity(entities[index]);
             SpriteBatch.End();
         }
 

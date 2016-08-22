@@ -21,10 +21,10 @@ namespace XnaCommonLib.ECS.Systems
             Update(GetRelevant(pool), delta);
         }
 
-        public abstract void Update(ICollection<IComponentContainer> entities, long delta);
+        public abstract void Update(IList<IComponentContainer> entities, long delta);
         public abstract Predicate<IComponentContainer> RelevantEntities();
 
-        public ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
+        public IList<IComponentContainer> GetRelevant(IEntityPool pool)
         {
             return pool.AllThat(RelevantEntities()).ToList();
         }

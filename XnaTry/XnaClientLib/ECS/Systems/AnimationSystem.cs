@@ -7,12 +7,10 @@ namespace XnaClientLib.ECS.Systems
 {
     public class AnimationSystem : XnaCommonLib.ECS.Systems.System
     {
-        public override void Update(ICollection<IComponentContainer> entities, long delta)
+        public override void Update(IList<IComponentContainer> entities, long delta)
         {
-            foreach (var entity in entities)
-            {
-                HandleAnimation(entity, delta);
-            }
+            for (var index = 0; index < entities.Count; index++)
+                HandleAnimation(entities[index], delta);
         }
 
         public void HandleAnimation(IComponentContainer entity, long delta)

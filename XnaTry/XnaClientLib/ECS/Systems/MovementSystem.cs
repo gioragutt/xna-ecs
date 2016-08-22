@@ -5,14 +5,16 @@ using Microsoft.Xna.Framework;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
-namespace XnaServerLib.ECS.Systems
+namespace XnaClientLib.ECS.Systems
 {
     public class MovementSystem : XnaCommonLib.ECS.Systems.System
     {
-        public override void Update(IList<IComponentContainer> entities, long delta)
+        public override void Update(ICollection<IComponentContainer> entities, long delta)
         {
-            for (var i = 0; i < entities.Count; i++)
-                UpdateEntity(entities[i], delta);
+            foreach (var entity in entities)
+            {
+                UpdateEntity(entity, delta);
+            }
         }
 
         private static void UpdateEntity(IComponentContainer entity, long delta)

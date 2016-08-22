@@ -19,12 +19,13 @@ namespace XnaClientLib.ECS.Systems
             Camera = camera;
         }
 
-        public override void Update(ICollection<IComponentContainer> entities, long delta)
+        public override void Update(IList<IComponentContainer> entities, long delta)
         {
-            var allGuiComponents = entities.SelectMany(c => c.GetAllOf<GuiComponent>());
+            var allGuiComponents = entities.SelectMany(c => c.GetAllOf<GuiComponent>()).ToList();
             SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
-            foreach (var guiComponent in allGuiComponents)
+            for (var i = 0; i < allGuiComponents.Count; ++i)
             {
+                var guiComponent = allGuiComponents[i];
                 guiComponent.Update(guiComponent.Container);
                 guiComponent.Draw(SpriteBatch);
             }

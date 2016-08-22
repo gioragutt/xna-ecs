@@ -8,7 +8,7 @@ namespace XnaClientLib.ECS.Systems
 {
     public class LinkerSystem : XnaCommonLib.ECS.Systems.System
     {
-        public override void Update(ICollection<IComponentContainer> entities, long delta)
+        public override void Update(IList<IComponentContainer> entities, long delta)
         {
             entities.Select(c => c.Get<Linker>()).ToList().ForEach(linker => linker.Link());
         }
