@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Net.Sockets;
+using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading;
+using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 using XnaServerLib.ECS;
+using XnaServerLib.ECS.Systems;
 using XnaServerLib.Exceptions;
 
 namespace XnaServerLib
@@ -20,17 +25,26 @@ namespace XnaServerLib
 
         #endregion Constants
 
+        #region Threads
+
+        /// <summary>
+        /// The thread that accepts clients to the server
+        /// </summary>
+        private Thread ClientAcceptingThread { get; }
+
+        /// <summary>
+        /// The thread that runs the update loop
+        /// </summary>
+        private Thread UpdateLoopThread { get; }
+
+        #endregion Threads
+
         #region Properties
 
         /// <summary>
         /// The list of client currently registered in the server
         /// </summary>
         public List<GameClient> GameClients { get; set; }
-
-        /// <summary>
-        /// The thread that accepts clients to the server
-        /// </summary>
-        private Thread ClientAcceptingThread { get; }
 
         /// <summary>
         /// TcpListner which listens for incoming TCP/IP Connections
@@ -47,7 +61,12 @@ namespace XnaServerLib
         /// </summary>
         public bool Listening { get; private set; }
 
+        /// <summary>
+        /// The servers GameManager
+        /// </summary>
         public ServerGameManager GameManager { get; }
+
+        public DateTime LastUpdateTime { get; private set; }
 
         #endregion Properties
 
@@ -68,10 +87,18 @@ namespace XnaServerLib
                 IsBackground = false
             };
 
+            UpdateLoopThread = new Thread(Server_UpdateLoop)
+            {
+                IsBackground = true
+            };
+
             ConnectionListener = new TcpListener(IPAddress.Any, Port);
             Listening = false;
 
             GameManager = new ServerGameManager();
+            GameManager.RegisterSystem(new MovementSystem());
+
+            UpdateLoopThread.Start();
         }
 
         #endregion Constructors
@@ -91,6 +118,18 @@ namespace XnaServerLib
         #endregion API Methods
 
         #region Thread Methods
+
+        private void Server_UpdateLoop()
+        {
+            while (true)
+            {
+                var currentTime = DateTime.Now;
+                GameManager.Update(currentTime - LastUpdateTime);
+                LastUpdateTime = currentTime;
+
+                Thread.Sleep(Constants.UpdateThreadSleepTime);
+            }
+        }
 
         private void Server_AcceptPlayers()
         {

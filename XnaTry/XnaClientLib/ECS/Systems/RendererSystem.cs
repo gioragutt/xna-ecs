@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework;
@@ -47,9 +48,9 @@ namespace XnaClientLib.ECS.Systems
                 layerDepth: 0);
         }
 
-        public override ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
+        public override Predicate<IComponentContainer> RelevantEntities()
         {
-            return pool.AllThat(c => c.Has<Sprite>() && c.Has<Transform>()).ToList();
+            return c => c.Has<Sprite>() && c.Has<Transform>();
         }
     }
 }

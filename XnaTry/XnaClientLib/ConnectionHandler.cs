@@ -108,6 +108,9 @@ namespace XnaClientLib
             attributes.Read(Reader);
             GameObject.Components.Add(attributes);
             GameObject.Transform.Read(Reader);
+            var velocty = new Velocity(Vector2.Zero);
+            velocty.Read(Reader);
+            GameObject.Components.Add(velocty);
             ClientGameManager.InitializeLocalClient(GameObject);
         }
 
@@ -150,7 +153,7 @@ namespace XnaClientLib
         private void WritePlayerData()
         {
             var components = GameObject.Components;
-            components.Get<Transform>().Write(Writer);
+            //components.Get<Transform>().Write(Writer);
             components.Get<DirectionalInput>().Write(Writer);
         }
     }

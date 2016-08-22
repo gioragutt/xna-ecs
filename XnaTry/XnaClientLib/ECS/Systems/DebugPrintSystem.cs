@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework;
@@ -40,9 +41,9 @@ namespace XnaClientLib.ECS.Systems
             return textPos;
         }
 
-        public override ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
+        public override Predicate<IComponentContainer> RelevantEntities()
         {
-            return pool.AllThat(c => c.Has<DebugPrintText>()).ToList();
+            return c => c.Has<DebugPrintText>();
         }
     }
 }

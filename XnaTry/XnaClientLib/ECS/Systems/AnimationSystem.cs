@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using ECS.Interfaces;
 using XnaClientLib.ECS.Compnents;
 
@@ -20,9 +20,9 @@ namespace XnaClientLib.ECS.Systems
             entity.Get<Animation>().Update(delta);
         }
 
-        public override ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
+        public override Predicate<IComponentContainer> RelevantEntities()
         {
-            return pool.AllThat(c => c.Has<Animation>()).ToList();
+            return c => c.Has<Animation>(); 
         }
     }
 }

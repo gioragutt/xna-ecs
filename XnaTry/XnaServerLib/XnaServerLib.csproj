@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ECS\ServerGameManager.cs" />
+    <Compile Include="ECS\Systems\MovementSystem.cs" />
     <Compile Include="Exceptions\BaseXnaServerException.cs" />
     <Compile Include="Exceptions\ConnectionEstablishmentErrorException.cs" />
     <Compile Include="Exceptions\InvalidPortException.cs" />
@@ -55,6 +56,7 @@
       <Name>XnaCommonLib</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

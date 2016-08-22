@@ -153,7 +153,7 @@ namespace XnaTry
 
             ClientGameManager.CreateDebugPrint(() => ClientGameManager.ToString());
 
-            ClientGameManager.RegisterSystem(new MovementSystem());
+            //ClientGameManager.RegisterSystem(new MovementSystem());
             ClientGameManager.RegisterSystem(new LinkerSystem());
         }
 

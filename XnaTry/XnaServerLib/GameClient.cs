@@ -76,7 +76,7 @@ namespace XnaServerLib
             Reader = new BinaryReader(connectionStream);
             Writer = new BinaryWriter(connectionStream);
 
-            ReadClientLoginData();
+            ReadClientLoginDataAndInitializePlayer();
             SendClientLoginResponse();
             UpdateThread = new Thread(GameClient_InteractWithClient);
             UpdateThread.Start();
@@ -117,7 +117,7 @@ namespace XnaServerLib
         {
             Console.WriteLine("Writing to client");
             var components = GameObject.Components;
-            components.Get<Transform>().Read(Reader);
+            //components.Get<Transform>().Read(Reader);
             components.Get<DirectionalInput>().Read(Reader);
         }
 
@@ -147,12 +147,15 @@ namespace XnaServerLib
             GameObject.Components.Get<PlayerAttributes>().Write(Writer);
             GameObject.Transform.Position = new Vector2(50, 300);
             GameObject.Transform.Write(Writer);
+            GameObject.Components.Get<Velocity>().Write(Writer);
         }
 
-        private void ReadClientLoginData()
+        private void ReadClientLoginDataAndInitializePlayer()
         {
             var name = Reader.ReadString();
             var team = Reader.ReadString();
+
+            GameObject.Transform.Scale = 0.4f;
 
             GameObject.Components.Add(new PlayerAttributes
             {
@@ -166,6 +169,7 @@ namespace XnaServerLib
             });
 
             GameObject.Components.Add(new InputData());
+            GameObject.Components.Add(new Velocity(new Vector2(5)));
         }
 
         #endregion Constructor

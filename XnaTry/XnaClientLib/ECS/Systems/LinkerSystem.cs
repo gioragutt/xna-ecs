@@ -2,6 +2,7 @@
 using System.Linq;
 using ECS.Interfaces;
 using XnaClientLib.ECS.Linkers;
+using System;
 
 namespace XnaClientLib.ECS.Systems
 {
@@ -12,9 +13,9 @@ namespace XnaClientLib.ECS.Systems
             entities.Select(c => c.Get<Linker>()).ToList().ForEach(linker => linker.Link());
         }
 
-        public override ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
+        public override Predicate<IComponentContainer> RelevantEntities()
         {
-            return pool.AllThat(c => c.Has<Linker>()).ToList();
+            return c => c.Has<Linker>(); 
         }
     }
 }

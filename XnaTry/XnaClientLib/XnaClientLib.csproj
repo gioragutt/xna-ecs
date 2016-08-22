@@ -78,7 +78,6 @@
     <Compile Include="ECS\Systems\DebugPrintSystem.cs" />
     <Compile Include="ECS\Systems\GuiComponentsSystem.cs" />
     <Compile Include="ECS\Systems\LinkerSystem.cs" />
-    <Compile Include="ECS\Systems\MovementSystem.cs" />
     <Compile Include="ECS\Systems\RendererSystem.cs" />
     <Compile Include="IContentRequester.cs" />
     <Compile Include="IResourcesManager.cs" />

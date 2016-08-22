@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,9 +31,9 @@ namespace XnaClientLib.ECS.Systems
             SpriteBatch.End();
         }
 
-        public override ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
+        public override Predicate<IComponentContainer> RelevantEntities()
         {
-            return pool.AllThat(c => c.Has<GuiComponent>()).ToList();
+            return c => c.Has<GuiComponent>();
         }
     }
 }

@@ -4,6 +4,9 @@ using ECS.Managers;
 
 namespace XnaCommonLib.ECS
 {
+    /// <summary>
+    /// Base class for game managers
+    /// </summary>
     public abstract class GameManagerBase
     {
         protected EntityManager entityManager;

@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework;
-using XnaClientLib.ECS.Compnents;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
-namespace XnaClientLib.ECS.Systems
+namespace XnaServerLib.ECS.Systems
 {
     public class MovementSystem : XnaCommonLib.ECS.Systems.System
     {
@@ -23,19 +22,9 @@ namespace XnaClientLib.ECS.Systems
             var transform = entity.Get<Transform>();
             var velocity = entity.Get<Velocity>();
             var input = entity.Get<DirectionalInput>();
-            var rotateToMouse = entity.Get<RotateToMouse>();
             HandleMovement(delta, input, velocity, transform);
-            HandleRotationToMouse(rotateToMouse, transform);
         }
 
-        private static void HandleRotationToMouse(RotateToMouse rotateToMouse, Transform transform)
-        {
-            if (!Util.ComponentsEnabled(rotateToMouse))
-                return;
-
-            var mousePosition = rotateToMouse.MousePosition;
-            transform.RotateTo(mousePosition);
-        }
 
         private static void HandleMovement(long delta, DirectionalInput input, Velocity velocity, Transform transform)
         {
@@ -64,11 +53,9 @@ namespace XnaClientLib.ECS.Systems
             return moveVector;
         }
 
-        public override ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
+        public override Predicate<IComponentContainer> RelevantEntities()
         {
-            return pool.AllThat(c => c.Has<Transform>() &&
-                                     ((c.Has<Velocity>() && c.Has<DirectionalInput>()) ||
-                                      c.Has<RotateToMouse>())).ToList();
+            return c => c.Has<Transform>() && c.Has<Velocity>() && c.Has<DirectionalInput>();
         }
     }
 }

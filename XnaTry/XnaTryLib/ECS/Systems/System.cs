@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ECS.Interfaces;
 
 namespace XnaCommonLib.ECS.Systems
@@ -20,6 +22,13 @@ namespace XnaCommonLib.ECS.Systems
         }
 
         public abstract void Update(ICollection<IComponentContainer> entities, long delta);
-        public abstract ICollection<IComponentContainer> GetRelevant(IEntityPool pool);
+        public abstract Predicate<IComponentContainer> RelevantEntities();
+
+        public ICollection<IComponentContainer> GetRelevant(IEntityPool pool)
+        {
+            return pool.AllThat(RelevantEntities()).ToList();
+        }
+
+
     }
 }

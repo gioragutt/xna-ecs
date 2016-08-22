@@ -13,8 +13,10 @@ namespace XnaClientLib.ECS.Compnents
 
         public override void Update(BinaryReader reader)
         {
-            new Transform().Read(reader);
-            new PlayerAttributes().Read(reader);
+            var components = UpdatedObject.Components;
+
+            components.Get<Transform>().Read(reader);
+            components.Get<PlayerAttributes>().Read(reader);
             new InputData().Read(reader);
         }
     }

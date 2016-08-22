@@ -152,9 +152,14 @@ namespace XnaClientLib.ECS
 
         public void Update(GameTime gameTime, Viewport viewport)
         {
-            Update(gameTime.ElapsedGameTime.Milliseconds);
-            if (LocalPlayer != null)
-                Camera.UpdateCamera(LocalPlayer, viewport);
+            var delta = gameTime.ElapsedGameTime.Milliseconds;
+            Update(delta);
+
+            if (LocalPlayer == null)
+                return;
+
+            LocalPlayer.Components.Get<DirectionalInput>().Update(delta);
+            Camera.UpdateCamera(LocalPlayer, viewport);
         }
 
         public void Draw(GameTime gameTime)
@@ -180,7 +185,6 @@ namespace XnaClientLib.ECS
             var components = go.Components;
 
             // Now add input
-            components.Add(new Velocity(new Vector2(2)));
             components.Add(new KeyboardDirectionalInput());
 
             // Show a character
