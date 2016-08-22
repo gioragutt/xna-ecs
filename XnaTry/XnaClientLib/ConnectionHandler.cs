@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ECS.BaseTypes;
+using EMS;
 using Microsoft.Xna.Framework;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using ECS.BaseTypes;
 using XnaClientLib.ECS;
 using XnaClientLib.ECS.Compnents;
 using XnaCommonLib;
@@ -73,6 +74,11 @@ namespace XnaClientLib
         /// </summary>
         public ClientGameManager ClientGameManager { get; }
 
+        /// <summary>
+        /// The EMS Server Endpoint to receive and broadcasts from and to the server
+        /// </summary>
+        private EmsServerEndpoint EmsServerEndpoint { get; }
+
         public ConnectionHandler(string hostName, int port, ClientGameManager gameManager)
         {
             HostName = hostName;
@@ -80,6 +86,7 @@ namespace XnaClientLib
             ClientGameManager = gameManager;
             GameObject = null;
             UpdateThread = new Thread(ConnectionHandler_InteractWithServer);
+            EmsServerEndpoint = new EmsServerEndpoint();
         }
 
         public void ConnectAndInitializeLocalPlayer(string name, string team)
@@ -125,6 +132,7 @@ namespace XnaClientLib
         {
             while (Connection.Connected)
             {
+                EmsServerEndpoint.BroadcastIncomingEvents(Reader);
                 var playersUpdate = Reader.ReadInt32();
                 Debug.WriteLine("Reading {0} Players", playersUpdate);
 
@@ -153,6 +161,7 @@ namespace XnaClientLib
 
         private void WritePlayerData()
         {
+            EmsServerEndpoint.Flush(Writer);
             var components = GameObject.Components;
             components.Get<DirectionalInput>().Write(Writer);
         }
