@@ -1,4 +1,3 @@
-﻿using XnaCommonLib.ECS;
 ﻿using System;
 using XnaCommonLib.ECS;
 
