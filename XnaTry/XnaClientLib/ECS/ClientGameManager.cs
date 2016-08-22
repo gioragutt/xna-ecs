@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ECS.BaseTypes;
+using EMS;
 using Microsoft.Xna.Framework.Graphics;
 using XnaClientLib.ECS.Compnents;
 using XnaClientLib.ECS.Linkers;
@@ -37,6 +39,18 @@ namespace XnaClientLib.ECS
             ResourceManager = resourceManager;
             drawingSystems = new SystemManager(EntityPool);
             Camera = new Camera();
+
+            Subscribe(EventMessageNames.ClientDisconnected, Callback_ClientDisconnected);
+        }
+
+        #endregion
+
+        #region Callbacks
+
+        private void Callback_ClientDisconnected(EventMessageData eventMessageData)
+        {
+            var guid = new Guid(eventMessageData.Data);
+            EntityPool.Remove(new Entity(guid));
         }
 
         #endregion

@@ -63,6 +63,7 @@
     <Compile Include="ECS\Systems\System.cs" />
     <Compile Include="ECS\GameObject.cs" />
     <Compile Include="ECS\Components\Transform.cs" />
+    <Compile Include="EventMessageNames.cs" />
     <Compile Include="Extentions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TeamData.cs" />

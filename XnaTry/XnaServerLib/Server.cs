@@ -1,5 +1,3 @@
-﻿using System;
-using System.Net.Sockets;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -95,7 +93,7 @@ namespace XnaServerLib
             ConnectionListener = new TcpListener(IPAddress.Any, Port);
             Listening = false;
 
-            GameManager = new ServerGameManager();
+            GameManager = new ServerGameManager(this);
             GameManager.RegisterSystem(new MovementSystem());
 
             UpdateLoopThread.Start();

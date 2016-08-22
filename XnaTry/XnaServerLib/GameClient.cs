@@ -121,6 +121,7 @@ namespace XnaServerLib
             
             Console.WriteLine("Player {0} disconnected", GameObject.Components.Get<PlayerAttributes>().Name);
 
+            Broadcast(new EventMessageData(EventMessageNames.ClientDisconnected, GameObject.Entity.Id.ToByteArray()));
 
             GameManager.DisposeOfClient(this);
             GameObject = null;
