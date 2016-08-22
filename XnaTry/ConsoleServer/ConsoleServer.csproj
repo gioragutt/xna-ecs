@@ -44,9 +44,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EMS\EMS.csproj">
+      <Project>{9dd1b6d5-18d4-4ff1-86ca-c382ecd42fe4}</Project>
+      <Name>EMS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XnaServerLib\XnaServerLib.csproj">
       <Project>{ff330f45-8687-4bc8-8bea-dd590528ed50}</Project>
       <Name>XnaServerLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XnaTryLib\XnaCommonLib.csproj">
+      <Project>{0c3b9106-ee61-42ea-9593-2c45f8b8100b}</Project>
+      <Name>XnaCommonLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
