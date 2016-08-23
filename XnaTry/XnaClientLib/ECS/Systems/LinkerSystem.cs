@@ -10,7 +10,11 @@ namespace XnaClientLib.ECS.Systems
     {
         public override void Update(IList<IComponentContainer> entities, long delta)
         {
-            entities.Select(c => c.Get<Linker>()).ToList().ForEach(linker => linker.Link());
+            if (entities.Count == 0)
+                return;
+
+            var linkers = entities.SelectMany(c => c.GetAllOf<Linker>()).ToList();
+            linkers.ForEach(linker => linker.Link());
         }
 
         public override Predicate<IComponentContainer> RelevantEntities()
