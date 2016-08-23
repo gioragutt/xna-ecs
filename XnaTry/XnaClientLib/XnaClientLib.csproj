@@ -69,6 +69,7 @@
     <Compile Include="ECS\Compnents\RemotePlayer.cs" />
     <Compile Include="ECS\Compnents\RotateToMouse.cs" />
     <Compile Include="ECS\Compnents\Sprite.cs" />
+    <Compile Include="ECS\Compnents\SpriteEffect.cs" />
     <Compile Include="ECS\Compnents\StateAnimation.cs" />
     <Compile Include="ECS\Compnents\TextureCollectionAnimation.cs" />
     <Compile Include="ECS\Linkers\ActionLinker.cs" />
