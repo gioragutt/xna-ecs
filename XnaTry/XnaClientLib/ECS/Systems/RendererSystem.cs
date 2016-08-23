@@ -23,10 +23,8 @@ namespace XnaClientLib.ECS.Systems
 
         public override void Update(IList<IComponentContainer> entities, long delta)
         {
-            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
             for (var index = 0; index < entities.Count; index++)
                 DrawEntity(entities[index]);
-            SpriteBatch.End();
         }
 
         private void DrawEntity(IComponentContainer entity)
@@ -35,6 +33,7 @@ namespace XnaClientLib.ECS.Systems
             var transform = entity.Get<Transform>();
             var spriteEffect = entity.Get<SpriteEffect>();
 
+            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
             ApplyEffectIfEnabled(spriteEffect);
             SpriteBatch.Draw(
                 texture: sprite.Texture, 
@@ -46,6 +45,14 @@ namespace XnaClientLib.ECS.Systems
                 scale: transform.Scale, 
                 effects: SpriteEffects.None,
                 layerDepth: 0);
+            DisableEffect(spriteEffect);
+            SpriteBatch.End();
+        }
+
+        private static void DisableEffect(SpriteEffect spriteEffect)
+        {
+            if (Component.IsEnabled(spriteEffect))
+                spriteEffect.ResetPass();
         }
 
         private static void ApplyEffectIfEnabled(SpriteEffect spriteEffect)
