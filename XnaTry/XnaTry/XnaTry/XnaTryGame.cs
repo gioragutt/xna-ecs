@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
+using EMS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -142,7 +143,7 @@ namespace XnaTry
         private static void LinkPlayerStateToEffect(IComponentContainer componentContainer, SpriteEffect spriteEffect)
         {
             var attr = componentContainer.Get<PlayerAttributes>();
-            if (attr.HealthPercentage == 0.0f)
+            if (attr.IsDead)
             {
                 spriteEffect.ApplyPass("Ghost");
                 return;
@@ -223,9 +224,14 @@ namespace XnaTry
                 ConnectToServer();
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.P))// && !previousKeyboardState.IsKeyDown(Keys.P))
-                for (var i = 0; i < 5; i++)
-                    CreateStupidAiPlayer();
+            if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && !previousKeyboardState.IsKeyDown(Keys.NumPad1))
+                ConnectionHandler.Broadcast(EventMessageNames.DamagePlayers);
+
+            if (currentKeyboardState.IsKeyDown(Keys.NumPad2) && !previousKeyboardState.IsKeyDown(Keys.NumPad2))
+                ConnectionHandler.Broadcast(new EventMessageData(EventMessageNames.DamagePlayers, ConnectionHandler.GameObject.Entity.Id.ToByteArray()));
+
+            if (currentKeyboardState.IsKeyDown(Keys.P) && !previousKeyboardState.IsKeyDown(Keys.P))
+                CreateStupidAiPlayer();
 
             ResourceManager.LoadContent();
             ClientGameManager.Update(gameTime, GraphicsDevice.Viewport);

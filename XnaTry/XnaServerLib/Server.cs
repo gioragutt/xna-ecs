@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -12,7 +13,7 @@ using XnaServerLib.Exceptions;
 
 namespace XnaServerLib
 {
-    public class Server
+    public class Server : EmsClient
     {
         #region Constants
 
@@ -97,6 +98,25 @@ namespace XnaServerLib
             GameManager.RegisterSystem(new MovementSystem());
 
             UpdateLoopThread.Start();
+
+            Subscribe(EventMessageNames.DamagePlayers, Callback_DamagePlayers);
+        }
+
+        private void Callback_DamagePlayers(EventMessageData eventMessageData)
+        {
+            Guid? player = null;
+            if (eventMessageData.Data.Length > 0)
+                player = new Guid(eventMessageData.Data);
+
+            List<PlayerAttributes> attrs;
+            if (player.HasValue)
+                attrs =
+                    GameManager.EntityPool.GetAllOf<PlayerAttributes>().ToList().Where(
+                        c => c.Container.Parent.Id == player.Value).ToList();
+            else
+                attrs = GameManager.EntityPool.GetAllOf<PlayerAttributes>().ToList();
+
+            attrs.ForEach(a => a.Health -= 10f);
         }
 
         #endregion Constructors

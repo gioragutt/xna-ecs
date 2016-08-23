@@ -303,7 +303,7 @@ namespace XnaClientLib.ECS
             components.Add(new ActionLinker<IComponentContainer, SpriteEffect>(components, effect, (c, s) =>
             {
                 var attr = c.Get<PlayerAttributes>();
-                if (attr.HealthPercentage == 0.0f)
+                if (attr.IsDead)
                 {
                     s.ApplyPass("Ghost");
                     return;

@@ -15,7 +15,7 @@ using XnaCommonLib.ECS.Components;
 
 namespace XnaClientLib
 {
-    public class ConnectionHandler : Component, IDisposable
+    public class ConnectionHandler : EmsClient, IDisposable
     {
         public void Dispose()
         {

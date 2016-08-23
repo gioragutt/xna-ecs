@@ -9,6 +9,8 @@ namespace XnaCommonLib.ECS.Components
         public float MaxHealth { get; set; }
         public TeamData Team { get; set; } = new TeamData();
 
+        public bool IsDead => HealthPercentage == 0.0f;
+
         public float HealthPercentage
         {
             get
