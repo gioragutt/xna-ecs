@@ -208,15 +208,12 @@ namespace XnaClientLib.ECS
             // Change Transform
             go.Transform.Scale = 0.4f;
 
-            // Add Animation
+            // Add Component sets
             AddAnimation(sprite, components);
-
-            //components.Add(new RotateToMouse());
-
             AddStatusBar(components, sprite, go.Components.Get<PlayerAttributes>());
+            AddPlayerEffect(components);
 
             components.Add(new LocalPlayer(go));
-
             LocalPlayer = go;
         }
 
@@ -232,6 +229,7 @@ namespace XnaClientLib.ECS
 
             AddAnimation(sprite, components);
             AddStatusBar(components, sprite, components.Get<PlayerAttributes>());
+            AddPlayerEffect(components);
         }
 
         /// <summary>
@@ -295,6 +293,24 @@ namespace XnaClientLib.ECS
 
             // Link Input to Animation
             components.Add(new MovementToAnimationLinker(components.Get<DirectionalInput>(), stateAnimation));
+        }
+
+        private void AddPlayerEffect(IComponentContainer components)
+        {
+            var effect = new SpriteEffect("Player/Effects/PlayerEffects");
+            components.Add(ResourceManager.Register(effect));
+
+            components.Add(new ActionLinker<IComponentContainer, SpriteEffect>(components, effect, (c, s) =>
+            {
+                var attr = c.Get<PlayerAttributes>();
+                if (attr.HealthPercentage == 0.0f)
+                {
+                    s.ApplyPass("Ghost");
+                    return;
+                }
+
+                s.ResetPass();
+            }));
         }
 
         #endregion Component Initializing Methods

@@ -25,15 +25,17 @@ namespace XnaClientLib.ECS.Systems
         {
             SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
             for (var index = 0; index < entities.Count; index++)
-                UpdateEntity(entities[index]);
+                DrawEntity(entities[index]);
             SpriteBatch.End();
         }
 
-        private void UpdateEntity(IComponentContainer entity)
+        private void DrawEntity(IComponentContainer entity)
         {
             var sprite = entity.Get<Sprite>();
             var transform = entity.Get<Transform>();
+            var spriteEffect = entity.Get<SpriteEffect>();
 
+            ApplyEffectIfEnabled(spriteEffect);
             SpriteBatch.Draw(
                 texture: sprite.Texture, 
                 position: transform.Position, 
@@ -42,8 +44,14 @@ namespace XnaClientLib.ECS.Systems
                 rotation: transform.Rotation, 
                 origin: sprite.Origin, 
                 scale: transform.Scale, 
-                effects: SpriteEffects.None, 
+                effects: SpriteEffects.None,
                 layerDepth: 0);
+        }
+
+        private static void ApplyEffectIfEnabled(SpriteEffect spriteEffect)
+        {
+            if (Component.IsEnabled(spriteEffect))
+                spriteEffect.Effect.CurrentTechnique.Passes[spriteEffect.AppliedPass].Apply();
         }
 
         public override Predicate<IComponentContainer> RelevantEntities()

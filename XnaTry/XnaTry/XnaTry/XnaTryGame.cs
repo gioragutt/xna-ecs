@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using ECS.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -126,10 +128,27 @@ namespace XnaTry
 
             components.Add(attributes);
 
+            var effect = new SpriteEffect("Player/Effects/PlayerEffects");
+            components.Add(ResourceManager.Register(effect));
+
+            components.Add(new ActionLinker<IComponentContainer, SpriteEffect>(components, effect, LinkPlayerStateToEffect));
+
             components.Add(ResourceManager.Register(new PlayerStatusBar(attributes, sprite, entity.Transform, Constants.Assets.PlayerHealthBarAsset,
                 Constants.Assets.PlayerNameFontAsset)));
 
             return entity;
+        }
+
+        private static void LinkPlayerStateToEffect(IComponentContainer componentContainer, SpriteEffect spriteEffect)
+        {
+            var attr = componentContainer.Get<PlayerAttributes>();
+            if (attr.HealthPercentage == 0.0f)
+            {
+                spriteEffect.ApplyPass("Ghost");
+                return;
+            }
+
+            spriteEffect.ResetPass();
         }
 
         void CreateStupidAiPlayer()
@@ -150,6 +169,7 @@ namespace XnaTry
         protected override void Initialize()
         {
             base.Initialize();
+            //InitializeGameSettings(1280, 1024);
 
             ClientGameManager.CreateDebugPrint(() => ClientGameManager.ToString());
 
@@ -210,6 +230,8 @@ namespace XnaTry
             ResourceManager.LoadContent();
             ClientGameManager.Update(gameTime, GraphicsDevice.Viewport);
 
+            ClientGameManager.EntityPool.AllThat(c => Component.IsEnabled(c.Get<PlayerAttributes>()) && c.Get<PlayerAttributes>().Name.StartsWith("[AI]")).ToList().ForEach(c => c.Get<PlayerAttributes>().Health -= 0.1f);
+
             Window.Title = "XnaTryGame - " + ClientGameManager.EntitiesCount + " Entities";
 
             base.Update(gameTime);
@@ -218,6 +240,8 @@ namespace XnaTry
         private void ConnectToServer()
         {
             ConnectionHandler.ConnectAndInitializeLocalPlayer("[PC] GioraG", goodTeam.Name);
+            ClientGameManager.CreateDebugPrint(
+                () => ConnectionHandler.GameObject.Components.Get<DirectionalInput>().ToString());
         }
 
         protected override void EndRun()
