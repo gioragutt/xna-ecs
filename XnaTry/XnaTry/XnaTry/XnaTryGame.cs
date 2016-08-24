@@ -225,17 +225,17 @@ namespace XnaTry
                 ConnectToServer();
             }
 
-            if (ConnectionHandler.Connected)
-            {
-                if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && !previousKeyboardState.IsKeyDown(Keys.NumPad1))
-                    ConnectionHandler.Broadcast(EventMessageNames.DamagePlayers);
+            if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && !previousKeyboardState.IsKeyDown(Keys.NumPad1))
+                ConnectionHandler.Broadcast(
+                    MessageBuilder.Create(EventMessageNames.DamagePlayers)
+                        .Add("damage", 25)
+                        .Get());
 
-                if (currentKeyboardState.IsKeyDown(Keys.NumPad2) && !previousKeyboardState.IsKeyDown(Keys.NumPad2))
-                    ConnectionHandler.Broadcast(
-                        MessageBuilder.Create(EventMessageNames.DamagePlayers)
-                            .Add(Constants.MessageFields.GuidField, ConnectionHandler.GameObject.Entity.Id)
-                            .Get());
-            }
+            if (currentKeyboardState.IsKeyDown(Keys.NumPad2) && !previousKeyboardState.IsKeyDown(Keys.NumPad2))
+                ConnectionHandler.Broadcast(
+                    MessageBuilder.Create(EventMessageNames.DamagePlayers)
+                        .Add(Constants.MessageFields.GuidField, ConnectionHandler.GameObject.Entity.Id)
+                        .Get());
 
             if (currentKeyboardState.IsKeyDown(Keys.P) && !previousKeyboardState.IsKeyDown(Keys.P))
                 CreateStupidAiPlayer();
