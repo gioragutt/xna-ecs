@@ -294,7 +294,7 @@ namespace XnaClientLib.ECS
             components.Add(stateAnimation);
 
             // Link Input to Animation
-            components.Add(new MovementToAnimationLinker(components.Get<DirectionalInput>(), stateAnimation));
+            components.Add(new MovementToAnimationLinker(components, stateAnimation));
         }
 
         private void AddPlayerEffect(IComponentContainer components)

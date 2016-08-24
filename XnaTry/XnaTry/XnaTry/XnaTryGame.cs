@@ -118,7 +118,7 @@ namespace XnaTry
             components.Add(stateAnimation);
 
             // Link Input to Animation
-            components.Add(new MovementToAnimationLinker(entity.Components.Get<DirectionalInput>(), stateAnimation));
+            components.Add(new MovementToAnimationLinker(entity.Components, stateAnimation));
 
             var attributes = new PlayerAttributes
             {

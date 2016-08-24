@@ -1,14 +1,23 @@
-﻿using XnaClientLib.ECS.Compnents;
+﻿using ECS.Interfaces;
+using XnaClientLib.ECS.Compnents;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
 namespace XnaClientLib.ECS.Linkers
 {
-    public class MovementToAnimationLinker : Linker<DirectionalInput, StateAnimation<MovementDirection>>
+    public class MovementToAnimationLinker : Linker<IComponentContainer, StateAnimation<MovementDirection>>
     {
+        private DirectionalInput Input { get; }
+        private PlayerAttributes Attributes { get; }
+        public MovementToAnimationLinker(IComponentContainer first, StateAnimation<MovementDirection> second) : base(first, second)
+        {
+            Input = First.Get<DirectionalInput>();
+            Attributes = First.Get<PlayerAttributes>();
+        }
+
         public override void Link()
         {
-            if (!First.IsMoving())
+            if (!Input.IsMoving() || Attributes.IsDead)
             {
                 if (!Second.Enabled)
                     return;
@@ -28,33 +37,27 @@ namespace XnaClientLib.ECS.Linkers
 
         private MovementDirection UpdateAnimation(MovementDirection direction, ref float animationSpeed)
         {
-            if (First.Vertical > 0)
+            if (Input.Vertical > 0)
             {
                 direction = MovementDirection.Down;
-                animationSpeed = First.Vertical;
+                animationSpeed = Input.Vertical;
             }
-            else if (First.Vertical < 0)
+            else if (Input.Vertical < 0)
             {
                 direction = MovementDirection.Up;
-                animationSpeed = First.Vertical;
+                animationSpeed = Input.Vertical;
             }
-            if (First.Horizontal > 0)
+            if (Input.Horizontal > 0)
             {
                 direction = MovementDirection.Right;
-                animationSpeed = First.Horizontal;
+                animationSpeed = Input.Horizontal;
             }
-            else if (First.Horizontal < 0)
+            else if (Input.Horizontal < 0)
             {
                 direction = MovementDirection.Left;
-                animationSpeed = First.Horizontal;
+                animationSpeed = Input.Horizontal;
             }
             return direction;
-        }
-
-        public MovementToAnimationLinker(DirectionalInput first, StateAnimation<MovementDirection> second) 
-            : base(first, second)
-        {
-
         }
     }
 }
