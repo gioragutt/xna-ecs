@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace EMS
 {
@@ -56,7 +57,7 @@ namespace EMS
         /// <param name="callback">The registered callback</param>
         /// <exception cref="System.ArgumentNullException">if client is null</exception>
         /// <exception cref="System.ArgumentNullException">if callback is null</exception>
-        public void SubscribeToAll(IEmsClient client, Action<EventMessageData> callback)
+        public void SubscribeToAll(IEmsClient client, Action<JObject> callback)
         {
             #region Argument Null Assertion
 
@@ -86,7 +87,7 @@ namespace EMS
         /// <exception cref="System.ArgumentNullException">if client is null</exception>
         /// <exception cref="System.ArgumentNullException">if callback is null</exception>
         /// <exception cref="System.ArgumentNullException">if messageName is null</exception>
-        public void Subscribe(IEmsClient client, string messageName, Action<EventMessageData> callback)
+        public void Subscribe(IEmsClient client, string messageName, Action<JObject> callback)
         {
             #region Argument Null Assertion
 
@@ -159,14 +160,18 @@ namespace EMS
         /// Broadcast to clients subscribed to all messages, and to clients subscribed to
         /// The broadcast message name, if any exists
         /// </remarks>
-        public void Broadcast(EventMessageData message)
+        public void Broadcast(JObject message)
         {
-            subscriptionsToAllMessages.ForEach(c => c.Callback(message));
-
-            if (!subscriptions.ContainsKey(message.Name))
+            var messageName = message.GetMessageName();
+            if (string.IsNullOrEmpty(messageName))
                 return;
 
-            subscriptions[message.Name].ForEach(c => c.Callback(message));
+            subscriptionsToAllMessages.ForEach(c => c.Callback(message));
+
+            if (!subscriptions.ContainsKey(messageName))
+                return;
+
+            subscriptions[messageName].ForEach(c => c.Callback(message));
         }
 
         #endregion

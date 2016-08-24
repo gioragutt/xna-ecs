@@ -12,6 +12,7 @@ using XnaClientLib.ECS.Compnents;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using Constants = XnaCommonLib.Constants;
 
 namespace XnaClientLib
 {

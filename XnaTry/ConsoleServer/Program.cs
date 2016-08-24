@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Text;
 using EMS;
-using XnaCommonLib;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using XnaServerLib;
 
 namespace ConsoleServer
@@ -13,9 +13,9 @@ namespace ConsoleServer
             SubscribeToAll(Callback_ToAll);
         }
 
-        private static void Callback_ToAll(EventMessageData eventMessageData)
+        private static void Callback_ToAll(JObject message)
         {
-            Console.WriteLine("Received message: {0}", eventMessageData.Name);
+            Console.WriteLine("Received message: {0}", message.ToString(Formatting.Indented));
         }
 
         public void Dispose()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace EMS
 {
@@ -12,14 +13,14 @@ namespace EMS
         /// <summary>
         /// All messages the were broadcast before the last time Flush was called
         /// </summary>
-        public Queue<EventMessageData> OutgoingMessagesBuffer { get; set; }
+        public Queue<JObject> OutgoingMessagesBuffer { get; set; }
 
         /// <summary>
         /// Initializes an EmsServerEndpoint
         /// </summary>
         public EmsServerEndpoint()
         {
-            OutgoingMessagesBuffer = new Queue<EventMessageData>();
+            OutgoingMessagesBuffer = new Queue<JObject>();
             Console.WriteLine("Initializing EmsServerEndpoint");
             EmsServer.Instance.SubscribeToAll(this, InsertMessageToBuffer);
         }
@@ -28,10 +29,10 @@ namespace EMS
         /// Inserts a broadcast message to the buffer
         /// </summary>
         /// <param name="message">The broadcast message</param>
-        private void InsertMessageToBuffer(EventMessageData message)
+        private void InsertMessageToBuffer(JObject message)
         {
             // Do no send messaged if they were transmitted from another Endpoint
-            if (message.Transmitted)
+            if (message.GetTransmitted())
                 return;
 
             OutgoingMessagesBuffer.Enqueue(message);
@@ -51,7 +52,7 @@ namespace EMS
             for (var i = 0; i < initialCount; ++i)
             {
                 var message = OutgoingMessagesBuffer.Dequeue();
-                message.Write(writer);
+                EmsUtils.WriteJObject(writer, message);
             }
         }
 
@@ -65,9 +66,8 @@ namespace EMS
 
             for (var i = 0; i < count; ++i)
             {
-                var msg = new EventMessageData(reader);
+                var msg = MessageBuilder.Create(EmsUtils.ReadJObject(reader)).Add(Constants.TransmittedField, true, true).Get();
                 Broadcast(msg);
-                Console.WriteLine("Recieved {0}", msg.Name);
             }
         }
     }

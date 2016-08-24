@@ -41,10 +41,12 @@
   <ItemGroup>
     <Compile Include="ClientCallbackPair.cs" />
     <Compile Include="EmsClient.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="EmsServer.cs" />
     <Compile Include="EmsServerEndpoint.cs" />
-    <Compile Include="EventMessageData.cs" />
+    <Compile Include="EmsUtils.cs" />
     <Compile Include="IEmsClient.cs" />
+    <Compile Include="MessageBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

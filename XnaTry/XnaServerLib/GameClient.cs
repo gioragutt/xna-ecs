@@ -10,6 +10,7 @@ using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
 using XnaServerLib.ECS;
+using Constants = XnaCommonLib.Constants;
 
 namespace XnaServerLib
 {
@@ -121,7 +122,10 @@ namespace XnaServerLib
             
             Console.WriteLine("Player {0} disconnected", GameObject.Components.Get<PlayerAttributes>().Name);
 
-            Broadcast(new EventMessageData(EventMessageNames.ClientDisconnected, GameObject.Entity.Id.ToByteArray()));
+            Broadcast(
+                MessageBuilder.Create(EventMessageNames.ClientDisconnected)
+                    .Add(Constants.MessageFields.GuidField, GameObject.Entity.Id)
+                    .Get());
 
             GameManager.DisposeOfClient(this);
             GameObject = null;

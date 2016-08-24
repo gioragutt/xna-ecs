@@ -1,4 +1,5 @@
 using System;
+using Newtonsoft.Json.Linq;
 
 namespace EMS
 {
@@ -8,7 +9,7 @@ namespace EMS
         {
             get; set;
         }
-        public Action<EventMessageData> Callback
+        public Action<JObject> Callback
         {
             get; set;
         }

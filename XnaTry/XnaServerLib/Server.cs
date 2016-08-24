@@ -1,3 +1,4 @@
+﻿using EMS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,11 +6,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json.Linq;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 using XnaServerLib.ECS;
 using XnaServerLib.ECS.Systems;
 using XnaServerLib.Exceptions;
+using Constants = XnaCommonLib.Constants;
 
 namespace XnaServerLib
 {
@@ -102,17 +105,15 @@ namespace XnaServerLib
             Subscribe(EventMessageNames.DamagePlayers, Callback_DamagePlayers);
         }
 
-        private void Callback_DamagePlayers(EventMessageData eventMessageData)
+        private void Callback_DamagePlayers(JObject message)
         {
-            Guid? player = null;
-            if (eventMessageData.Data.Length > 0)
-                player = new Guid(eventMessageData.Data);
+            var player = message.Value<string>(Constants.MessageFields.GuidField);
 
             List<PlayerAttributes> attrs;
-            if (player.HasValue)
+            if (player != null)
                 attrs =
                     GameManager.EntityPool.GetAllOf<PlayerAttributes>().ToList().Where(
-                        c => c.Container.Parent.Id == player.Value).ToList();
+                        c => c.Container.Parent.Id == Guid.Parse(player)).ToList();
             else
                 attrs = GameManager.EntityPool.GetAllOf<PlayerAttributes>().ToList();
 
@@ -163,6 +164,10 @@ namespace XnaServerLib
                     var attr = newGameClient.GameObject.Components.Get<PlayerAttributes>();
                     Console.WriteLine("{2} - {0} Connected to {1}", attr.Name, attr.Team.Name, acceptedConnection.Client.RemoteEndPoint);
                     GameClients.Add(newGameClient);
+                    Broadcast(
+                        MessageBuilder.Create(EventMessageNames.ClientAcceptedOnServer)
+                            .Add(Constants.MessageFields.PlayerField, attr.Name)
+                            .Get());
                 }
                 catch (SocketException se)
                 {

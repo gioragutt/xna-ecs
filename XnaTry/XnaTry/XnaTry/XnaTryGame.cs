@@ -14,6 +14,7 @@ using XnaClientLib.ECS.Systems;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using Constants = XnaCommonLib.Constants;
 
 namespace XnaTry
 {
@@ -224,11 +225,17 @@ namespace XnaTry
                 ConnectToServer();
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && !previousKeyboardState.IsKeyDown(Keys.NumPad1))
-                ConnectionHandler.Broadcast(EventMessageNames.DamagePlayers);
+            if (ConnectionHandler.Connected)
+            {
+                if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && !previousKeyboardState.IsKeyDown(Keys.NumPad1))
+                    ConnectionHandler.Broadcast(EventMessageNames.DamagePlayers);
 
-            if (currentKeyboardState.IsKeyDown(Keys.NumPad2) && !previousKeyboardState.IsKeyDown(Keys.NumPad2))
-                ConnectionHandler.Broadcast(new EventMessageData(EventMessageNames.DamagePlayers, ConnectionHandler.GameObject.Entity.Id.ToByteArray()));
+                if (currentKeyboardState.IsKeyDown(Keys.NumPad2) && !previousKeyboardState.IsKeyDown(Keys.NumPad2))
+                    ConnectionHandler.Broadcast(
+                        MessageBuilder.Create(EventMessageNames.DamagePlayers)
+                            .Add(Constants.MessageFields.GuidField, ConnectionHandler.GameObject.Entity.Id)
+                            .Get());
+            }
 
             if (currentKeyboardState.IsKeyDown(Keys.P) && !previousKeyboardState.IsKeyDown(Keys.P))
                 CreateStupidAiPlayer();

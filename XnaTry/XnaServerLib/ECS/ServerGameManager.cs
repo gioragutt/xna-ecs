@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using ECS.BaseTypes;
-using EMS;
+using Newtonsoft.Json.Linq;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using EmsConsts = EMS.Constants;
+using MyConsts = XnaCommonLib.Constants;
 
 namespace XnaServerLib.ECS
 {
@@ -25,9 +27,9 @@ namespace XnaServerLib.ECS
             client.GameObject.Entity.Dispose();
         }
 
-        private void Callback_CllientDisconnected(EventMessageData eventMessageData)
+        private void Callback_CllientDisconnected(JObject message)
         {
-            var guid = new Guid(eventMessageData.Data);
+            var guid = message.Value<Guid>(MyConsts.MessageFields.GuidField);
             EntityPool.Remove(new Entity(guid));
         }
 

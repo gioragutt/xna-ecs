@@ -8,11 +8,13 @@ using System.Text;
 using ECS.BaseTypes;
 using EMS;
 using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
 using XnaClientLib.ECS.Compnents;
 using XnaClientLib.ECS.Linkers;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using Constants = XnaCommonLib.Constants;
 
 namespace XnaClientLib.ECS
 {
@@ -47,9 +49,9 @@ namespace XnaClientLib.ECS
 
         #region Callbacks
 
-        private void Callback_ClientDisconnected(EventMessageData eventMessageData)
+        private void Callback_ClientDisconnected(JObject message)
         {
-            var guid = new Guid(eventMessageData.Data);
+            var guid = message.Value<Guid>(Constants.MessageFields.GuidField);
             EntityPool.Remove(new Entity(guid));
         }
 

@@ -18,11 +18,16 @@ namespace XnaCommonLib
 
         public const int UpdateThreadSleepTime = 1000 / 100;
 
-
         public static class Assets
         {
             public const string PlayerHealthBarAsset = "Player/GUI/HealthBar";
             public const string PlayerNameFontAsset = "Player/Fonts/NameFont";
+        }
+
+        public static class MessageFields
+        {
+            public const string GuidField = "guid";
+            public const string PlayerField = "player";
         }
     }
 }

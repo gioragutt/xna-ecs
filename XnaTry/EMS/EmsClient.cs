@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json.Linq;
 
 namespace EMS
 {
@@ -33,7 +34,7 @@ namespace EMS
         /// </summary>
         /// <param name="messageName">Name of the message to subscribe to</param>
         /// <param name="callback">Callback for when the message is broadcast</param>
-        public void Subscribe(string messageName, Action<EventMessageData> callback)
+        public void Subscribe(string messageName, Action<JObject> callback)
         {
             server.Subscribe(this, messageName, callback);
         }
@@ -42,7 +43,7 @@ namespace EMS
         /// Subscribe to all outgoing messages
         /// </summary>
         /// <param name="callback">The callback for when a message is broadcast</param>
-        public void SubscribeToAll(Action<EventMessageData> callback)
+        public void SubscribeToAll(Action<JObject> callback)
         {
             server.SubscribeToAll(this, callback);
         }
@@ -78,14 +79,14 @@ namespace EMS
         /// <param name="messageName">Name of the message to broadcast</param>
         public void Broadcast(string messageName)
         {
-            server.Broadcast(new EventMessageData(messageName));
+            server.Broadcast(EmsUtils.CreateMessage(messageName));
         }
 
         /// <summary>
         /// Broadcast an event message
         /// </summary>
         /// <param name="message">Message to broadcast</param>
-        public void Broadcast(EventMessageData message)
+        public void Broadcast(JObject message)
         {
             server.Broadcast(message);
         }
