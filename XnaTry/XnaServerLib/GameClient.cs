@@ -144,11 +144,11 @@ namespace XnaServerLib
             var amountOfPlayers = GameManager.EntitiesCount;
             Writer.Write(amountOfPlayers);
 
-            var allEntities = GameManager.EntityPool.AllEntities;
+            var allEntities = GameManager.EntityPool.AllThat(c => c.Has<Transform>() && c.Has<PlayerAttributes>() && c.Has<DirectionalInput>());
 
             foreach (var entity in allEntities)
             {
-                WriteEntity(entity, GameManager.EntityPool.GetComponents(entity));
+                WriteEntity(entity.Parent, entity);
             }
         }
 
