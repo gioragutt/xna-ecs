@@ -76,6 +76,12 @@ namespace XnaClientLib.ECS.Compnents
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (Attributes.IsDead)
+            {
+                DrawName(spriteBatch, Vector2.Zero);
+                return;
+            }
+
             var framePosition = DrawFrameAndGetPosition(spriteBatch);
             DrawHealthBar(spriteBatch, framePosition);
             DrawName(spriteBatch, framePosition);
@@ -85,9 +91,18 @@ namespace XnaClientLib.ECS.Compnents
         {
             var upperCaseName = Attributes.Name.ToUpper();
             var nameTextSize = NameFont.MeasureString(upperCaseName);
+            Vector2 textPosition;
 
-            var textPosition = new Vector2(framePosition.X + (FrameTexture.Width / 2f) - (nameTextSize.X / 2f),
-                framePosition.Y - nameTextSize.Y - NamePaddingHealthBar);
+            if (!Attributes.IsDead)
+            {
+                textPosition = new Vector2(framePosition.X + (FrameTexture.Width / 2f) - (nameTextSize.X / 2f),
+                    framePosition.Y - nameTextSize.Y - NamePaddingHealthBar);
+            }
+            else
+            {
+                var topCenter = GetTopCenterPointOfSprite(Sprite, Transform);
+                textPosition = new Vector2(topCenter.X - nameTextSize.X / 2, topCenter.Y - nameTextSize.Y);
+            }
 
             spriteBatch.DrawString(NameFont, upperCaseName, textPosition, Attributes.Team.Color);
         }
