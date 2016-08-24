@@ -51,7 +51,7 @@ namespace XnaClientLib.ECS
 
         private void Callback_ClientDisconnected(JObject message)
         {
-            var guid = message.Value<Guid>(Constants.MessageFields.GuidField);
+            var guid = message.GetGuid(Constants.MessageFields.GuidField);
             EntityPool.Remove(new Entity(guid));
         }
 
