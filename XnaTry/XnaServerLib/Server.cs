@@ -107,17 +107,18 @@ namespace XnaServerLib
 
         private void Callback_DamagePlayers(JObject message)
         {
-            var player = message.Value<string>(Constants.MessageFields.GuidField);
+            var player = message.GetGuid(Constants.MessageFields.GuidField);
+            var damage = message.Value<float?>("damage") ?? 10f;
 
             List<PlayerAttributes> attrs;
-            if (player != null)
+            if (player != Guid.Empty)
                 attrs =
                     GameManager.EntityPool.GetAllOf<PlayerAttributes>().ToList().Where(
-                        c => c.Container.Parent.Id == Guid.Parse(player)).ToList();
+                        c => c.Container.Parent.Id == player).ToList();
             else
                 attrs = GameManager.EntityPool.GetAllOf<PlayerAttributes>().ToList();
 
-            attrs.ForEach(a => a.Health -= 10f);
+            attrs.ForEach(a => a.Health -= damage);
         }
 
         #endregion Constructors
