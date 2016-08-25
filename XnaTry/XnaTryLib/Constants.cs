@@ -4,6 +4,8 @@ namespace XnaCommonLib
 {
     public static class Constants
     {
+        public const float MillisecondsInSecond = 1000f;
+
         public const float DefaultScale = 1f;
         public const float DefaultRotation = 0f;
 
@@ -16,7 +18,8 @@ namespace XnaCommonLib
 
         public const float MaxRotation = MathHelper.TwoPi;
 
-        public const int UpdateThreadSleepTime = 1000 / 100;
+        public const int UpdatesPerSecond = 60;
+        public const int UpdateThreadSleepTime = (int)MillisecondsInSecond / UpdatesPerSecond;
 
         public static class Assets
         {
