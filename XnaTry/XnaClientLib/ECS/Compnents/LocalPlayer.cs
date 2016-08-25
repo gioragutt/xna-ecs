@@ -18,6 +18,7 @@ namespace XnaClientLib.ECS.Compnents
             components.Get<Transform>().Read(reader);
             components.Get<PlayerAttributes>().Read(reader);
             new InputData().Read(reader);
+            components.Get<Velocity>().Read(reader);
         }
     }
 }

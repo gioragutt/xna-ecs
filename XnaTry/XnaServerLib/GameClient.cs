@@ -154,21 +154,16 @@ namespace XnaServerLib
 
         private void WriteEntity(IEntity entity, IComponentContainer entityComponents)
         {
-            Util.WriteString(Writer, entity.Id.ToString());
+            Util.WriterGuid(Writer, entity.Id);
             entityComponents.Get<Transform>().Write(Writer);
             entityComponents.Get<PlayerAttributes>().Write(Writer);
             entityComponents.Get<DirectionalInput>().Write(Writer);
+            entityComponents.Get<Velocity>().Write(Writer);
         }
 
         private void SendClientLoginResponse()
         {
-            var guid = Encoding.ASCII.GetBytes(GameObject.Entity.Id.ToString());
-            Writer.Write(guid.Length);
-            Writer.Write(guid);
-            GameObject.Components.Get<PlayerAttributes>().Write(Writer);
-            GameObject.Transform.Position = new Vector2(50, 300);
-            GameObject.Transform.Write(Writer);
-            GameObject.Components.Get<Velocity>().Write(Writer);
+            WriteEntity(GameObject.Entity, GameObject.Components);
         }
 
         private void ReadClientLoginDataAndInitializePlayer()
@@ -177,6 +172,7 @@ namespace XnaServerLib
             var team = Reader.ReadString();
 
             GameObject.Transform.Scale = 0.4f;
+            GameObject.Transform.Position = new Vector2(50, 300);
 
             var teamName = GameManager.EntitiesCount % 2 == 0 ? "Bad Team" : "Good Team";
 
@@ -192,7 +188,7 @@ namespace XnaServerLib
             });
 
             GameObject.Components.Add(new InputData());
-            GameObject.Components.Add(new Velocity(new Vector2(5)));
+            GameObject.Components.Add(new Velocity(new Vector2(500)));
         }
     }
 }

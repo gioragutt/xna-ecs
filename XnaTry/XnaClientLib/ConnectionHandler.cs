@@ -110,17 +110,9 @@ namespace XnaClientLib
 
         private void ReadLoginResponseFromServer()
         {
-            var guidLength = Reader.ReadInt32();
-            var guid = Encoding.ASCII.GetString(Reader.ReadBytes(guidLength));
-            GameObject = ClientGameManager.CreateGameObject(Guid.Parse(guid));
-            var attributes = new PlayerAttributes();
-            attributes.Read(Reader);
-            GameObject.Components.Add(attributes);
-            GameObject.Transform.Read(Reader);
-            var velocty = new Velocity(Vector2.Zero);
-            velocty.Read(Reader);
-            GameObject.Components.Add(velocty);
-            ClientGameManager.InitializeLocalClient(GameObject);
+            GameObject = ClientGameManager.BeginAllocateLocal(Util.ReadGuid(Reader));
+            GameObject.Components.Get<NetworkPlayer>().Update(Reader);
+            ClientGameManager.EndAllocate(GameObject);
         }
 
         private void WriteLoginDataToServer(string name, string team)
@@ -139,13 +131,13 @@ namespace XnaClientLib
 
                 for (var i = 0; i < playersUpdate; i++)
                 {
-                    var guid = Util.ReadString(Reader);
-                    var entity = new Entity(Guid.Parse(guid));
+                    var guid = Util.ReadGuid(Reader);
+                    var entity = new Entity(guid);
                     if (!ClientGameManager.EntityPool.Exists(entity))
                     {
-                        var newGo = ClientGameManager.AllocateGameObjectForRemote(entity.Id);
+                        var newGo = ClientGameManager.BeginAllocateRemote(entity.Id);
                         newGo.Components.Get<NetworkPlayer>().Update(Reader);
-                        ClientGameManager.InitializeRemoteClient(newGo);
+                        ClientGameManager.EndAllocate(newGo);
                     }
                     else
                     {

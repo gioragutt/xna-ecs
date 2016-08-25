@@ -193,44 +193,23 @@ namespace XnaClientLib.ECS
         #region GameObject Methods
 
         /// <summary>
-        /// Initializes a remote client with game components
+        /// Finishes creating a game object
         /// </summary>
-        /// <param name="go">The local player's GameObject</param>
-        public void InitializeLocalClient(GameObject go)
+        /// <param name="go">The GameObject to finish creating</param>
+        public void EndAllocate(GameObject go)
         {
-            var components = go.Components;
-
-            // Now add input
-            components.Add(new KeyboardDirectionalInput());
-
-            // Show a character
-            var sprite = ResourceManager.Register(new Sprite("Player/Images/Down_001"));
-            components.Add(sprite);
-
-            // Change Transform
-            go.Transform.Scale = 0.4f;
-
-            // Add Component sets
-            AddAnimation(sprite, components);
-            AddStatusBar(components, sprite, go.Components.Get<PlayerAttributes>());
-            AddPlayerEffect(components);
-
-            components.Add(new LocalPlayer(go));
-            LocalPlayer = go;
+            AddCommonComponents(go.Components);
         }
 
         /// <summary>
-        /// Initializes a remote client with game components
+        /// Initializes all components commion to local and remote players
         /// </summary>
-        /// <param name="go">The GameObject of the remote game client</param>
-        public void InitializeRemoteClient(GameObject go)
+        /// <param name="components">The component container to add the components to</param>
+        private void AddCommonComponents(IComponentContainer components)
         {
-            var components = go.Components;
-            var sprite = ResourceManager.Register(new Sprite("Player/Images/Down_001"));
-            components.Add(sprite);
-
-            AddAnimation(sprite, components);
-            AddStatusBar(components, sprite, components.Get<PlayerAttributes>());
+            AddSprite(components);
+            AddAnimation(components);
+            AddStatusBar(components);
             AddPlayerEffect(components);
         }
 
@@ -238,12 +217,30 @@ namespace XnaClientLib.ECS
         /// Creates a new GameObject for a remote player
         /// </summary>
         /// <returns>The newly created game object</returns>
-        public GameObject AllocateGameObjectForRemote(Guid id)
+        public GameObject BeginAllocateRemote(Guid id)
         {
             var newGameObject = new GameObject(id);
             newGameObject.Components.Add(new PlayerAttributes());
             newGameObject.Components.Add(new InputData());
+            newGameObject.Components.Add(new Velocity(Vector2.Zero));
             newGameObject.Components.Add(new RemotePlayer(newGameObject));
+            EntityPool.Add(newGameObject.Entity, newGameObject.Components);
+            return newGameObject;
+        }
+
+        /// <summary>
+        /// Creates a new GameObject for a local player
+        /// </summary>
+        /// <returns>The newly created game object</returns>
+        public GameObject BeginAllocateLocal(Guid id)
+        {
+            var newGameObject = new GameObject(id);
+            var components = newGameObject.Components;
+            components.Add(new PlayerAttributes());
+            components.Add(new Velocity(Vector2.Zero));
+            components.Add(new KeyboardDirectionalInput());
+            components.Add(new LocalPlayer(newGameObject));
+            LocalPlayer = newGameObject;
             EntityPool.Add(newGameObject.Entity, newGameObject.Components);
             return newGameObject;
         }
@@ -253,13 +250,22 @@ namespace XnaClientLib.ECS
         #region Component Initializing Methods
 
         /// <summary>
-        /// Inserts the StatusBar gui component to a component container
+        /// Initializes the Sprite component
         /// </summary>
         /// <param name="components">The component container to add the component to</param>
-        /// <param name="sprite">The sprite of the game object</param>
-        /// <param name="attributes">The player attributes of the object</param>
-        private void AddStatusBar(IComponentContainer components, Sprite sprite, PlayerAttributes attributes)
+        public void AddSprite(IComponentContainer components)
         {
+            components.Add(ResourceManager.Register(new Sprite("Player/Images/Down_001")));
+        }
+
+        /// <summary>
+        /// Initializes the PlayerStatusBar component
+        /// </summary>
+        /// <param name="components">The component container to add the component to</param>
+        private void AddStatusBar(IComponentContainer components)
+        {
+            var sprite = components.Get<Sprite>();
+            var attributes = components.Get<PlayerAttributes>();
             attributes.Team = Teams[attributes.Team.Name];
             components.Add(
                 ResourceManager.Register(new PlayerStatusBar(attributes, sprite, components.Get<Transform>(),
@@ -267,12 +273,12 @@ namespace XnaClientLib.ECS
         }
 
         /// <summary>
-        /// Inserts animation related components into a component container
+        /// Initializes the Animation component
         /// </summary>
-        /// <param name="sprite">The sprite of the game object</param>
         /// <param name="components">The component container the components are inserted into</param>
-        private void AddAnimation(Sprite sprite, IComponentContainer components)
+        private void AddAnimation(IComponentContainer components)
         {
+            var sprite = components.Get<Sprite>();
             const long msPerFrame = 100;
             var stateAnimation = new StateAnimation<MovementDirection>(sprite, 0, MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
@@ -297,6 +303,10 @@ namespace XnaClientLib.ECS
             components.Add(new MovementToAnimationLinker(components, stateAnimation));
         }
 
+        /// <summary>
+        /// Initializes the PlayerEffects component
+        /// </summary>
+        /// <param name="components">The component container to add the component to</param>
         private void AddPlayerEffect(IComponentContainer components)
         {
             var effect = new SpriteEffect("Player/Effects/PlayerEffects");
