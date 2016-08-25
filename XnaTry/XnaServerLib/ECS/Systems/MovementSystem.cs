@@ -30,7 +30,7 @@ namespace XnaServerLib.ECS.Systems
                 return;
 
             input.Update(delta);
-            var moveVector = GetMoveVector(velocity, input);
+            var moveVector = GetMoveVector(velocity, input, delta);
             transform.MoveBy(moveVector);
         }
 
@@ -43,12 +43,9 @@ namespace XnaServerLib.ECS.Systems
         /// <param name="velocity">Velocity component </param>
         /// <param name="input">The source of input</param>
         /// <returns>Movement vector for the update</returns>
-        private static Vector2 GetMoveVector(Velocity velocity, DirectionalInput input)
+        private static Vector2 GetMoveVector(Velocity velocity, DirectionalInput input, long delta)
         {
-            var moveVector = Vector2.Zero;
-            moveVector.X = velocity.X * input.Horizontal;
-            moveVector.Y = velocity.Y * input.Vertical;
-            return moveVector;
+            return velocity * input * (delta / Constants.MillisecondsInSecond);
         }
 
         public override Predicate<IComponentContainer> RelevantEntities()

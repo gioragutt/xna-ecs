@@ -177,6 +177,7 @@ namespace XnaTry
 
             //ClientGameManager.RegisterSystem(new MovementSystem());
             ClientGameManager.RegisterSystem(new LinkerSystem());
+            ClientGameManager.RegisterSystem(new InterpolationSystem());
         }
 
         /// <summary>

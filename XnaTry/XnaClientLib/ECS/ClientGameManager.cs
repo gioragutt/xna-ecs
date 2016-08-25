@@ -1,4 +1,4 @@
-﻿using ECS.Interfaces;
+using ECS.Interfaces;
 using ECS.Managers;
 using Microsoft.Xna.Framework;
 using System;
@@ -211,6 +211,7 @@ namespace XnaClientLib.ECS
             AddAnimation(components);
             AddStatusBar(components);
             AddPlayerEffect(components);
+            AddInterpolation(components);
         }
 
         /// <summary>
@@ -323,6 +324,15 @@ namespace XnaClientLib.ECS
 
                 s.ResetPass();
             }));
+        }
+
+        /// <summary>
+        /// Initializes the Interpolator component
+        /// </summary>
+        /// <param name="components">The component container to add the component to</param>
+        public void AddInterpolation(IComponentContainer components)
+        {
+            components.Add(new Interpolator());
         }
 
         #endregion Component Initializing Methods
