@@ -28,5 +28,10 @@ namespace XnaCommonLib.ECS.Components
                 Y = reader.ReadSingle()
             };
         }
+
+        public static Vector2 operator *(Velocity vel, DirectionalInput input)
+        {
+            return new Vector2(vel.X * input.Horizontal, vel.Y * input.Vertical);
+        }
     }
 }
