@@ -1,18 +1,16 @@
 ﻿using ECS.BaseTypes;
 using EMS;
-using Microsoft.Xna.Framework;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using XnaClientLib.ECS;
 using XnaClientLib.ECS.Compnents;
-using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
-using Constants = XnaCommonLib.Constants;
+using UtilsLib;
+using UtilsLib.Consts;
 
 namespace XnaClientLib
 {
@@ -110,7 +108,7 @@ namespace XnaClientLib
 
         private void ReadLoginResponseFromServer()
         {
-            GameObject = ClientGameManager.BeginAllocateLocal(Util.ReadGuid(Reader));
+            GameObject = ClientGameManager.BeginAllocateLocal(Reader.ReadGuid());
             GameObject.Components.Get<NetworkPlayer>().Update(Reader);
             ClientGameManager.EndAllocate(GameObject);
         }
@@ -131,7 +129,7 @@ namespace XnaClientLib
 
                 for (var i = 0; i < playersUpdate; i++)
                 {
-                    var guid = Util.ReadGuid(Reader);
+                    var guid = Reader.ReadGuid();
                     var entity = new Entity(guid);
                     if (!ClientGameManager.EntityPool.Exists(entity))
                     {
@@ -148,7 +146,7 @@ namespace XnaClientLib
 
                 WritePlayerData();
 
-                Thread.Sleep(Constants.UpdateThreadSleepTime);
+                Thread.Sleep(Constants.Time.UpdateThreadSleepTime);
             }
         }
 

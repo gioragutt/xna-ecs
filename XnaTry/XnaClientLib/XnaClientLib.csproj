@@ -100,6 +100,10 @@
       <Project>{9dd1b6d5-18d4-4ff1-86ca-c382ecd42fe4}</Project>
       <Name>EMS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UtilsLib\UtilsLib.csproj">
+      <Project>{fe20fb76-e79d-46f5-97dd-fc4d8f83fc05}</Project>
+      <Name>UtilsLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XnaTryLib\XnaCommonLib.csproj">
       <Project>{0c3b9106-ee61-42ea-9593-2c45f8b8100b}</Project>
       <Name>XnaCommonLib</Name>

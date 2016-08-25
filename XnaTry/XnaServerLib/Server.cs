@@ -1,18 +1,17 @@
 ﻿using EMS;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using Newtonsoft.Json.Linq;
-using XnaCommonLib;
+using UtilsLib;
+using UtilsLib.Consts;
+using UtilsLib.Exceptions.Server;
 using XnaCommonLib.ECS.Components;
 using XnaServerLib.ECS;
 using XnaServerLib.ECS.Systems;
-using XnaServerLib.Exceptions;
-using Constants = XnaCommonLib.Constants;
 
 namespace XnaServerLib
 {
@@ -102,12 +101,12 @@ namespace XnaServerLib
 
             UpdateLoopThread.Start();
 
-            Subscribe(EventMessageNames.DamagePlayers, Callback_DamagePlayers);
+            Subscribe(Constants.Messages.DamagePlayers, Callback_DamagePlayers);
         }
 
         private void Callback_DamagePlayers(JObject message)
         {
-            var player = message.GetGuid(Constants.MessageFields.GuidField);
+            var player = message.GetGuid(Constants.Fields.PlayerGuid);
             var damage = message.Value<float?>("damage") ?? 10f;
 
             List<PlayerAttributes> attrs;
@@ -147,7 +146,7 @@ namespace XnaServerLib
                 GameManager.Update(currentTime - LastUpdateTime);
                 LastUpdateTime = currentTime;
 
-                Thread.Sleep(Constants.UpdateThreadSleepTime);
+                Thread.Sleep(Constants.Time.UpdateThreadSleepTime);
             }
         }
 
@@ -166,8 +165,8 @@ namespace XnaServerLib
                     Console.WriteLine("{2} - {0} Connected to {1}", attr.Name, attr.Team.Name, acceptedConnection.Client.RemoteEndPoint);
                     GameClients.Add(newGameClient);
                     Broadcast(
-                        MessageBuilder.Create(EventMessageNames.ClientAcceptedOnServer)
-                            .Add(Constants.MessageFields.PlayerField, attr.Name)
+                        MessageBuilder.Create(Constants.Messages.ClientAcceptedOnServer)
+                            .Add(Constants.Fields.PlayerName, attr.Name)
                             .Get());
                 }
                 catch (SocketException se)

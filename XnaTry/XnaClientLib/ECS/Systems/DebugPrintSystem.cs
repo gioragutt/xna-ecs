@@ -4,8 +4,8 @@ using System.Linq;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using UtilsLib.Consts;
 using XnaClientLib.ECS.Compnents;
-using XnaCommonLib;
 
 namespace XnaClientLib.ECS.Systems
 {
@@ -24,7 +24,7 @@ namespace XnaClientLib.ECS.Systems
         public override void Update(IList<IComponentContainer> entities, long delta)
         {
             SpriteBatch.Begin();
-            var textPos = new Vector2(Constants.DebugPrintInitialX, Constants.DebugPrintInitialY);
+            var textPos = new Vector2(Constants.GUI.DebugPrintInitialX, Constants.GUI.DebugPrintInitialY);
             entities.Aggregate(textPos, (current, entity) => PrintDebugText(entity, current));
             SpriteBatch.End();
         }
@@ -37,7 +37,7 @@ namespace XnaClientLib.ECS.Systems
             var text = debugPrintComp.PrintValue?.ToString() ?? debugPrintComp.PrintFunc();
             var textSize = Font.MeasureString(text);
             SpriteBatch.DrawString(Font, text, textPos, debugPrintComp.Color);
-            textPos.Y += textSize.Y + Constants.DebugPrintSpacing;
+            textPos.Y += textSize.Y + Constants.GUI.DebugPrintSpacing;
             return textPos;
         }
 

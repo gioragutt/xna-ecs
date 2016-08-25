@@ -1,5 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
+using UtilsLib.Utility;
 
 namespace EMS
 {
@@ -55,7 +56,7 @@ namespace EMS
         /// <summary>
         /// Unsubscribe from a certain message
         /// </summary>
-        /// <param name="messageName">Message name to unsubscribe from</param>
+        /// <param name="messageName">Messages name to unsubscribe from</param>
         public void Unsubscribe(string messageName)
         {
             server.Unsubscribe(this, messageName);
@@ -79,13 +80,13 @@ namespace EMS
         /// <param name="messageName">Name of the message to broadcast</param>
         public void Broadcast(string messageName)
         {
-            server.Broadcast(EmsUtils.CreateMessage(messageName));
+            server.Broadcast(Utils.Ems.CreateMessage(messageName));
         }
 
         /// <summary>
         /// Broadcast an event message
         /// </summary>
-        /// <param name="message">Message to broadcast</param>
+        /// <param name="message">Messages to broadcast</param>
         public void Broadcast(JObject message)
         {
             server.Broadcast(message);

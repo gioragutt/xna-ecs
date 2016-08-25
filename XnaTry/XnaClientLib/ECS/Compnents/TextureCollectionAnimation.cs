@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using XnaCommonLib;
+using UtilsLib.Utility;
 
 namespace XnaClientLib.ECS.Compnents
 {
@@ -52,9 +52,9 @@ namespace XnaClientLib.ECS.Compnents
         public TextureCollectionAnimation(Sprite sprite, IList<Texture2D> animationTextures, long fpsRate)
             : this(sprite, animationTextures, null, fpsRate)
         {
-            Util.AssertArgumentNotNull(animationTextures, "animationTextures");
+            Utils.AssertArgumentNotNull(animationTextures, "animationTextures");
             for (var index = 0; index < animationTextures.Count; index++)
-                Util.AssertArgumentNotNull(animationTextures[index], string.Format("Item {0} of animationTextures", index));
+                Utils.AssertArgumentNotNull(animationTextures[index], string.Format("Item {0} of animationTextures", index));
         }
 
         /// <summary>
@@ -67,9 +67,9 @@ namespace XnaClientLib.ECS.Compnents
         public TextureCollectionAnimation(Sprite sprite, IList<string> assetNames, long fpsRate)
             : this(sprite, null, assetNames, fpsRate)
         {
-            Util.AssertArgumentNotNull(assetNames, "assetNames");
+            Utils.AssertArgumentNotNull(assetNames, "assetNames");
             for (var index = 0; index < assetNames.Count; index++)
-                Util.AssertStringArgumentNotNull(assetNames[index], string.Format("Item {0} of assetNames", index));
+                Utils.AssertStringArgumentNotNull(assetNames[index], string.Format("Item {0} of assetNames", index));
         }
 
         /// <summary>

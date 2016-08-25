@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Content;
+using UtilsLib.Utility;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
@@ -29,7 +30,7 @@ namespace XnaClientLib.ECS.Compnents
         /// <exception cref="System.ArgumentNullException">sprite it null</exception>
         protected Animation(Sprite sprite, long msPerFrame)
         {
-            Util.AssertArgumentNotNull(sprite, "sprite");
+            Utils.AssertArgumentNotNull(sprite, "sprite");
 
             Sprite = sprite;
             MsPerFrame = msPerFrame;

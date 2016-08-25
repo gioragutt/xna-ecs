@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using UtilsLib.Utility;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
@@ -46,8 +47,8 @@ namespace XnaClientLib.ECS.Compnents
         /// <param name="nameFontAsset"></param>
         public PlayerStatusBar(PlayerAttributes attributes, Sprite sprite, Transform transform, string healthBarTextureAsset, string nameFontAsset)
         {
-            Util.AssertStringArgumentNotNull(healthBarTextureAsset, "healthBarTextureAsset");
-            Util.AssertStringArgumentNotNull(nameFontAsset, "nameFontAsset");
+            Utils.AssertStringArgumentNotNull(healthBarTextureAsset, "healthBarTextureAsset");
+            Utils.AssertStringArgumentNotNull(nameFontAsset, "nameFontAsset");
 
             Attributes = attributes;
             Sprite = sprite;

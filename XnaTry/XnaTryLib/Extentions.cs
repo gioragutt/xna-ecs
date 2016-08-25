@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using UtilsLib.Utility;
 using XnaCommonLib.ECS.Components;
 
 namespace XnaCommonLib
@@ -30,7 +31,7 @@ namespace XnaCommonLib
 
         public static bool IsMoving(this DirectionalInput input)
         {
-            if (!Util.NotNull(input))
+            if (!Utils.NotNull(input))
                 return false;
             return input.Horizontal.NotZero() || input.Vertical.NotZero(); 
         }

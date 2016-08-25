@@ -144,8 +144,11 @@ namespace ECSTest
         [Test]
         public void TwoEntitiesInPoolOnlyOneHasDummy()
         {
-            pool.AddToPool(entity).Add(new DummyComponent());
-            pool.AddToPool(new Entity(Guid.NewGuid())).Add(new DummyComponent());
+            pool.Add(entity);
+            pool.GetComponents(entity).Add(new DummyComponent());
+            var anotherEntity = new Entity(Guid.NewGuid());
+            pool.Add(anotherEntity);
+            pool.GetComponents(anotherEntity).Add(new DummyComponent());
             Assert.AreEqual(pool.AllThat(c => c.Has<DummyComponent>()).Count(), 2);
         }
         [Test]

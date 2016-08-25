@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using UtilsLib;
+using UtilsLib.Consts;
 
 namespace EMS
 {
@@ -21,7 +23,6 @@ namespace EMS
         public EmsServerEndpoint()
         {
             OutgoingMessagesBuffer = new Queue<JObject>();
-            Console.WriteLine("Initializing EmsServerEndpoint");
             EmsServer.Instance.SubscribeToAll(this, InsertMessageToBuffer);
         }
 
@@ -52,7 +53,7 @@ namespace EMS
             for (var i = 0; i < initialCount; ++i)
             {
                 var message = OutgoingMessagesBuffer.Dequeue();
-                EmsUtils.WriteJObject(writer, message);
+                writer.WriteJObject(message);
             }
         }
 
@@ -66,7 +67,7 @@ namespace EMS
 
             for (var i = 0; i < count; ++i)
             {
-                var msg = MessageBuilder.Create(EmsUtils.ReadJObject(reader)).Add(Constants.TransmittedField, true, true).Get();
+                var msg = MessageBuilder.Create(reader.ReadJObject()).Add(Constants.Fields.Transmitted, true, true).Get();
                 Broadcast(msg);
             }
         }

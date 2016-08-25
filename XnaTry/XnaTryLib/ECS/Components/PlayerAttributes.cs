@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using UtilsLib;
 
 namespace XnaCommonLib.ECS.Components
 {
@@ -9,6 +11,7 @@ namespace XnaCommonLib.ECS.Components
         public float MaxHealth { get; set; }
         public TeamData Team { get; set; } = new TeamData();
 
+        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
         public bool IsDead => HealthPercentage == 0.0f;
 
         public float HealthPercentage
@@ -23,7 +26,7 @@ namespace XnaCommonLib.ECS.Components
 
         public void Write(BinaryWriter writer)
         {
-            Util.WriteString(writer, Name);
+            writer.Write(Name);
             writer.Write(MaxHealth);
             writer.Write(Health);
             Team.Write(writer);
@@ -31,7 +34,7 @@ namespace XnaCommonLib.ECS.Components
 
         public void Read(BinaryReader reader)
         {
-            Name = Util.ReadString(reader);
+            Name = reader.ReadString();
             MaxHealth = reader.ReadSingle();
             Health = reader.ReadSingle();
             Team.Read(reader);

@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework;
+using UtilsLib;
+using UtilsLib.Consts;
 
 namespace XnaCommonLib.ECS.Components
 {
@@ -7,14 +9,14 @@ namespace XnaCommonLib.ECS.Components
     {
         public void Write(BinaryWriter writer)
         {
-            Util.WriteVector2(writer, Position);
+            writer.WriteVector2(Position);
             writer.Write(Rotation);
             writer.Write(Scale);
         }
 
         public void Read(BinaryReader reader)
         {
-            Position = Util.ReadVector2(reader);
+            Position = reader.ReadVector2();
             Rotation = reader.ReadSingle();
             Scale = reader.ReadSingle();
         }
@@ -51,7 +53,7 @@ namespace XnaCommonLib.ECS.Components
             }
             set
             {
-                rotation = (value + Constants.MaxRotation) % Constants.MaxRotation;
+                rotation = (value + Constants.Game.MaxRotation) % Constants.Game.MaxRotation;
             }
         }
 
@@ -67,11 +69,8 @@ namespace XnaCommonLib.ECS.Components
         /// <param name="scale">The scale of the transform, defaulting at 1</param>
         /// <param name="rotation">The rotation of the transform, defaulting at 0</param>
         /// <param name="enabled">The enabled status of the transform, defaulting to true</param>
-        public Transform(
-            Vector2 position,
-            float scale = Constants.DefaultScale,
-            float rotation = Constants.DefaultRotation,
-            bool enabled = true) : base(enabled)
+        public Transform(Vector2 position, float scale = 1f, float rotation = 0f, bool enabled = true) 
+            : base(enabled)
         {
             Position = position;
             Scale = scale;
@@ -97,7 +96,10 @@ namespace XnaCommonLib.ECS.Components
         /// Move the transform position by the given vector
         /// </summary>
         /// <param name="vector">The vector to move by</param>
-        public void MoveBy(Vector2 vector) { Position = Vector2.Add(Position, vector); }
+        public void MoveBy(Vector2 vector)
+        {
+            Position = Vector2.Add(Position, vector); 
+        }
 
         /// <summary>
         /// Rotates the transform towards the given point

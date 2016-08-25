@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using Microsoft.Xna.Framework;
+using UtilsLib.Consts;
 
 namespace XnaCommonLib.ECS.Components
 {
@@ -10,7 +11,7 @@ namespace XnaCommonLib.ECS.Components
     {
         private static float ClampInput(float input)
         {
-            return MathHelper.Clamp(input, Constants.FullNegativeInput, Constants.FullPositiveInput);
+            return MathHelper.Clamp(input, Constants.Game.FullNegativeInput, Constants.Game.FullPositiveInput);
         }
 
         private float horizontal;

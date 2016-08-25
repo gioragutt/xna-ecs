@@ -1,16 +1,17 @@
 using System;
 using System.IO;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using ECS.Interfaces;
 using EMS;
 using Microsoft.Xna.Framework;
+using UtilsLib;
+using UtilsLib.Consts;
+using UtilsLib.Utility;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
 using XnaServerLib.ECS;
-using Constants = XnaCommonLib.Constants;
 
 namespace XnaServerLib
 {
@@ -73,8 +74,8 @@ namespace XnaServerLib
         /// <param name="gameManager">The server's game manager</param>
         public GameClient(TcpClient connection, GameObject gameObject, ServerGameManager gameManager)
         {
-            Util.AssertArgumentNotNull(connection, "connection");
-            Util.AssertArgumentNotNull(gameObject, "gameObject");
+            Utils.AssertArgumentNotNull(connection, "connection");
+            Utils.AssertArgumentNotNull(gameObject, "gameObject");
 
             EmsServerEndpoint = new EmsServerEndpoint();
 
@@ -117,14 +118,14 @@ namespace XnaServerLib
                     break;
                 }
 
-                Thread.Sleep(Constants.UpdateThreadSleepTime);
+                Thread.Sleep(Constants.Time.UpdateThreadSleepTime);
             }
             
             Console.WriteLine("Player {0} disconnected", GameObject.Components.Get<PlayerAttributes>().Name);
 
             Broadcast(
-                MessageBuilder.Create(EventMessageNames.ClientDisconnected)
-                    .Add(Constants.MessageFields.GuidField, GameObject.Entity.Id)
+                MessageBuilder.Create(Constants.Messages.ClientDisconnected)
+                    .Add(Constants.Fields.PlayerGuid, GameObject.Entity.Id)
                     .Get());
 
             GameManager.DisposeOfClient(this);
@@ -154,7 +155,7 @@ namespace XnaServerLib
 
         private void WriteEntity(IEntity entity, IComponentContainer entityComponents)
         {
-            Util.WriterGuid(Writer, entity.Id);
+            Writer.WriterGuid(entity.Id);
             entityComponents.Get<Transform>().Write(Writer);
             entityComponents.Get<PlayerAttributes>().Write(Writer);
             entityComponents.Get<DirectionalInput>().Write(Writer);

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework;
+using UtilsLib.Consts;
+using UtilsLib.Utility;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
@@ -26,7 +28,7 @@ namespace XnaServerLib.ECS.Systems
 
         private static void HandleMovement(long delta, DirectionalInput input, Velocity velocity, Transform transform)
         {
-            if (!Util.ComponentsEnabled(input, velocity))
+            if (!Utils.Ecs.ComponentsEnabled(input, velocity))
                 return;
 
             input.Update(delta);
@@ -45,7 +47,7 @@ namespace XnaServerLib.ECS.Systems
         /// <returns>Movement vector for the update</returns>
         private static Vector2 GetMoveVector(Velocity velocity, DirectionalInput input, long delta)
         {
-            return velocity * input * (delta / Constants.MillisecondsInSecond);
+            return velocity * input * (delta / Constants.Time.MillisecondsInSecond);
         }
 
         public override Predicate<IComponentContainer> RelevantEntities()

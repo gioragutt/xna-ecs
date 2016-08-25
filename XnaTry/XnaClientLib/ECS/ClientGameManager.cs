@@ -1,20 +1,21 @@
+using ECS.BaseTypes;
 using ECS.Interfaces;
 using ECS.Managers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ECS.BaseTypes;
-using EMS;
-using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json.Linq;
+using UtilsLib;
+using UtilsLib.Consts;
+using UtilsLib.Utility;
 using XnaClientLib.ECS.Compnents;
 using XnaClientLib.ECS.Linkers;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
-using Constants = XnaCommonLib.Constants;
 
 namespace XnaClientLib.ECS
 {
@@ -42,7 +43,7 @@ namespace XnaClientLib.ECS
             drawingSystems = new SystemManager(EntityPool);
             Camera = new Camera();
 
-            Subscribe(EventMessageNames.ClientDisconnected, Callback_ClientDisconnected);
+            Subscribe(Constants.Messages.ClientDisconnected, Callback_ClientDisconnected);
         }
 
         #endregion
@@ -51,7 +52,7 @@ namespace XnaClientLib.ECS
 
         private void Callback_ClientDisconnected(JObject message)
         {
-            var guid = message.GetGuid(Constants.MessageFields.GuidField);
+            var guid = message.GetGuid(Constants.Fields.PlayerGuid);
             EntityPool.Remove(new Entity(guid));
         }
 
@@ -270,7 +271,7 @@ namespace XnaClientLib.ECS
             attributes.Team = Teams[attributes.Team.Name];
             components.Add(
                 ResourceManager.Register(new PlayerStatusBar(attributes, sprite, components.Get<Transform>(),
-                    Constants.Assets.PlayerHealthBarAsset, Constants.Assets.PlayerNameFontAsset)));
+                    Constants.Assets.PlayerHealthBar, Constants.Assets.PlayerNameFont)));
         }
 
         /// <summary>
@@ -286,16 +287,16 @@ namespace XnaClientLib.ECS
                 {
                     [MovementDirection.Down] =
                         ResourceManager.Register(new TextureCollectionAnimation(sprite,
-                            Util.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)),
+                            Utils.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)),
                     [MovementDirection.Up] =
                         ResourceManager.Register(new TextureCollectionAnimation(sprite,
-                            Util.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)),
+                            Utils.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)),
                     [MovementDirection.Left] =
                         ResourceManager.Register(new TextureCollectionAnimation(sprite,
-                            Util.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)),
+                            Utils.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)),
                     [MovementDirection.Right] =
                         ResourceManager.Register(new TextureCollectionAnimation(sprite,
-                            Util.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame))
+                            Utils.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame))
                 });
 
             components.Add(stateAnimation);

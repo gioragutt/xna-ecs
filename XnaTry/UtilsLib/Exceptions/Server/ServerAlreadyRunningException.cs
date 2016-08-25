@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace XnaServerLib.Exceptions
+namespace UtilsLib.Exceptions.Server
 {
     public class ServerAlreadyRunningException : BaseXnaServerException
     {

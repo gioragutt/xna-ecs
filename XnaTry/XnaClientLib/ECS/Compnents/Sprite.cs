@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using UtilsLib.Utility;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
@@ -37,7 +38,7 @@ namespace XnaClientLib.ECS.Compnents
         /// <exception cref="System.ArgumentNullException">if assetName is empty or null</exception>
         public Sprite(string assetName)
         {
-            Util.AssertStringArgumentNotNull(assetName, "assetName");
+            Utils.AssertStringArgumentNotNull(assetName, "assetName");
 
             AssetName = assetName;
         }

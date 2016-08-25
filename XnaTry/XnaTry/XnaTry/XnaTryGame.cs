@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
-using EMS;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using UtilsLib;
+using UtilsLib.Consts;
+using UtilsLib.Utility;
 using XnaClientLib;
 using XnaClientLib.ECS;
 using XnaClientLib.ECS.Compnents;
@@ -14,7 +16,6 @@ using XnaClientLib.ECS.Systems;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
-using Constants = XnaCommonLib.Constants;
 
 namespace XnaTry
 {
@@ -109,10 +110,10 @@ namespace XnaTry
             var stateAnimation = new StateAnimation<MovementDirection>(sprite, 0, MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
                 {
-                    { MovementDirection.Down,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Up,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Left,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Right,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Util.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame)) }
+                    { MovementDirection.Down,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Utils.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)) },
+                    { MovementDirection.Up,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Utils.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)) },
+                    { MovementDirection.Left,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Utils.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)) },
+                    { MovementDirection.Right,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Utils.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame)) }
                 });
 
             components.Add(stateAnimation);
@@ -135,8 +136,8 @@ namespace XnaTry
 
             components.Add(new ActionLinker<IComponentContainer, SpriteEffect>(components, effect, LinkPlayerStateToEffect));
 
-            components.Add(ResourceManager.Register(new PlayerStatusBar(attributes, sprite, entity.Transform, Constants.Assets.PlayerHealthBarAsset,
-                Constants.Assets.PlayerNameFontAsset)));
+            components.Add(ResourceManager.Register(new PlayerStatusBar(attributes, sprite, entity.Transform, Constants.Assets.PlayerHealthBar,
+                Constants.Assets.PlayerNameFont)));
 
             return entity;
         }
@@ -228,14 +229,14 @@ namespace XnaTry
 
             if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && !previousKeyboardState.IsKeyDown(Keys.NumPad1))
                 ConnectionHandler.Broadcast(
-                    MessageBuilder.Create(EventMessageNames.DamagePlayers)
+                    MessageBuilder.Create(Constants.Messages.DamagePlayers)
                         .Add("damage", 25)
                         .Get());
 
             if (currentKeyboardState.IsKeyDown(Keys.NumPad2) && !previousKeyboardState.IsKeyDown(Keys.NumPad2))
                 ConnectionHandler.Broadcast(
-                    MessageBuilder.Create(EventMessageNames.DamagePlayers)
-                        .Add(Constants.MessageFields.GuidField, ConnectionHandler.GameObject.Entity.Id)
+                    MessageBuilder.Create(Constants.Messages.DamagePlayers)
+                        .Add(Constants.Fields.PlayerGuid, ConnectionHandler.GameObject.Entity.Id)
                         .Get());
 
             if (currentKeyboardState.IsKeyDown(Keys.P) && !previousKeyboardState.IsKeyDown(Keys.P))

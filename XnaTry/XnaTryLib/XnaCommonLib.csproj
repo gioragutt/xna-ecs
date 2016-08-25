@@ -54,7 +54,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
     <Compile Include="ECS\Components\Component.cs" />
     <Compile Include="ECS\Components\DirectionalInput.cs" />
     <Compile Include="ECS\Components\FakeInput.cs" />
@@ -66,11 +65,10 @@
     <Compile Include="ECS\Systems\System.cs" />
     <Compile Include="ECS\GameObject.cs" />
     <Compile Include="ECS\Components\Transform.cs" />
-    <Compile Include="EventMessageNames.cs" />
     <Compile Include="Extentions.cs" />
+    <Compile Include="MapData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TeamData.cs" />
-    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -81,6 +79,10 @@
     <ProjectReference Include="..\EMS\EMS.csproj">
       <Project>{9dd1b6d5-18d4-4ff1-86ca-c382ecd42fe4}</Project>
       <Name>EMS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\UtilsLib\UtilsLib.csproj">
+      <Project>{fe20fb76-e79d-46f5-97dd-fc4d8f83fc05}</Project>
+      <Name>UtilsLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

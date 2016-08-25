@@ -15,12 +15,12 @@ namespace XnaCommonLib
 
         public void Read(BinaryReader reader)
         {
-            Name = Util.ReadString(reader);
+            Name = reader.ReadString();
         }
 
         public void Write(BinaryWriter writer)
         {
-            Util.WriteString(writer, Name);
+            writer.Write(Name);
         }
     }
 }

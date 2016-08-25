@@ -1,7 +1,6 @@
-﻿using System;
 using System.Net;
 
-namespace XnaServerLib.Exceptions
+namespace UtilsLib.Exceptions.Server
 {
     public class InvalidPortException : BaseXnaServerException
     {

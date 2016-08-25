@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Input;
+using UtilsLib.Consts;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
@@ -46,13 +47,13 @@ namespace XnaClientLib.ECS.Compnents
             Vertical = Horizontal = 0;
             var keyboard = Keyboard.GetState();
             if (keyboard.IsKeyDown(LayoutOptions.Down))
-                Vertical += Constants.FullPositiveInput;
+                Vertical += Constants.Game.FullPositiveInput;
             if (keyboard.IsKeyDown(LayoutOptions.Up))
-                Vertical += Constants.FullNegativeInput;
+                Vertical += Constants.Game.FullNegativeInput;
             if (keyboard.IsKeyDown(LayoutOptions.Right))
-                Horizontal += Constants.FullPositiveInput;
+                Horizontal += Constants.Game.FullPositiveInput;
             if (keyboard.IsKeyDown(LayoutOptions.Left))
-                Horizontal += Constants.FullNegativeInput;
+                Horizontal += Constants.Game.FullNegativeInput;
         }
     }
 }
