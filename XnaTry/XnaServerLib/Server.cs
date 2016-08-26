@@ -107,15 +107,11 @@ namespace XnaServerLib
         private void Callback_DamagePlayers(JObject message)
         {
             var player = message.GetGuid(Constants.Fields.PlayerGuid);
-            var damage = message.Value<float?>("damage") ?? 10f;
+            var damage = message.GetProp("damage", 10f);
 
-            List<PlayerAttributes> attrs;
-            if (player != Guid.Empty)
-                attrs =
-                    GameManager.EntityPool.GetAllOf<PlayerAttributes>().ToList().Where(
-                        c => c.Container.Parent.Id == player).ToList();
-            else
-                attrs = GameManager.EntityPool.GetAllOf<PlayerAttributes>().ToList();
+            var attrs = GameManager.EntityPool.GetAllOf<PlayerAttributes>().ToList();
+            if (player != null)
+                attrs = attrs.Where(c => c.Container.Parent.Id == player).ToList();
 
             attrs.ForEach(a => a.Health -= damage);
         }
@@ -167,6 +163,7 @@ namespace XnaServerLib
                     Broadcast(
                         MessageBuilder.Create(Constants.Messages.ClientAcceptedOnServer)
                             .Add(Constants.Fields.PlayerName, attr.Name)
+                            .Add(Constants.Fields.TeamName, attr.Team.Name)
                             .Get());
                 }
                 catch (SocketException se)

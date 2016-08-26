@@ -41,13 +41,33 @@ namespace UtilsLib
         /// <returns>A read GUID if exists; otherwise Guid.Empty</returns>
         /// <exception cref="System.ArgumentNullException">if jObject is null</exception>
         /// <exception cref="System.ArgumentNullException">if propName is null</exception>
-        public static Guid GetGuid(this JObject jObject, string propName)
+        public static Guid? GetGuid(this JObject jObject, string propName)
         {
             Utils.AssertArgumentNotNull(jObject, "jObject");
             Utils.AssertStringArgumentNotNull(propName, "propName");
 
             var guidAsString = jObject.Value<string>(propName);
-            return string.IsNullOrEmpty(guidAsString) ? Guid.Empty : Guid.Parse(guidAsString);
+            if (string.IsNullOrEmpty(guidAsString))
+                return null;
+            return Guid.Parse(guidAsString);
+        }
+
+        /// <summary>
+        /// Gets the value of a property
+        /// </summary>
+        /// <param name="jObject">A JObject containing the guid</param>
+        /// <param name="propName">The name of the property</param>
+        /// <param name="defaultValue">Default value if field is not found</param>
+        /// <returns>A read property if exists; otherwise defaultValue</returns>
+        /// <exception cref="System.ArgumentNullException">if jObject is null</exception>
+        /// <exception cref="System.ArgumentNullException">if propName is null</exception>
+        public static T GetProp<T>(this JObject jObject, string propName, T defaultValue)
+        {
+            Utils.AssertArgumentNotNull(jObject, "jObject");
+            Utils.AssertStringArgumentNotNull(propName, "propName");
+
+            JToken token;
+            return jObject.TryGetValue(propName, out token) ? token.Value<T>() : defaultValue;
         }
     }
 }

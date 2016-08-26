@@ -53,7 +53,9 @@ namespace XnaClientLib.ECS
         private void Callback_ClientDisconnected(JObject message)
         {
             var guid = message.GetGuid(Constants.Fields.PlayerGuid);
-            EntityPool.Remove(new Entity(guid));
+
+            if (guid.HasValue)
+                EntityPool.Remove(new Entity(guid.Value));
         }
 
         #endregion
