@@ -43,7 +43,14 @@ namespace ECS.BaseTypes
 
         public bool Has<TDerived>() where TDerived : class, TBase
         {
-            return AllDerivedOf<TDerived>().ToArray().Length > 0;
+            try
+            {
+                return AllDerivedOf<TDerived>().ToArray().Length > 0;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
