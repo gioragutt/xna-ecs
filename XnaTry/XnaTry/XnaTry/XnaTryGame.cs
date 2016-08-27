@@ -5,8 +5,10 @@ using ECS.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Windows.Forms;
 using UtilsLib;
 using UtilsLib.Consts;
+using UtilsLib.Exceptions.Server;
 using UtilsLib.Utility;
 using XnaClientLib;
 using XnaClientLib.ECS;
@@ -16,6 +18,7 @@ using XnaClientLib.ECS.Systems;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace XnaTry
 {
@@ -107,7 +110,7 @@ namespace XnaTry
 
             // Add Animation
             const long msPerFrame = 100;
-            var stateAnimation = new StateAnimation<MovementDirection>(sprite, 0, MovementDirection.Down,
+            var stateAnimation = new StateAnimation<MovementDirection>(MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
                 {
                     { MovementDirection.Down,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Utils.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)) },
@@ -131,27 +134,10 @@ namespace XnaTry
 
             components.Add(attributes);
 
-            var effect = new SpriteEffect("Player/Effects/PlayerEffects");
-            components.Add(ResourceManager.Register(effect));
-
-            components.Add(new ActionLinker<IComponentContainer, SpriteEffect>(components, effect, LinkPlayerStateToEffect));
-
             components.Add(ResourceManager.Register(new PlayerStatusBar(attributes, sprite, entity.Transform, Constants.Assets.PlayerHealthBar,
                 Constants.Assets.PlayerNameFont)));
 
             return entity;
-        }
-
-        private static void LinkPlayerStateToEffect(IComponentContainer componentContainer, SpriteEffect spriteEffect)
-        {
-            var attr = componentContainer.Get<PlayerAttributes>();
-            if (attr.IsDead)
-            {
-                spriteEffect.ApplyPass("Ghost");
-                return;
-            }
-
-            spriteEffect.ResetPass();
         }
 
         void CreateStupidAiPlayer()
@@ -172,6 +158,7 @@ namespace XnaTry
         protected override void Initialize()
         {
             base.Initialize();
+            IsMouseVisible = true;
             //InitializeGameSettings(1280, 1024);
 
             ClientGameManager.CreateDebugPrint(() => ClientGameManager.ToString());
@@ -254,9 +241,28 @@ namespace XnaTry
 
         private void ConnectToServer()
         {
-            ConnectionHandler.ConnectAndInitializeLocalPlayer("[PC] GioraG", goodTeam.Name);
-            ClientGameManager.CreateDebugPrint(
-                () => ConnectionHandler.GameObject.Components.Get<DirectionalInput>().ToString());
+            try
+            {
+                ConnectionHandler.ConnectAndInitializeLocalPlayer("[PC] GioraG", goodTeam.Name);
+                ClientGameManager.CreateDebugPrint(
+                    () => ConnectionHandler.GameObject.Components.Get<DirectionalInput>().ToString());
+            }
+            catch (Exception x)
+            {
+                if (ShowConnectionFailedError(x) == DialogResult.Yes)
+                    throw new ConnectionEstablishmentErrorException("Failed to connect the server", x);
+                Exit();
+            }
+        }
+
+        private DialogResult ShowConnectionFailedError(Exception x)
+        {
+            return MessageBox.Show(
+                string.Format("Failed to connect the server {0}:{1}{2}{3}{2}Throw exception for debug?", ConnectionHandler.HostName, ConnectionHandler.Port, Environment.NewLine, x), 
+                "Connection failed",
+                MessageBoxButtons.YesNo, 
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button2);
         }
 
         protected override void EndRun()
