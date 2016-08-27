@@ -22,8 +22,8 @@ namespace EMS
         /// </summary>
         public EmsServerEndpoint()
         {
-            OutgoingMessagesBuffer = new Queue<JObject>();
-            EmsServer.Instance.SubscribeToAll(this, InsertMessageToBuffer);
+           OutgoingMessagesBuffer = new Queue<JObject>();
+           SubscribeToAll(InsertMessageToBuffer);
         }
 
         /// <summary>
@@ -61,6 +61,11 @@ namespace EMS
         /// Reads all messages from a binary reader and broadcasts them
         /// </summary>
         /// <param name="reader">BinaryReader containing the trasmitted messages</param>
+        /// <remarks>
+        /// Messages broadcast by this method are marked as transmitted, so that messages broadcast by an 
+        /// Endpoint wouldn't be recieved by an endpoint and start a message loop.
+        /// In case a message should be transfered again, a suitable client should handle the logic of those messages
+        /// </remarks>
         public void BroadcastIncomingEvents(BinaryReader reader)
         {
             var count = reader.ReadInt32();
