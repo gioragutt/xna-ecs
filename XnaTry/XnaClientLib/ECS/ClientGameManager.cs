@@ -324,6 +324,16 @@ namespace XnaClientLib.ECS
                     s.ApplyPass("Ghost");
                     return;
                 }
+                if (attr.PreviousHealth < attr.Health)
+                {
+                    s.ApplyPass("Healed");
+                    return;
+                }
+                if (attr.PreviousHealth > attr.Health)
+                {
+                    s.ApplyPass("Hit");
+                    return;
+                }
 
                 s.ResetPass();
             }));
