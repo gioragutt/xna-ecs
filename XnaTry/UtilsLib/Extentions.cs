@@ -53,6 +53,21 @@ namespace UtilsLib
         }
 
         /// <summary>
+        /// Checks if a JObject has a property by name
+        /// </summary>
+        /// <param name="jObject">The checked JObject</param>
+        /// <param name="propName">Name of the property to check</param>
+        /// <returns>true if jObject has prop propName; otherwise false</returns>
+        public static bool HasProp(this JObject jObject, string propName)
+        {
+            Utils.AssertArgumentNotNull(jObject, "jObject");
+            Utils.AssertStringArgumentNotNull(propName, "propName");
+
+            JToken dummyToken;
+            return jObject.TryGetValue(propName, out dummyToken);
+        }
+
+        /// <summary>
         /// Gets the value of a property
         /// </summary>
         /// <param name="jObject">A JObject containing the guid</param>
