@@ -68,19 +68,25 @@ namespace UtilsLib
         /// Changes the name of the message
         /// </summary>
         /// <param name="name">New name of the message</param>
-        public void ChangeName(string name)
+        /// <returns>The MessageBuilder object</returns>
+        public MessageBuilder ChangeName(string name)
         {
             Add(Constants.Fields.MessageName, name, true);
+
+            return this;
         }
 
         /// <summary>
         /// Removes a property by a given name if exists
         /// </summary>
         /// <param name="propName">Name of the property to remove</param>
-        public void RemoveProp(string propName)
+        /// <returns>The MessageBuilder object</returns>
+        public MessageBuilder RemoveProp(string propName)
         {
             if (ConstructedObject.GetValue(propName) != null)
                 ConstructedObject.Remove(propName);
+
+            return this;
         }
 
         /// <summary>
