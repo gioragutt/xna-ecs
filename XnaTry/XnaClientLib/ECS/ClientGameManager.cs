@@ -293,7 +293,7 @@ namespace XnaClientLib.ECS
         {
             var sprite = components.Get<Sprite>();
             const long msPerFrame = 100;
-            var stateAnimation = new StateAnimation<MovementDirection>(sprite, 0, MovementDirection.Down,
+            var stateAnimation = new StateAnimation<MovementDirection>(MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
                 {
                     [MovementDirection.Down] =

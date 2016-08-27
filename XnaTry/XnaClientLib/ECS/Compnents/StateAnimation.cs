@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework.Content;
 
 namespace XnaClientLib.ECS.Compnents
 {
+    /// <summary>
+    /// Manages other animations by state
+    /// </summary>
+    /// <typeparam name="T">Type of the states of the animation. Can be an enum, an integer, a string, practically anything</typeparam>
     public class StateAnimation<T> : Animation
     {
         private T currentState;
@@ -49,39 +52,31 @@ namespace XnaClientLib.ECS.Compnents
         /// </summary>
         private Animation ActiveAnimation { get; set; }
 
-        public StateAnimation(Sprite sprite, long msPerFrame, T defaultState, Dictionary<T, Animation> animations) 
-            : base(sprite, msPerFrame)
+        /// <summary>
+        /// Initialize the state animation
+        /// </summary>
+        /// <param name="defaultState">The default state of the animation, must be one of the states of the animations</param>
+        /// <param name="animations">The animations managed by the state animation</param>
+        public StateAnimation(T defaultState, Dictionary<T, Animation> animations)
         {
+            if (!animations.ContainsKey(DefaultState))
+                throw new ArgumentOutOfRangeException("defaultState", defaultState, "The default state must be one of the states of the animation");
+
             Animations = animations;
             DefaultState = defaultState;
-
-            if (animations.ContainsKey(DefaultState))
-                CurrentState = DefaultState;
-            else if (animations.Count > 0)
-                CurrentState = animations.Keys.First();
-        }
-
-        public StateAnimation(Sprite sprite, long msPerFrame, T initialState)
-            : this(sprite, msPerFrame, initialState, new Dictionary<T, Animation>())
-        {
-        }
-
-        public void AddState(T id, Animation animation)
-        {
-            if (Animations.ContainsKey(id))
-                return;
-
-            Animations.Add(id, animation);
-
-            if (id.Equals(DefaultState))
-                CurrentState = id;
+            CurrentState = DefaultState;
         }
 
         public override void LoadContent(ContentManager content)
         {
-            ActiveAnimation.LoadContent(content);
+            // No need to load any content, since the state animation doesn't store any content, but
+            // Just manages other animations
         }
 
+        /// <summary>
+        /// When you disable the animation, you want to get back to the default state and
+        /// Disable the animation of the default state
+        /// </summary>
         public override void Disable()
         {
             CurrentState = DefaultState;

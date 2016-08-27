@@ -39,6 +39,17 @@ namespace XnaClientLib.ECS.Compnents
         }
 
         /// <summary>
+        /// Initializes variables of Animation
+        /// </summary>
+        protected Animation()
+        {
+            Sprite = null;
+            MsPerFrame = 0;
+            Enabled = false;
+            AnimationSpeed = 1f;
+        }
+
+        /// <summary>
         /// Loads the required resources for the animation
         /// </summary>
         /// <param name="content">Content manager to use</param>
