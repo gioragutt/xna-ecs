@@ -19,9 +19,6 @@ namespace XnaClientLib.ECS.Linkers
         {
             if (!Input.IsMoving() || Attributes.IsDead)
             {
-                if (!Second.Enabled)
-                    return;
-
                 Second.Enabled = false;
                 return;
             }

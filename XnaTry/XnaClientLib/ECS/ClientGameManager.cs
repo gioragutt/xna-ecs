@@ -217,6 +217,15 @@ namespace XnaClientLib.ECS
             AddInterpolation(components);
         }
 
+        private static DirectionalInput InputForLocal()
+        {
+#if WINDOWS
+            return new KeyboardDirectionalInput();
+#else
+            return new GamepadDirectionalInput();
+#endif
+        }
+
         /// <summary>
         /// Creates a new GameObject for a remote player
         /// </summary>
@@ -242,7 +251,7 @@ namespace XnaClientLib.ECS
             var components = newGameObject.Components;
             components.Add(new PlayerAttributes());
             components.Add(new Velocity(Vector2.Zero));
-            components.Add(new KeyboardDirectionalInput());
+            components.Add(InputForLocal());
             components.Add(new LocalPlayer(newGameObject));
             LocalPlayer = newGameObject;
             EntityPool.Add(newGameObject.Entity, newGameObject.Components);
