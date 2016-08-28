@@ -153,6 +153,7 @@ namespace XnaTry
             var health = (float)rnd.NextDouble() * 100;
             var aiPlayer = CreatePlayer(new FakeInput(), initialPosition, team, null, health);
             aiPlayer.Components.Get<PlayerAttributes>().Name = "[AI] " + aiPlayer.Components.Get<PlayerAttributes>().Name;
+            aiPlayer.Components.Destroy(5000);
         }
 
         protected override void Initialize()
@@ -166,6 +167,7 @@ namespace XnaTry
             //ClientGameManager.RegisterSystem(new MovementSystem());
             ClientGameManager.RegisterSystem(new LinkerSystem());
             ClientGameManager.RegisterSystem(new InterpolationSystem());
+            ClientGameManager.RegisterSystem(new LifespanSystem());
         }
 
         /// <summary>

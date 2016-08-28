@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using ECS.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using UtilsLib.Utility;
@@ -39,6 +40,16 @@ namespace XnaCommonLib
         public static bool KeysPressed(this KeyboardState state, params Keys[] keys)
         {
             return keys.All(state.IsKeyDown);
+        }
+
+        public static void Destroy(this IComponentContainer entity, long timeTillDestruction = 0)
+        {
+            Utils.AssertArgumentNotNull(entity, "entity");
+
+            if (entity.Has<Lifespan>())
+                entity.Remove<Lifespan>();
+
+            entity.Add(new Lifespan(timeTillDestruction));
         }
     }
 }
