@@ -30,12 +30,24 @@ namespace ECS.Interfaces
         /// Checks if instance of type TDerived exists
         /// </summary>
         /// <typeparam name="TDerived">Type that implements interface TBase</typeparam>
-        /// <returns></returns>
+        /// <returns>true if container contains TDerived or anything that derives from TDerived</returns>
         bool Has<TDerived>() where TDerived : class, TBase;
 
         /// <summary>
         /// Count of instances in the container
         /// </summary>
         int Count { get; }
+
+        /// <summary>
+        /// Removed an instance of TDerived from the container
+        /// </summary>
+        /// <typeparam name="TDerived">Type that implements interface TBase</typeparam>
+        void Remove<TDerived>() where TDerived : class, TBase;
+
+        /// <summary>
+        /// Removed all instances of TDerived (and those who derive from it)
+        /// </summary>
+        /// <typeparam name="TDerived">Type that implements interface TBase</typeparam>
+        void RemoveAllOf<TDerived>() where TDerived : class, TBase;
     }
 }

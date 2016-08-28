@@ -52,5 +52,20 @@ namespace ECS.BaseTypes
                 return false;
             }
         }
+
+        public void Remove<TDerived>() where TDerived : class, TBase
+        {
+            Remove(typeof (TDerived));
+        }
+
+        public void RemoveAllOf<TDerived>() where TDerived : class, TBase
+        {
+            var allOfTDerived = Keys.Where(ImplementsType<TDerived>).ToList();
+            var count = allOfTDerived.Count;
+            for (var i = 0; i < count; i++)
+            {
+                Remove(allOfTDerived[i]);
+            }
+        }
     }
 }
