@@ -175,14 +175,14 @@ namespace XnaServerLib
             GameObject.Transform.Scale = 0.4f;
             GameObject.Transform.Position = new Vector2(50, 300);
 
-            var teamName = GameManager.EntitiesCount % 2 == 0 ? "Bad Team" : "Good Team";
+            //var teamName = GameManager.EntitiesCount % 2 == 0 ? "Bad" : "Good";
 
             GameObject.Components.Add(new PlayerAttributes
             {
                 Name = GameManager.GetAvailablePlayerName(name),
                 Team = new TeamData
                 {
-                    Name = teamName,
+                    Name = team,
                 },
                 MaxHealth = 100,
                 Health = 50

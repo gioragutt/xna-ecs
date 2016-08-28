@@ -18,6 +18,7 @@ using XnaClientLib.ECS.Systems;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using XnaCommonLib.ECS.Systems;
 using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace XnaTry
@@ -40,14 +41,14 @@ namespace XnaTry
         public TeamData goodTeam = new TeamData
         {
             Color = Color.Blue,
-            Name = "Good Team",
+            Name = "Good",
             Frame = "Player/GUI/GreenTeam"
         };
 
         public TeamData badTeam = new TeamData
         {
             Color = Color.Red,
-            Name = "Bad Team",
+            Name = "Bad",
             Frame = "Player/GUI/RedTeam"
         };
 
@@ -61,8 +62,16 @@ namespace XnaTry
             IsMouseVisible = true;
         }
 
-        public XnaTryGame()
+        public XnaTryGame(string[] args)
         {
+            string name = "giorag", ip = "localhost", team = Convert.ToBoolean(new Random().Next(0, 2)) ? "Good" : "Bad";
+            if (args.Length > 0)
+                name = args[0];
+            if (args.Length > 1)
+                ip = args[1];
+            if (args.Length > 2)
+                team = args[2];
+
             Teams = new Dictionary<string, TeamData>
             {
                 [goodTeam.Name] = goodTeam,
@@ -79,7 +88,8 @@ namespace XnaTry
             currentKeyboardState = Keyboard.GetState();
             previousKeyboardState = currentKeyboardState;
 
-            ConnectionHandler = new ConnectionHandler(null, 27015, ClientGameManager);
+            ConnectionHandler = new ConnectionHandler(ip, 27015, ClientGameManager);
+            ConnectToServer(name, team);
         }
 
         #region Contants Configurations
@@ -171,8 +181,7 @@ namespace XnaTry
         }
 
         /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
+        /// LoadContent will be called once per game and is the place to load all of your content.
         /// </summary>
         protected override void LoadContent()
         {
@@ -211,11 +220,6 @@ namespace XnaTry
             if (currentKeyboardState.KeysPressed(Keys.LeftControl, Keys.Q, Keys.W))
                 Exit();
 
-            if (currentKeyboardState.IsKeyDown(Keys.C) && !ConnectionHandler.Connected)
-            {
-                ConnectToServer();
-            }
-
             if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && !previousKeyboardState.IsKeyDown(Keys.NumPad1))
                 ConnectionHandler.Broadcast(
                     MessageBuilder.Create(Constants.Messages.DamagePlayers)
@@ -241,11 +245,11 @@ namespace XnaTry
             base.Update(gameTime);
         }
 
-        private void ConnectToServer()
+        private void ConnectToServer(string name, string team)
         {
             try
             {
-                ConnectionHandler.ConnectAndInitializeLocalPlayer("[PC] GioraG", goodTeam.Name);
+                ConnectionHandler.ConnectAndInitializeLocalPlayer(name, team);
                 ClientGameManager.CreateDebugPrint(
                     () => ConnectionHandler.GameObject.Components.Get<DirectionalInput>().ToString());
             }

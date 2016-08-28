@@ -165,6 +165,8 @@ namespace XnaServerLib
                             .Add(Constants.Fields.PlayerName, attr.Name)
                             .Add(Constants.Fields.TeamName, attr.Team.Name)
                             .Get());
+
+                    Thread.Sleep(1000);
                 }
                 catch (SocketException se)
                 {

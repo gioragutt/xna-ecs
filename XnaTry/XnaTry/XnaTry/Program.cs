@@ -8,7 +8,7 @@ namespace XnaTry
         /// </summary>
         static void Main(string[] args)
         {
-            using (var game = new XnaTryGame())
+            using (var game = new XnaTryGame(args))
             {
                 game.Run();
             }
