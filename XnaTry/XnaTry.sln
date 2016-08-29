@@ -25,11 +25,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7F06CBF7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilsLib", "UtilsLib\UtilsLib.csproj", "{FE20FB76-E79D-46F5-97DD-FC4D8F83FC05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of XnaCommonLib", "XnaTryLib\Xbox 360 Copy of XnaCommonLib.csproj", "{F70EAFF7-B595-4A3E-9879-C5FF36B92133}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of XnaClientLib", "XnaClientLib\Xbox 360 Copy of XnaClientLib.csproj", "{0EC7264D-5666-4C2D-9E0C-D8DFF23BF69F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xbox 360 Copy of XnaTry", "XnaTry\XnaTry\Xbox 360 Copy of XnaTry.csproj", "{C2DB5AAA-6CA6-4176-BBCB-731DD3418C8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "Launcher\Launcher.csproj", "{6AA4EB1B-E5EF-4FAC-9787-6B363794A8CC}"
 EndProject
