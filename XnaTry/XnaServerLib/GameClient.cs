@@ -108,15 +108,8 @@ namespace XnaServerLib
             {
                 try
                 {
-                    var clientMessageString = Reader.ReadString();
-                    var clientMessage = JsonConvert.DeserializeObject<OutgoingMessage>(clientMessageString);
-                    EmsServerEndpoint.BroadcastIncomingEvents(clientMessage.Broadcasts);
-                    UpdateClient(clientMessage.PlayerUpdate);
-                    Writer.Write(JsonConvert.SerializeObject(new IncomingUpdate
-                    {
-                        Broadcasts = EmsServerEndpoint.Flush(),
-                        PlayerUpdates = PlayerUpdates()
-                    }));
+                    ProcessClientUpdate();
+                    SendServerUpdate();
                 }
                 catch (IOException)
                 {
@@ -145,6 +138,23 @@ namespace XnaServerLib
             GameObject = null;
         }
 
+        private void SendServerUpdate()
+        {
+            Writer.Write(JsonConvert.SerializeObject(new ServerToClientUpdateMessage
+            {
+                Broadcasts = EmsServerEndpoint.Flush(),
+                PlayerUpdates = PlayerUpdates()
+            }));
+        }
+
+        private void ProcessClientUpdate()
+        {
+            var clientMessageString = Reader.ReadString();
+            var clientMessage = JsonConvert.DeserializeObject<ClientToServerUpdateMessage>(clientMessageString);
+            EmsServerEndpoint.BroadcastIncomingEvents(clientMessage.Broadcasts);
+            UpdateClient(clientMessage.PlayerUpdate);
+        }
+
         private IList<PlayerUpdate> PlayerUpdates()
         {
             return GameManager.EntityPool.AllThat(PlayerUpdate.IsPlayer).Select(c => new PlayerUpdate(c)).ToList();
@@ -165,20 +175,17 @@ namespace XnaServerLib
         private void ReadClientLoginDataAndInitializePlayer()
         {
             var serializedMessage = Reader.ReadString();
-            var loginMessage = JsonConvert.DeserializeObject<JObject>(serializedMessage);
-
-            if (loginMessage.GetMessageName() != Constants.Messages.PlayerLogin)
-                Dispose();
+            var loginMessage = JsonConvert.DeserializeObject<ClientLoginMessage>(serializedMessage);
 
             GameObject.Transform.Scale = 0.4f;
             GameObject.Transform.Position = new Vector2(50, 300);
 
             GameObject.Components.Add(new PlayerAttributes
             {
-                Name = GameManager.GetAvailablePlayerName(loginMessage.GetProp<string>(Constants.Fields.PlayerName)),
+                Name = GameManager.GetAvailablePlayerName(loginMessage.PlayerName),
                 Team = new TeamData
                 {
-                    Name = loginMessage.GetProp<string>(Constants.Fields.TeamName)
+                    Name = loginMessage.PlayerTeam
                 },
                 MaxHealth = 100,
                 Health = 50

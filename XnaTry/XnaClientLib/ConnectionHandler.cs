@@ -8,7 +8,6 @@ using System.Threading;
 using UtilsLib;
 using UtilsLib.Consts;
 using XnaClientLib.ECS;
-using XnaClientLib.ECS.Compnents;
 using XnaClientLib.ECS.Compnents.Network;
 using XnaCommonLib.ECS;
 using XnaCommonLib.Network;
@@ -118,10 +117,11 @@ namespace XnaClientLib
 
         private void WriteLoginDataToServer(string name, string team)
         {
-            var loginMessage = MessageBuilder.Create(Constants.Messages.PlayerLogin)
-                .Add(Constants.Fields.PlayerName, name)
-                .Add(Constants.Fields.TeamName, team)
-                .Get();
+            var loginMessage = new ClientLoginMessage
+            {
+                PlayerName = name,
+                PlayerTeam = team
+            };
             var serializedMessage = JsonConvert.SerializeObject(loginMessage);
             Writer.Write(serializedMessage);
         }
@@ -130,16 +130,20 @@ namespace XnaClientLib
         {
             while (Connection.Connected)
             {
-                var message = Reader.ReadString();
-                var incomingUpdate = JsonConvert.DeserializeObject<IncomingUpdate>(message);
-                EmsServerEndpoint.BroadcastIncomingEvents(incomingUpdate.Broadcasts);
-
-                foreach (var update in incomingUpdate.PlayerUpdates)
-                    ApplyUpdate(update);
-
+                ProcessServerUpdate();
                 WritePlayerData();
                 Thread.Sleep(Constants.Time.UpdateThreadSleepTime);
             }
+        }
+
+        private void ProcessServerUpdate()
+        {
+            var message = Reader.ReadString();
+            var incomingUpdate = JsonConvert.DeserializeObject<ServerToClientUpdateMessage>(message);
+            EmsServerEndpoint.BroadcastIncomingEvents(incomingUpdate.Broadcasts);
+
+            foreach (var update in incomingUpdate.PlayerUpdates)
+                ApplyUpdate(update);
         }
 
         private void ApplyUpdate(PlayerUpdate update)
@@ -160,7 +164,7 @@ namespace XnaClientLib
 
         private void WritePlayerData()
         {
-            var message = new OutgoingMessage
+            var message = new ClientToServerUpdateMessage
             {
                 Broadcasts = EmsServerEndpoint.Flush(),
                 PlayerUpdate = new PlayerUpdate(GameObject.Components)
