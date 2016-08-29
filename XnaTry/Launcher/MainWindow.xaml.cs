@@ -102,7 +102,7 @@ namespace Launcher
                 StartInfo =
                 {
                     FileName = "XnaTry.exe",
-                    Arguments = string.Format(" {0} {1} {2}", PlayerName, IpAddress, teamName),
+                    Arguments = string.Format("\"{0}\" {1} {2}", PlayerName, IpAddress, teamName),
                     UseShellExecute = false
                 }
             };
