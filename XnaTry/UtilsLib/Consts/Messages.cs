@@ -8,6 +8,7 @@
             public const string ServerStoppedListening = "SERVER-STOPPED-LISTENING";
             public const string ClientDisconnected = "CLIENT-DISCONNECTED";
             public const string DamagePlayers = "DAMAGE-PLAYERS";
+            public const string PlayerLogin = "PLAYER-LOGIN";
         }
     }
 }

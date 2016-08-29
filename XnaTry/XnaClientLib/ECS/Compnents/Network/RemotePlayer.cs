@@ -1,8 +1,8 @@
-﻿using System.IO;
-using XnaCommonLib.ECS;
+﻿using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using XnaCommonLib.Network;
 
-namespace XnaClientLib.ECS.Compnents
+namespace XnaClientLib.ECS.Compnents.Network
 {
     public class RemotePlayer : NetworkPlayer
     {
@@ -19,12 +19,12 @@ namespace XnaClientLib.ECS.Compnents
             Velocity = UpdatedObject.Components.Get<Velocity>();
         }
 
-        public override void Update(BinaryReader reader)
+        public override void Update(PlayerUpdate update)
         {
-            Transform.Read(reader);
-            Attributes.Read(reader);
-            Input.Read(reader);
-            Velocity.Read(reader);
+            Transform.Update(update.Transform);
+            Attributes.Update(update.Attributes);
+            Velocity.Update(update.Velocity);
+            Input.Update(update.Input);
         }
     }
 }

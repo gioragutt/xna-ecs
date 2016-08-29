@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using UtilsLib;
 using UtilsLib.Consts;
@@ -13,7 +14,7 @@ namespace EMS
     public class EmsServerEndpoint : EmsClient
     {
         /// <summary>
-        /// All messages the were broadcast before the last time Flush was called
+        /// All messages the were broadcasts before the last time Flush was called
         /// </summary>
         public Queue<JObject> OutgoingMessagesBuffer { get; set; }
 
@@ -27,9 +28,9 @@ namespace EMS
         }
 
         /// <summary>
-        /// Inserts a broadcast message to the buffer
+        /// Inserts a broadcasts message to the buffer
         /// </summary>
-        /// <param name="message">The broadcast message</param>
+        /// <param name="message">The broadcasts message</param>
         private void InsertMessageToBuffer(JObject message)
         {
             // Do no send messaged if they were transmitted from another Endpoint
@@ -40,39 +41,29 @@ namespace EMS
         }
 
         /// <summary>
-        /// Flushes the currently buffered messages to a binary writer
+        /// Flushes the currently buffered messages to a list
         /// </summary>
-        /// <param name="writer">BinaryWriter to writer messages to</param>
-        public void Flush(BinaryWriter writer)
+        public IList<JObject> Flush()
         {
-            // Write current amount of messages
-            var initialCount = OutgoingMessagesBuffer.Count;
-            writer.Write(initialCount);
-
-            // Send only the messages we declared above to send
-            for (var i = 0; i < initialCount; ++i)
-            {
-                var message = OutgoingMessagesBuffer.Dequeue();
-                writer.WriteJObject(message);
-            }
+            var bufferCopy = OutgoingMessagesBuffer.ToList();
+            OutgoingMessagesBuffer.Clear();
+            return bufferCopy;
         }
 
         /// <summary>
-        /// Reads all messages from a binary reader and broadcasts them
+        /// Broadcasts all incoming messages from a remote Endpoint
         /// </summary>
-        /// <param name="reader">BinaryReader containing the trasmitted messages</param>
+        /// <param name="broadcasts">Broadcasts recieved</param>
         /// <remarks>
-        /// Messages broadcast by this method are marked as transmitted, so that messages broadcast by an 
+        /// Messages broadcasts by this method are marked as transmitted, so that messages broadcasts by an 
         /// Endpoint wouldn't be recieved by an endpoint and start a message loop.
         /// In case a message should be transfered again, a suitable client should handle the logic of those messages
         /// </remarks>
-        public void BroadcastIncomingEvents(BinaryReader reader)
+        public void BroadcastIncomingEvents(IList<JObject> broadcasts)
         {
-            var count = reader.ReadInt32();
-
-            for (var i = 0; i < count; ++i)
+            foreach (var broadcast in broadcasts)
             {
-                var msg = MessageBuilder.Create(reader.ReadJObject()).Add(Constants.Fields.Transmitted, true, true).Get();
+                var msg = MessageBuilder.Create(new JObject(broadcast)).Add(Constants.Fields.Transmitted, true, true).Get();
                 Broadcast(msg);
             }
         }

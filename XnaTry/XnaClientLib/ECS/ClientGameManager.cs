@@ -12,6 +12,7 @@ using UtilsLib;
 using UtilsLib.Consts;
 using UtilsLib.Utility;
 using XnaClientLib.ECS.Compnents;
+using XnaClientLib.ECS.Compnents.Network;
 using XnaClientLib.ECS.Linkers;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
@@ -72,8 +73,9 @@ namespace XnaClientLib.ECS
             foreach (var entity in allplayers)
             {
                 var attributes = entity.Get<PlayerAttributes>();
+                var transform = entity.Get<Transform>();
 
-                builder.AppendFormat("{0} - ( {1} ) {2}% HP{3}", attributes.Name, entity.Count, attributes.HealthPercentage * 100f, Environment.NewLine);
+                builder.AppendFormat("{0} - ({1}) {2}% HP - {3}{4}", attributes.Name, entity.Count, attributes.HealthPercentage * 100f, transform, Environment.NewLine);
             }
 
             return builder.ToString();
@@ -277,12 +279,8 @@ namespace XnaClientLib.ECS
         /// <param name="components">The component container to add the component to</param>
         private void AddStatusBar(IComponentContainer components)
         {
-            var sprite = components.Get<Sprite>();
-            var attributes = components.Get<PlayerAttributes>();
-            attributes.Team = Teams[attributes.Team.Name];
-            components.Add(
-                ResourceManager.Register(new PlayerStatusBar(attributes, sprite, components.Get<Transform>(),
-                    Constants.Assets.PlayerHealthBar, Constants.Assets.PlayerNameFont)));
+            components.Get<PlayerAttributes>().Team = Teams[components.Get<PlayerAttributes>().Team.Name];
+            components.Add(ResourceManager.Register(new PlayerStatusBar(components, Constants.Assets.PlayerHealthBar, Constants.Assets.PlayerNameFont)));
         }
 
         /// <summary>
@@ -291,22 +289,21 @@ namespace XnaClientLib.ECS
         /// <param name="components">The component container the components are inserted into</param>
         private void AddAnimation(IComponentContainer components)
         {
-            var sprite = components.Get<Sprite>();
             const long msPerFrame = 100;
             var stateAnimation = new StateAnimation<MovementDirection>(MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
                 {
                     [MovementDirection.Down] =
-                        ResourceManager.Register(new TextureCollectionAnimation(sprite,
+                        ResourceManager.Register(new TextureCollectionAnimation(components,
                             Utils.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)),
                     [MovementDirection.Up] =
-                        ResourceManager.Register(new TextureCollectionAnimation(sprite,
+                        ResourceManager.Register(new TextureCollectionAnimation(components,
                             Utils.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)),
                     [MovementDirection.Left] =
-                        ResourceManager.Register(new TextureCollectionAnimation(sprite,
+                        ResourceManager.Register(new TextureCollectionAnimation(components,
                             Utils.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)),
                     [MovementDirection.Right] =
-                        ResourceManager.Register(new TextureCollectionAnimation(sprite,
+                        ResourceManager.Register(new TextureCollectionAnimation(components,
                             Utils.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame))
                 });
 

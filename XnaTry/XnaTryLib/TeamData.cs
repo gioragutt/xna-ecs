@@ -1,26 +1,17 @@
-﻿using System;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using XnaCommonLib.ECS.Components;
 
 namespace XnaCommonLib
 {
-    public class TeamData : IEquatable<TeamData>, ISharedComponent
+    public class TeamData : IUpdatable<TeamData>
     {
         public string Name { get; set; }
         public Color Color { get; set; }
         public string Frame { get; set; }
 
-        public bool Equals(TeamData other) { return Name.Equals(other.Name); }
-
-        public void Read(BinaryReader reader)
+        public void Update(TeamData instance)
         {
-            Name = reader.ReadString();
-        }
-
-        public void Write(BinaryWriter writer)
-        {
-            writer.Write(Name);
+            Name = instance.Name;
         }
     }
 }

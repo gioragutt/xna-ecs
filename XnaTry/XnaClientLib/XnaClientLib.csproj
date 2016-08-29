@@ -68,10 +68,10 @@
     <Compile Include="ECS\Compnents\Interpolator.cs" />
     <Compile Include="ECS\Compnents\KeyboardDirectionalInput.cs" />
     <Compile Include="ECS\Compnents\Label.cs" />
-    <Compile Include="ECS\Compnents\LocalPlayer.cs" />
-    <Compile Include="ECS\Compnents\NetworkPlayer.cs" />
+    <Compile Include="ECS\Compnents\Network\LocalPlayer.cs" />
+    <Compile Include="ECS\Compnents\Network\NetworkPlayer.cs" />
+    <Compile Include="ECS\Compnents\Network\RemotePlayer.cs" />
     <Compile Include="ECS\Compnents\PlayerStatusBar.cs" />
-    <Compile Include="ECS\Compnents\RemotePlayer.cs" />
     <Compile Include="ECS\Compnents\RotateToMouse.cs" />
     <Compile Include="ECS\Compnents\Sprite.cs" />
     <Compile Include="ECS\Compnents\SpriteEffect.cs" />

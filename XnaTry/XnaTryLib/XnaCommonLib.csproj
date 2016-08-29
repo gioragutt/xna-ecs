@@ -58,15 +58,19 @@
     <Compile Include="ECS\Components\DirectionalInput.cs" />
     <Compile Include="ECS\Components\FakeInput.cs" />
     <Compile Include="ECS\Components\InputData.cs" />
-    <Compile Include="ECS\Components\ISharedComponent.cs" />
+    <Compile Include="ECS\Components\IUpdatable.cs" />
+    <Compile Include="ECS\Components\Lifespan.cs" />
     <Compile Include="ECS\Components\PlayerAttributes.cs" />
     <Compile Include="ECS\GameManagerBase.cs" />
     <Compile Include="ECS\Components\Velocity.cs" />
+    <Compile Include="ECS\Systems\LifespanSystem.cs" />
     <Compile Include="ECS\Systems\System.cs" />
     <Compile Include="ECS\GameObject.cs" />
     <Compile Include="ECS\Components\Transform.cs" />
     <Compile Include="Extentions.cs" />
-    <Compile Include="MapData.cs" />
+    <Compile Include="Network\IncomingUpdate.cs" />
+    <Compile Include="Network\OutgoingMessage.cs" />
+    <Compile Include="Network\PlayerUpdate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TeamData.cs" />
   </ItemGroup>

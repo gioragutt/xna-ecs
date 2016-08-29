@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ECS.Interfaces;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using UtilsLib.Utility;
@@ -40,19 +41,17 @@ namespace XnaClientLib.ECS.Compnents
         /// <summary>
         /// Initializes a new PlayerStatusBar
         /// </summary>
-        /// <param name="attributes"></param>
-        /// <param name="sprite"></param>
-        /// <param name="transform"></param>
-        /// <param name="healthBarTextureAsset"></param>
-        /// <param name="nameFontAsset"></param>
-        public PlayerStatusBar(PlayerAttributes attributes, Sprite sprite, Transform transform, string healthBarTextureAsset, string nameFontAsset)
+        /// <param name="entity">Components of the entity</param>
+        /// <param name="healthBarTextureAsset">Asset of the health bar texture</param>
+        /// <param name="nameFontAsset">Asset of the name label font</param>
+        public PlayerStatusBar(IComponentContainer entity, string healthBarTextureAsset, string nameFontAsset)
         {
             Utils.AssertStringArgumentNotNull(healthBarTextureAsset, "healthBarTextureAsset");
             Utils.AssertStringArgumentNotNull(nameFontAsset, "nameFontAsset");
 
-            Attributes = attributes;
-            Sprite = sprite;
-            Transform = transform;
+            Attributes = entity.Get<PlayerAttributes>();
+            Sprite = entity.Get<Sprite>();
+            Transform = entity.Get<Transform>();
             HealthBarTextureAsset = healthBarTextureAsset;
             NameFontAsset = nameFontAsset;
         }

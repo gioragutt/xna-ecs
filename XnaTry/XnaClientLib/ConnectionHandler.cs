@@ -1,16 +1,17 @@
 ﻿using ECS.BaseTypes;
 using EMS;
+using Newtonsoft.Json;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using XnaClientLib.ECS;
-using XnaClientLib.ECS.Compnents;
-using XnaCommonLib.ECS;
-using XnaCommonLib.ECS.Components;
 using UtilsLib;
 using UtilsLib.Consts;
+using XnaClientLib.ECS;
+using XnaClientLib.ECS.Compnents;
+using XnaClientLib.ECS.Compnents.Network;
+using XnaCommonLib.ECS;
+using XnaCommonLib.Network;
 
 namespace XnaClientLib
 {
@@ -102,59 +103,69 @@ namespace XnaClientLib
 
             WriteLoginDataToServer(name, team);
             ReadLoginResponseFromServer();
-            UpdateThread.Start();
             WritePlayerData();
+            UpdateThread.Start();
         }
 
         private void ReadLoginResponseFromServer()
         {
-            GameObject = ClientGameManager.BeginAllocateLocal(Reader.ReadGuid());
-            GameObject.Components.Get<NetworkPlayer>().Update(Reader);
+            var response = Reader.ReadString();
+            var playerUpdate = JsonConvert.DeserializeObject<PlayerUpdate>(response);
+            GameObject = ClientGameManager.BeginAllocateLocal(playerUpdate.Guid);
+            GameObject.Components.Get<NetworkPlayer>().Update(playerUpdate);
             ClientGameManager.EndAllocate(GameObject);
         }
 
         private void WriteLoginDataToServer(string name, string team)
         {
-            Writer.Write(name);
-            Writer.Write(team);
+            var loginMessage = MessageBuilder.Create(Constants.Messages.PlayerLogin)
+                .Add(Constants.Fields.PlayerName, name)
+                .Add(Constants.Fields.TeamName, team)
+                .Get();
+            var serializedMessage = JsonConvert.SerializeObject(loginMessage);
+            Writer.Write(serializedMessage);
         }
 
         private void ConnectionHandler_InteractWithServer()
         {
             while (Connection.Connected)
             {
-                EmsServerEndpoint.BroadcastIncomingEvents(Reader);
-                var playersUpdate = Reader.ReadInt32();
-                Debug.WriteLine("Reading {0} Players", playersUpdate);
+                var message = Reader.ReadString();
+                var incomingUpdate = JsonConvert.DeserializeObject<IncomingUpdate>(message);
+                EmsServerEndpoint.BroadcastIncomingEvents(incomingUpdate.Broadcasts);
 
-                for (var i = 0; i < playersUpdate; i++)
-                {
-                    var guid = Reader.ReadGuid();
-                    var entity = new Entity(guid);
-                    if (!ClientGameManager.EntityPool.Exists(entity))
-                    {
-                        var newGo = ClientGameManager.BeginAllocateRemote(entity.Id);
-                        newGo.Components.Get<NetworkPlayer>().Update(Reader);
-                        ClientGameManager.EndAllocate(newGo);
-                    }
-                    else
-                    {
-                        var remoteComponents = ClientGameManager.EntityPool.GetComponents(entity);
-                        remoteComponents.Get<NetworkPlayer>().Update(Reader);
-                    }
-                }
+                foreach (var update in incomingUpdate.PlayerUpdates)
+                    ApplyUpdate(update);
 
                 WritePlayerData();
-
                 Thread.Sleep(Constants.Time.UpdateThreadSleepTime);
+            }
+        }
+
+        private void ApplyUpdate(PlayerUpdate update)
+        {
+            var entity = new Entity(update.Guid);
+            if (!ClientGameManager.EntityPool.Exists(entity))
+            {
+                var newGo = ClientGameManager.BeginAllocateRemote(entity.Id);
+                newGo.Components.Get<NetworkPlayer>().Update(update);
+                ClientGameManager.EndAllocate(newGo);
+            }
+            else
+            {
+                var remoteComponents = ClientGameManager.EntityPool.GetComponents(entity);
+                remoteComponents.Get<NetworkPlayer>().Update(update);
             }
         }
 
         private void WritePlayerData()
         {
-            EmsServerEndpoint.Flush(Writer);
-            var components = GameObject.Components;
-            components.Get<DirectionalInput>().Write(Writer);
+            var message = new OutgoingMessage
+            {
+                Broadcasts = EmsServerEndpoint.Flush(),
+                PlayerUpdate = new PlayerUpdate(GameObject.Components)
+            };
+            Writer.Write(JsonConvert.SerializeObject(message));
         }
     }
 }

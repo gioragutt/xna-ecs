@@ -53,7 +53,6 @@
     <Compile Include="Exceptions\Server\InvalidPortException.cs" />
     <Compile Include="Exceptions\Server\ServerAlreadyRunningException.cs" />
     <Compile Include="Extentions.cs" />
-    <Compile Include="IOExtentions.cs" />
     <Compile Include="MessageBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\CommonUtils.cs" />

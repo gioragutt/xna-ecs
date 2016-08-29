@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using ECS.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -123,10 +121,10 @@ namespace XnaTry
             var stateAnimation = new StateAnimation<MovementDirection>(MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
                 {
-                    { MovementDirection.Down,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Utils.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Up,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Utils.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Left,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Utils.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Right,  ResourceManager.Register(new TextureCollectionAnimation(sprite, Utils.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame)) }
+                    { MovementDirection.Down,  ResourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)) },
+                    { MovementDirection.Up,  ResourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)) },
+                    { MovementDirection.Left,  ResourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)) },
+                    { MovementDirection.Right,  ResourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame)) }
                 });
 
             components.Add(stateAnimation);
@@ -144,7 +142,7 @@ namespace XnaTry
 
             components.Add(attributes);
 
-            components.Add(ResourceManager.Register(new PlayerStatusBar(attributes, sprite, entity.Transform, Constants.Assets.PlayerHealthBar,
+            components.Add(ResourceManager.Register(new PlayerStatusBar(components, Constants.Assets.PlayerHealthBar,
                 Constants.Assets.PlayerNameFont)));
 
             return entity;
@@ -238,7 +236,7 @@ namespace XnaTry
             ResourceManager.LoadContent();
             ClientGameManager.Update(gameTime, GraphicsDevice.Viewport);
 
-            ClientGameManager.EntityPool.AllThat(c => Component.IsEnabled(c.Get<PlayerAttributes>()) && c.Get<PlayerAttributes>().Name.StartsWith("[AI]")).ToList().ForEach(c => c.Get<PlayerAttributes>().Health -= 0.1f);
+            //ClientGameManager.EntityPool.AllThat(c => Component.IsEnabled(c.Get<PlayerAttributes>()) && c.Get<PlayerAttributes>().Name.StartsWith("[AI]")).ToList().ForEach(c => c.Get<PlayerAttributes>().Health -= 0.1f);
 
             Window.Title = "XnaTryGame - " + ClientGameManager.EntitiesCount + " Entities";
 

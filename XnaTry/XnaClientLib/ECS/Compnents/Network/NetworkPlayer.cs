@@ -1,8 +1,8 @@
-﻿using System.IO;
-using XnaCommonLib.ECS;
+﻿using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using XnaCommonLib.Network;
 
-namespace XnaClientLib.ECS.Compnents
+namespace XnaClientLib.ECS.Compnents.Network
 {
     public abstract class NetworkPlayer : Component
     {
@@ -13,6 +13,6 @@ namespace XnaClientLib.ECS.Compnents
             UpdatedObject = gameObject;
         }
 
-        public abstract void Update(BinaryReader reader);
+        public abstract void Update(PlayerUpdate update);
     }
 }

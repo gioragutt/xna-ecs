@@ -1,17 +1,23 @@
+using EMS;
+using FarseerPhysics;
+using Microsoft.Xna.Framework;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
-using ECS.Interfaces;
-using EMS;
-using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
 using UtilsLib;
 using UtilsLib.Consts;
 using UtilsLib.Utility;
 using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using XnaCommonLib.Network;
 using XnaServerLib.ECS;
+using XnaServerLib.ECS.Components;
 
 namespace XnaServerLib
 {
@@ -102,8 +108,15 @@ namespace XnaServerLib
             {
                 try
                 {
-                    ReadPlayerData();
-                    WriteAllPlayerData();
+                    var clientMessageString = Reader.ReadString();
+                    var clientMessage = JsonConvert.DeserializeObject<OutgoingMessage>(clientMessageString);
+                    EmsServerEndpoint.BroadcastIncomingEvents(clientMessage.Broadcasts);
+                    UpdateClient(clientMessage.PlayerUpdate);
+                    Writer.Write(JsonConvert.SerializeObject(new IncomingUpdate
+                    {
+                        Broadcasts = EmsServerEndpoint.Flush(),
+                        PlayerUpdates = PlayerUpdates()
+                    }));
                 }
                 catch (IOException)
                 {
@@ -132,64 +145,50 @@ namespace XnaServerLib
             GameObject = null;
         }
 
-        private void ReadPlayerData()
+        private IList<PlayerUpdate> PlayerUpdates()
         {
-            EmsServerEndpoint.BroadcastIncomingEvents(Reader);
+            return GameManager.EntityPool.AllThat(PlayerUpdate.IsPlayer).Select(c => new PlayerUpdate(c)).ToList();
+        }
+
+        private void UpdateClient(PlayerUpdate playerUpdate)
+        {
             var components = GameObject.Components;
-            components.Get<DirectionalInput>().Read(Reader);
-        }
-
-        private void WriteAllPlayerData()
-        {
-            EmsServerEndpoint.Flush(Writer);
-            var amountOfPlayers = GameManager.EntitiesCount;
-            Writer.Write(amountOfPlayers);
-
-            var allEntities = GameManager.EntityPool.AllThat(c => c.Has<Transform>() && c.Has<PlayerAttributes>() && c.Has<DirectionalInput>());
-
-            foreach (var entity in allEntities)
-            {
-                WriteEntity(entity.Parent, entity);
-            }
-        }
-
-        private void WriteEntity(IEntity entity, IComponentContainer entityComponents)
-        {
-            Writer.WriterGuid(entity.Id);
-            entityComponents.Get<Transform>().Write(Writer);
-            entityComponents.Get<PlayerAttributes>().Write(Writer);
-            entityComponents.Get<DirectionalInput>().Write(Writer);
-            entityComponents.Get<Velocity>().Write(Writer);
+            components.Get<DirectionalInput>().Update(playerUpdate.Input);
         }
 
         private void SendClientLoginResponse()
         {
-            WriteEntity(GameObject.Entity, GameObject.Components);
+            var responseMessage = new PlayerUpdate(GameObject.Components);
+            Writer.Write(JsonConvert.SerializeObject(responseMessage));
         }
 
         private void ReadClientLoginDataAndInitializePlayer()
         {
-            var name = Reader.ReadString();
-            var team = Reader.ReadString();
+            var serializedMessage = Reader.ReadString();
+            var loginMessage = JsonConvert.DeserializeObject<JObject>(serializedMessage);
+
+            if (loginMessage.GetMessageName() != Constants.Messages.PlayerLogin)
+                Dispose();
 
             GameObject.Transform.Scale = 0.4f;
             GameObject.Transform.Position = new Vector2(50, 300);
 
-            //var teamName = GameManager.EntitiesCount % 2 == 0 ? "Bad" : "Good";
-
             GameObject.Components.Add(new PlayerAttributes
             {
-                Name = GameManager.GetAvailablePlayerName(name),
+                Name = GameManager.GetAvailablePlayerName(loginMessage.GetProp<string>(Constants.Fields.PlayerName)),
                 Team = new TeamData
                 {
-                    Name = team,
+                    Name = loginMessage.GetProp<string>(Constants.Fields.TeamName)
                 },
                 MaxHealth = 100,
                 Health = 50
             });
 
             GameObject.Components.Add(new InputData());
-            GameObject.Components.Add(new Velocity(new Vector2(500)));
+            GameObject.Components.Add(new Velocity(new Vector2(5)));
+            GameObject.Components.Add(new BoxCollision(GameManager.World,
+                ConvertUnits.ToSimUnits(new Vector2(155, 365) * GameObject.Transform.Scale),
+                GameObject.Transform.Position));
         }
     }
 }

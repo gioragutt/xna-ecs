@@ -76,7 +76,7 @@ namespace UtilsLib
         /// <returns>A read property if exists; otherwise defaultValue</returns>
         /// <exception cref="System.ArgumentNullException">if jObject is null</exception>
         /// <exception cref="System.ArgumentNullException">if propName is null</exception>
-        public static T GetProp<T>(this JObject jObject, string propName, T defaultValue)
+        public static T GetProp<T>(this JObject jObject, string propName, T defaultValue = default(T))
         {
             Utils.AssertArgumentNotNull(jObject, "jObject");
             Utils.AssertStringArgumentNotNull(propName, "propName");

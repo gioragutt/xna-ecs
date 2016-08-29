@@ -1,9 +1,8 @@
-﻿using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace XnaCommonLib.ECS.Components
 {
-    public class Velocity : Component, ISharedComponent
+    public class Velocity : Component, IUpdatable<Velocity>
     {
         public Vector2 VelocityVector { get; set; }
         public float X => VelocityVector.X;
@@ -14,19 +13,9 @@ namespace XnaCommonLib.ECS.Components
             VelocityVector = velocityVector;
         }
 
-        public void Write(BinaryWriter writer)
+        public void Update(Velocity instance)
         {
-            writer.Write(VelocityVector.X);
-            writer.Write(VelocityVector.Y);
-        }
-
-        public void Read(BinaryReader reader)
-        {
-            VelocityVector = new Vector2
-            {
-                X = reader.ReadSingle(),
-                Y = reader.ReadSingle()
-            };
+            VelocityVector = instance.VelocityVector;
         }
 
         public static Vector2 operator *(Velocity vel, DirectionalInput input)

@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using UtilsLib.Consts;
 
 namespace XnaCommonLib.ECS.Components
@@ -7,12 +6,20 @@ namespace XnaCommonLib.ECS.Components
     /// <summary>
     /// Base class for deriving directional movement input from an outer source
     /// </summary>
-    public abstract class DirectionalInput : Component, ISharedComponent
+    public abstract class DirectionalInput : Component, IUpdatable<DirectionalInput>
     {
+        public void Update(DirectionalInput instance)
+        {
+            Horizontal = instance.Horizontal;
+            Vertical = instance.Vertical;
+        }
+
         private static float ClampInput(float input)
         {
             return MathHelper.Clamp(input, Constants.Game.FullNegativeInput, Constants.Game.FullPositiveInput);
         }
+
+        #region Properties
 
         private float horizontal;
         private float vertical;
@@ -29,7 +36,7 @@ namespace XnaCommonLib.ECS.Components
             {
                 return horizontal;
             }
-            protected set
+            set
             {
                 horizontal = ClampInput(value);
             }
@@ -47,11 +54,13 @@ namespace XnaCommonLib.ECS.Components
             {
                 return vertical;
             }
-            protected set
+            set
             {
                 vertical = ClampInput(value);
             }
         }
+
+        #endregion Properties
 
         public override string ToString()
         {
@@ -59,21 +68,5 @@ namespace XnaCommonLib.ECS.Components
         }
 
         public abstract void Update(long delta);
-
-        #region ISharedComponent Methods
-
-        public void Write(BinaryWriter writer)
-        {
-            writer.Write(Horizontal);
-            writer.Write(Vertical);
-        }
-
-        public void Read(BinaryReader reader)
-        {
-            Horizontal = reader.ReadSingle();
-            Vertical = reader.ReadSingle();
-        }
-
-        #endregion ISharedComponent Methods
     }
 }

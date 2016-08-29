@@ -1,11 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using UtilsLib;
+﻿
+using Newtonsoft.Json;
 
 namespace XnaCommonLib.ECS.Components
 {
-    public class PlayerAttributes : Component, ISharedComponent
+    public class PlayerAttributes : Component, IUpdatable<PlayerAttributes>
     {
+        #region Properties
+
         private float health;
         public string Name { get; set; }
 
@@ -23,12 +24,16 @@ namespace XnaCommonLib.ECS.Components
         }
 
         public float MaxHealth { get; set; }
+
+        [JsonIgnore]
         public float PreviousHealth { get; private set; }
+
         public TeamData Team { get; set; } = new TeamData();
 
-        [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
+        [JsonIgnore]
         public bool IsDead => HealthPercentage == 0.0f;
 
+        [JsonIgnore]
         public float HealthPercentage
         {
             get
@@ -39,20 +44,14 @@ namespace XnaCommonLib.ECS.Components
             }
         }
 
-        public void Write(BinaryWriter writer)
-        {
-            writer.Write(Name);
-            writer.Write(MaxHealth);
-            writer.Write(Health);
-            Team.Write(writer);
-        }
+        #endregion Properties
 
-        public void Read(BinaryReader reader)
+        public void Update(PlayerAttributes instance)
         {
-            Name = reader.ReadString();
-            MaxHealth = reader.ReadSingle();
-            Health = reader.ReadSingle();
-            Team.Read(reader);
+            Name = instance.Name;
+            MaxHealth = instance.MaxHealth;
+            Health = instance.Health;
+            Team.Update(instance.Team);
         }
     }
 }
