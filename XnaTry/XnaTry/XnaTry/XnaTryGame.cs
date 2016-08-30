@@ -60,16 +60,8 @@ namespace XnaTry
             IsMouseVisible = true;
         }
 
-        public XnaTryGame(string[] args)
+        public XnaTryGame(IList<string> args)
         {
-            string name = "giorag", ip = "localhost", team = Convert.ToBoolean(new Random().Next(0, 2)) ? "Good" : "Bad";
-            if (args.Length > 0)
-                name = args[0];
-            if (args.Length > 1)
-                ip = args[1];
-            if (args.Length > 2)
-                team = args[2];
-
             Teams = new Dictionary<string, TeamData>
             {
                 [goodTeam.Name] = goodTeam,
@@ -83,11 +75,13 @@ namespace XnaTry
             {
                 Teams = Teams
             };
+
             currentKeyboardState = Keyboard.GetState();
             previousKeyboardState = currentKeyboardState;
 
-            ConnectionHandler = new ConnectionHandler(ip, 27015, ClientGameManager);
-            ConnectToServer(name, team);
+            var connectionArgs = new ConnectionArguments(args);
+            ConnectionHandler = new ConnectionHandler(connectionArgs.Hostname, 27015, ClientGameManager);
+            ConnectToServer(connectionArgs.Name, connectionArgs.TeamName);
         }
 
         #region Contants Configurations
