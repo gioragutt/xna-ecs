@@ -82,6 +82,13 @@ namespace XnaTry
             var connectionArgs = new ConnectionArguments(args);
             ConnectionHandler = new ConnectionHandler(connectionArgs.Hostname, 27015, ClientGameManager);
             ConnectToServer(connectionArgs.Name, connectionArgs.TeamName);
+            AddPingPrint();
+        }
+
+        private void AddPingPrint()
+        {
+            ClientGameManager.CreateDebugPrint(
+                () => string.Format("{0} ms", Math.Ceiling(ConnectionHandler.LastPing.TotalMilliseconds)), Color.Red);
         }
 
         #region Contants Configurations
@@ -155,18 +162,14 @@ namespace XnaTry
             var health = (float)rnd.NextDouble() * 100;
             var aiPlayer = CreatePlayer(new FakeInput(), initialPosition, team, null, health);
             aiPlayer.Components.Get<PlayerAttributes>().Name = "[AI] " + aiPlayer.Components.Get<PlayerAttributes>().Name;
-            aiPlayer.Components.Destroy(5000);
+            aiPlayer.Destroy(5000);
         }
 
         protected override void Initialize()
         {
             base.Initialize();
             IsMouseVisible = true;
-            //InitializeGameSettings(1280, 1024);
-
-            ClientGameManager.CreateDebugPrint(() => ClientGameManager.ToString());
-
-            //ClientGameManager.RegisterSystem(new MovementSystem());
+            
             ClientGameManager.RegisterSystem(new LinkerSystem());
             ClientGameManager.RegisterSystem(new InterpolationSystem());
             ClientGameManager.RegisterSystem(new LifespanSystem());
@@ -230,9 +233,10 @@ namespace XnaTry
             ResourceManager.LoadContent();
             ClientGameManager.Update(gameTime, GraphicsDevice.Viewport);
 
-            //ClientGameManager.EntityPool.AllThat(c => Component.IsEnabled(c.Get<PlayerAttributes>()) && c.Get<PlayerAttributes>().Name.StartsWith("[AI]")).ToList().ForEach(c => c.Get<PlayerAttributes>().Health -= 0.1f);
-
-            Window.Title = "XnaTryGame - " + ClientGameManager.EntitiesCount + " Entities";
+            var title = string.Format("{2} | XnaTryGame | {0} | {1}",
+                ConnectionHandler.GameObject.Components.Get<PlayerAttributes>().Name,
+                ConnectionHandler.GameObject.Entity.Id, DateTime.Now);
+            Window.Title = title;
 
             base.Update(gameTime);
         }
@@ -242,8 +246,6 @@ namespace XnaTry
             try
             {
                 ConnectionHandler.ConnectAndInitializeLocalPlayer(name, team);
-                ClientGameManager.CreateDebugPrint(
-                    () => ConnectionHandler.GameObject.Components.Get<DirectionalInput>().ToString());
             }
             catch (Exception x)
             {
@@ -263,6 +265,9 @@ namespace XnaTry
                 MessageBoxDefaultButton.Button2);
         }
 
+        /// <summary>
+        /// Close TCP Connection when game ends
+        /// </summary>
         protected override void EndRun()
         {
             ConnectionHandler.Dispose();

@@ -25,8 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7F06CBF7
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilsLib", "UtilsLib\UtilsLib.csproj", "{FE20FB76-E79D-46F5-97DD-FC4D8F83FC05}"
 EndProject
-EndProject
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "Launcher\Launcher.csproj", "{6AA4EB1B-E5EF-4FAC-9787-6B363794A8CC}"
 EndProject
 Global

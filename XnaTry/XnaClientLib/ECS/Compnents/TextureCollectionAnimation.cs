@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ECS.Interfaces;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using UtilsLib.Utility;
@@ -45,11 +46,11 @@ namespace XnaClientLib.ECS.Compnents
         /// <summary>
         /// Initializes all variables of TextureCollectionAnimation
         /// </summary>
-        /// <param name="sprite">The sprite to animate</param>
+        /// <param name="entity">The sprite to animate</param>
         /// <param name="assetNames">List of assets to be loaded before animation</param>
         /// <param name="msPerFrame">Rate at which frames of the animation change</param>
-        public TextureCollectionAnimation(Sprite sprite, IList<string> assetNames, long msPerFrame)
-            : base(sprite, msPerFrame)
+        public TextureCollectionAnimation(IComponentContainer entity, IList<string> assetNames, long msPerFrame)
+            : base(entity.Get<Sprite>(), msPerFrame)
         {
             Utils.AssertArgumentNotNull(assetNames, "assetNames");
             for (var i = 0; i < assetNames.Count; i++)

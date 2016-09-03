@@ -18,7 +18,9 @@ namespace XnaClientLib.ECS.Compnents
 
         #endregion
 
-        #region Content
+        #region Properties and Fields
+
+        private Vector2 healthBarPaddingInFrame = Vector2.Zero;
 
         private string HealthBarTextureAsset { get; }
         private string NameFontAsset { get; }
@@ -55,8 +57,6 @@ namespace XnaClientLib.ECS.Compnents
             HealthBarTextureAsset = healthBarTextureAsset;
             NameFontAsset = nameFontAsset;
         }
-
-        private Vector2 healthBarPaddingInFrame = Vector2.Zero;
 
         public override void LoadContent(ContentManager content)
         {

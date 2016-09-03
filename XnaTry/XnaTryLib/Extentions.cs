@@ -4,6 +4,7 @@ using ECS.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using UtilsLib.Utility;
+using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
 
 namespace XnaCommonLib
@@ -40,6 +41,20 @@ namespace XnaCommonLib
         public static bool KeysPressed(this KeyboardState state, params Keys[] keys)
         {
             return keys.All(state.IsKeyDown);
+        }
+
+        public static void Destroy(this GameObject entity, long timeTillDestruction = 0)
+        {
+            Utils.AssertArgumentNotNull(entity, "entity");
+
+            entity.Entity.Destroy(timeTillDestruction);
+        }
+
+        public static void Destroy(this IEntity entity, long timeTillDestruction = 0)
+        {
+            Utils.AssertArgumentNotNull(entity, "entity");
+
+            entity.Parent.GetComponents(entity).Destroy(timeTillDestruction);
         }
 
         public static void Destroy(this IComponentContainer entity, long timeTillDestruction = 0)

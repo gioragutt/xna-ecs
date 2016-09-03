@@ -22,6 +22,13 @@ namespace XnaClientLib
                 Connection.Close();
         }
 
+        #region Network Components and Properties
+
+        /// <summary>
+        /// The EMS Server Endpoint to receive and broadcasts from and to the server
+        /// </summary>
+        private EmsServerEndpoint EmsServerEndpoint { get; }
+
         /// <summary>
         /// The TcpClient object with which connection is established
         /// </summary>
@@ -48,11 +55,6 @@ namespace XnaClientLib
         public string HostName { get; set; }
 
         /// <summary>
-        /// The thread on which the player updates are received and sent
-        /// </summary>
-        private Thread UpdateThread { get; }
-
-        /// <summary>
         /// Indicates whether the client is connected to the server or not
         /// </summary>
         public bool Connected
@@ -64,6 +66,25 @@ namespace XnaClientLib
         }
 
         /// <summary>
+        /// Stores the time of the last update from the server
+        /// </summary>
+        public DateTime LastUpdateTime { get; private set; }
+
+        /// <summary>
+        /// Stores the time between the last two update
+        /// </summary>
+        public TimeSpan LastPing { get; private set; }
+
+        #endregion
+
+        #region Game Components and Properties
+
+        /// <summary>
+        /// The thread on which the player updates are received and sent
+        /// </summary>
+        private Thread UpdateThread { get; }
+
+        /// <summary>
         /// The game object of the player
         /// </summary>
         public GameObject GameObject { get; set; }
@@ -73,10 +94,9 @@ namespace XnaClientLib
         /// </summary>
         public ClientGameManager ClientGameManager { get; }
 
-        /// <summary>
-        /// The EMS Server Endpoint to receive and broadcasts from and to the server
-        /// </summary>
-        private EmsServerEndpoint EmsServerEndpoint { get; }
+        #endregion
+
+        #region Constructor
 
         public ConnectionHandler(string hostName, int port, ClientGameManager gameManager)
         {
@@ -87,6 +107,10 @@ namespace XnaClientLib
             UpdateThread = new Thread(ConnectionHandler_InteractWithServer);
             EmsServerEndpoint = new EmsServerEndpoint();
         }
+
+        #endregion
+
+        #region API
 
         public void ConnectAndInitializeLocalPlayer(string name, string team)
         {
@@ -106,9 +130,14 @@ namespace XnaClientLib
             UpdateThread.Start();
         }
 
+        #endregion
+
+        #region Communication With Server Methods
+
         private void ReadLoginResponseFromServer()
         {
             var response = Reader.ReadString();
+            LastUpdateTime = DateTime.Now;
             var playerUpdate = JsonConvert.DeserializeObject<PlayerUpdate>(response);
             GameObject = ClientGameManager.BeginAllocateLocal(playerUpdate.Guid);
             GameObject.Components.Get<NetworkPlayer>().Update(playerUpdate);
@@ -139,6 +168,8 @@ namespace XnaClientLib
         private void ProcessServerUpdate()
         {
             var message = Reader.ReadString();
+            UpdatePing();
+
             var incomingUpdate = JsonConvert.DeserializeObject<ServerToClientUpdateMessage>(message);
             EmsServerEndpoint.BroadcastIncomingEvents(incomingUpdate.Broadcasts);
 
@@ -171,5 +202,17 @@ namespace XnaClientLib
             };
             Writer.Write(JsonConvert.SerializeObject(message));
         }
+
+        #endregion
+
+        #region Helper Methods
+
+        private void UpdatePing()
+        {
+            LastPing = DateTime.Now - LastUpdateTime;
+            LastUpdateTime = DateTime.Now;
+        }
+
+        #endregion
     }
 }

@@ -1,5 +1,4 @@
 using EMS;
-using FarseerPhysics;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
 using System;
@@ -8,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
-using Newtonsoft.Json.Linq;
 using UtilsLib;
 using UtilsLib.Consts;
 using UtilsLib.Utility;
@@ -17,7 +15,6 @@ using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
 using XnaCommonLib.Network;
 using XnaServerLib.ECS;
-using XnaServerLib.ECS.Components;
 
 namespace XnaServerLib
 {
@@ -126,12 +123,14 @@ namespace XnaServerLib
 
                 Thread.Sleep(Constants.Time.UpdateThreadSleepTime);
             }
-            
-            Console.WriteLine("Player {0} disconnected", GameObject.Components.Get<PlayerAttributes>().Name);
+
+            var playerName = GameObject.Components.Get<PlayerAttributes>().Name;
+            Console.WriteLine("{1}\nPlayer <<< {0} >>> disconnected\n{1}", playerName, "============================================");
 
             Broadcast(
                 MessageBuilder.Create(Constants.Messages.ClientDisconnected)
                     .Add(Constants.Fields.PlayerGuid, GameObject.Entity.Id)
+                    .Add(Constants.Fields.PlayerName, GameObject.Components.Get<PlayerAttributes>().Name)
                     .Get());
 
             GameManager.DisposeOfClient(this);
@@ -192,10 +191,7 @@ namespace XnaServerLib
             });
 
             GameObject.Components.Add(new InputData());
-            GameObject.Components.Add(new Velocity(new Vector2(5)));
-            GameObject.Components.Add(new BoxCollision(GameManager.World,
-                ConvertUnits.ToSimUnits(new Vector2(155, 365) * GameObject.Transform.Scale),
-                GameObject.Transform.Position));
+            GameObject.Components.Add(new Velocity(new Vector2(500)));
         }
     }
 }
