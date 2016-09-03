@@ -38,10 +38,18 @@ namespace ECS.BaseTypes
 
         #endregion
 
+        /// <summary>
+        /// The Guid assigned to this entity
+        /// </summary>
         public Guid Id { get; }
+
+        /// <summary>
+        /// The entity pool containing this entity.
+        /// Assigned to when entity is added to an entity pool
+        /// </summary>
         public IEntityPool Parent { get; set; }
 
-        public Entity(Guid id, IEntityPool parent =  null)
+        public Entity(Guid id, IEntityPool parent = null)
         {
             Id = id;
             Parent = parent;

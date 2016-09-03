@@ -23,8 +23,8 @@ namespace ECS.Interfaces
         /// Retrieves all stored instances that are of type (or derived type of) TDerived
         /// </summary>
         /// <typeparam name="TDerived">Type that implements interface TBase</typeparam>
-        /// <returns>ICollection<TDerived/> that are of type (or derived type of) TDerived</returns>
-        ICollection<TDerived> GetAllOf<TDerived>() where TDerived : class, TBase;
+        /// <returns>collection of TDerived that are of type (or derived type of) TDerived</returns>
+        IList<TDerived> GetAllOf<TDerived>() where TDerived : class, TBase;
 
         /// <summary>
         /// Checks if instance of type TDerived exists

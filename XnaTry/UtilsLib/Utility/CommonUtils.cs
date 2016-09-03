@@ -6,11 +6,6 @@ namespace UtilsLib.Utility
 {
     public static partial class Utils
     {
-        public static IEnumerable<T> GetEnumValues<T>()
-        {
-            return from object value in Enum.GetValues(typeof(T)) select (T)value;
-        }
-
         public static bool NotNull(params object[] objects)
         {
             return objects.All(obj => !ReferenceEquals(obj, null));

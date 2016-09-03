@@ -10,7 +10,7 @@ namespace ECS.Interfaces
         /// </summary>
         /// <typeparam name="TComponent">The type of component to insert</typeparam>
         /// <returns>A collection of all components in the pool</returns>
-        ICollection<TComponent> GetAllOf<TComponent>() where TComponent : class, IComponent;
+        IList<TComponent> GetAllOf<TComponent>() where TComponent : class, IComponent;
 
         /// <summary>
         /// Checks if the entity exists in the pool
@@ -33,7 +33,7 @@ namespace ECS.Interfaces
         /// </summary>
         /// <param name="predicate">The predicate with which to filter containers</param>
         /// <returns>An enumeration of all containers that fall under the predicate</returns>
-        IEnumerable<IComponentContainer> AllThat(Predicate<IComponentContainer> predicate); 
+        IList<IComponentContainer> AllThat(Predicate<IComponentContainer> predicate); 
 
         /// <summary>
         /// Add an entity with an empty component container
@@ -62,6 +62,6 @@ namespace ECS.Interfaces
         /// <summary>
         /// Gets all entities in the pool
         /// </summary>
-        IEnumerable<IEntity> AllEntities { get; } 
+        IList<IEntity> AllEntities { get; } 
     }
 }

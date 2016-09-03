@@ -24,7 +24,7 @@ namespace ECS.Interfaces
         /// Allows to get only the relevant components
         /// </summary>
         /// <param name="pool">The available pool of entities</param>
-        /// <returns>An ICollection of all relevant components for the system</returns>
+        /// <returns>An collection of all relevant components for the system</returns>
         IList<IComponentContainer> GetRelevant(IEntityPool pool);
     }
 }

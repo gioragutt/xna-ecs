@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using ECS.Interfaces;
+using System.Collections.Concurrent;
 
 namespace ECS.BaseTypes
 {
     public class EntityPool : IEntityPool
     {
-        protected readonly Dictionary<IEntity, IComponentContainer> entities;
+        protected readonly ConcurrentDictionary<IEntity, IComponentContainer> entities;
 
         public EntityPool()
         {
-            entities = new Dictionary<IEntity, IComponentContainer>();
+            entities = new ConcurrentDictionary<IEntity, IComponentContainer>();
         }
 
         public EntityPool(EntityPool other)
@@ -25,24 +26,18 @@ namespace ECS.BaseTypes
                 throw new ArgumentNullException(name);
         }
 
-        public ICollection<TComponent> GetAllOf<TComponent>() where TComponent : class, IComponent
+        public IList<TComponent> GetAllOf<TComponent>() where TComponent : class, IComponent
         {
-            try
-            {
-                return
-                    entities.Values.Where(components => components.Has<TComponent>()).SelectMany(
-                        components => components.GetAllOf<TComponent>()).ToList();
-            }
-            catch
-            {
-                return new List<TComponent>();
-            }
+            return
+                entities.Values.Where(components => components.Has<TComponent>()).SelectMany(
+                    components => components.GetAllOf<TComponent>()).ToList();
         }
 
-        public IEnumerable<IComponentContainer> AllThat(Predicate<IComponentContainer> predicate)
+        public IList<IComponentContainer> AllThat(Predicate<IComponentContainer> predicate)
         {
-            return predicate == null ? default(IEnumerable<IComponentContainer>) :
-                entities.Values.Where(c => predicate(c));
+            return predicate == null
+                ? default(IList<IComponentContainer>)
+                : entities.Values.Where(c => predicate(c)).ToList();
         }
 
         public bool Exists(IEntity entity)
@@ -64,39 +59,26 @@ namespace ECS.BaseTypes
             AssertParameterNotNull(container, "container");
 
             entity.Parent = this;
-            entities.Add(entity, container);
+            entities.TryAdd(entity, container);
         }
 
         public void Add(IEntity entity)
         {
             AssertParameterNotNull(entity, "entity");
 
-            if (Exists(entity))
-                return;
-
             Add(entity, new ComponentContainer(entity));
-        }
-
-        public int Count
-        {
-            get
-            {
-                return entities.Count;
-            }
         }
 
         public void Remove(IEntity entity)
         {
-            if (entities.ContainsKey(entity))
-                entities.Remove(entity);
+            if (!entities.ContainsKey(entity))
+                return;
+
+            IComponentContainer outVal;
+            entities.TryRemove(entity, out outVal);
         }
 
-        public IEnumerable<IEntity> AllEntities
-        {
-            get
-            {
-                return entities.Keys.ToList();
-            }
-        }
+        public int Count => entities.Count;
+        public IList<IEntity> AllEntities => entities.Keys.ToList();
     }
 }
