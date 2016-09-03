@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 using UtilsLib;
 using UtilsLib.Consts;
@@ -65,6 +66,8 @@ namespace XnaServerLib
         /// </summary>
         private EmsServerEndpoint EmsServerEndpoint { get; }
 
+        private PacketProtocol PacketProtocol { get; }
+
         #endregion Properties
 
         #region Constructor
@@ -93,6 +96,11 @@ namespace XnaServerLib
             ReadClientLoginDataAndInitializePlayer();
             SendClientLoginResponse();
 
+            PacketProtocol = new PacketProtocol(0)
+            {
+                MessageArrived = PacketProtocol_MessageArrivedCallback
+            };
+
             UpdateThread = new Thread(GameClient_InteractWithClient);
             UpdateThread.Start();
         }
@@ -105,8 +113,7 @@ namespace XnaServerLib
             {
                 try
                 {
-                    ProcessClientUpdate();
-                    SendServerUpdate();
+                    HelperMethods.Receive(Connection, Reader, PacketProtocol);
                 }
                 catch (IOException)
                 {
@@ -137,18 +144,30 @@ namespace XnaServerLib
             GameObject = null;
         }
 
+        private void PacketProtocol_MessageArrivedCallback(byte[] bytes)
+        {
+            if (bytes.Length == 0)
+                return;
+
+            var stringData = Encoding.UTF8.GetString(bytes);
+            ProcessClientUpdate(stringData);
+            SendServerUpdate();
+        }
+
         private void SendServerUpdate()
         {
-            Writer.Write(JsonConvert.SerializeObject(new ServerToClientUpdateMessage
+            var message = JsonConvert.SerializeObject(new ServerToClientUpdateMessage
             {
                 Broadcasts = EmsServerEndpoint.Flush(),
                 PlayerUpdates = PlayerUpdates()
-            }));
+            });
+
+            var messageBytes = Encoding.UTF8.GetBytes(message);
+            Writer.Write(PacketProtocol.WrapMessage(messageBytes));
         }
 
-        private void ProcessClientUpdate()
+        private void ProcessClientUpdate(string clientMessageString)
         {
-            var clientMessageString = Reader.ReadString();
             var clientMessage = JsonConvert.DeserializeObject<ClientToServerUpdateMessage>(clientMessageString);
             EmsServerEndpoint.BroadcastIncomingEvents(clientMessage.Broadcasts);
             UpdateClient(clientMessage.PlayerUpdate);

@@ -3,9 +3,10 @@ using EMS;
 using Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
-using UtilsLib;
 using UtilsLib.Consts;
 using XnaClientLib.ECS;
 using XnaClientLib.ECS.Compnents.Network;
@@ -75,6 +76,8 @@ namespace XnaClientLib
         /// </summary>
         public TimeSpan LastPing { get; private set; }
 
+        private PacketProtocol PacketProtocol { get; }
+
         #endregion
 
         #region Game Components and Properties
@@ -106,6 +109,10 @@ namespace XnaClientLib
             GameObject = null;
             UpdateThread = new Thread(ConnectionHandler_InteractWithServer);
             EmsServerEndpoint = new EmsServerEndpoint();
+            PacketProtocol = new PacketProtocol(0)
+            {
+                MessageArrived = PacketProtocol_MessageRecievedCallback
+            };
         }
 
         #endregion
@@ -159,15 +166,32 @@ namespace XnaClientLib
         {
             while (Connection.Connected)
             {
-                ProcessServerUpdate();
-                WritePlayerData();
+                try
+                {
+                    HelperMethods.Receive(Connection, Reader, PacketProtocol);
+                }
+                catch (Exception)
+                {
+                    Connection.Close();
+                    break;
+                }
+
                 Thread.Sleep(Constants.Time.UpdateThreadSleepTime);
             }
         }
 
-        private void ProcessServerUpdate()
+        private void PacketProtocol_MessageRecievedCallback(byte[] data)
         {
-            var message = Reader.ReadString();
+            if (data.Length == 0)
+                return;
+
+            var stringData = Encoding.UTF8.GetString(data);
+            ProcessServerUpdate(stringData);
+            WritePlayerData();
+        }
+
+        private void ProcessServerUpdate(string message)
+        {
             UpdatePing();
 
             var incomingUpdate = JsonConvert.DeserializeObject<ServerToClientUpdateMessage>(message);
@@ -200,7 +224,10 @@ namespace XnaClientLib
                 Broadcasts = EmsServerEndpoint.Flush(),
                 PlayerUpdate = new PlayerUpdate(GameObject.Components)
             };
-            Writer.Write(JsonConvert.SerializeObject(message));
+
+            var messageBytes = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+            var wrapperMessage = PacketProtocol.WrapMessage(messageBytes);
+            Writer.Write(wrapperMessage);
         }
 
         #endregion
