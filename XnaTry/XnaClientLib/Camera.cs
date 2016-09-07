@@ -14,14 +14,12 @@ namespace XnaClientLib
         /// <summary>
         /// Gets the camera matrix of the camera.
         /// </summary>
-        public Matrix CameraMatrix
-        {
-            get
-            {
+        public Matrix CameraMatrix => Matrix.CreateTranslation(-cameraPosition);
 
-                return Matrix.CreateTranslation(-cameraPosition);
-            }
-        }
+        /// <summary>
+        /// The bounds of the camera;
+        /// </summary>
+        public Rectangle Bounds { get; set; } = new Rectangle();
 
         /// <summary>
         /// Updates the camera vector
@@ -30,10 +28,20 @@ namespace XnaClientLib
         /// <param name="viewport">The screen viewport</param>
         public void UpdateCamera(GameObject go, Viewport viewport)
         {
-            var transform = go.Transform;
+            var shouldClamp = Bounds.Width >= viewport.Width && Bounds.Height >= viewport.Height;
+            ClampToBounds(go.Transform.Position, viewport.Width, viewport.Height, shouldClamp);
+        }
 
-            cameraPosition.X = transform.Position.X - viewport.Width / 2f;
-            cameraPosition.Y = transform.Position.Y - viewport.Height / 2f;
+        private void ClampToBounds(Vector2 position, int viewportWidth, int viewportHeight, bool shouldClamp)
+        {
+            cameraPosition.X = position.X - viewportWidth / 2f;
+            cameraPosition.Y = position.Y - viewportHeight / 2f;
+
+            if (!shouldClamp)
+                return;
+
+            cameraPosition.X = MathHelper.Clamp(cameraPosition.X, Bounds.Left, Bounds.Right - viewportWidth);
+            cameraPosition.Y = MathHelper.Clamp(cameraPosition.Y, Bounds.Top, Bounds.Bottom - viewportHeight);
         }
     }
 }

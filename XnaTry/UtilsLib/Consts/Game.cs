@@ -11,6 +11,7 @@ namespace UtilsLib.Consts
             public const float MaxRotation = MathHelper.TwoPi;
             public const float FullPositiveInput = 1;
             public const float FullNegativeInput = -1;
+            public const float TileScale = 0.5f;
         }
     }
 }

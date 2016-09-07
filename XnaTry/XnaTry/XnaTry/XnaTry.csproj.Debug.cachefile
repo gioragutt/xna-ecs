@@ -1,4 +1,5 @@
 Content\DefaultFont.xnb
+Content\Player\Fonts\NameFont.xnb
 Content\Player\Images\Down_001.xnb
 Content\Player\Images\Down_002.xnb
 Content\Player\Images\Down_003.xnb
@@ -20,5 +21,19 @@ Content\Player\GUI\GreenTeamV2.xnb
 Content\Player\GUI\RedTeam.xnb
 Content\Player\GUI\RedTeamV2.xnb
 Content\Player\GUI\HealthBar.xnb
-Content\Player\Fonts\NameFont.xnb
 Content\Player\Effects\PlayerEffects.xnb
+Content\Map\Blocks\Block1.xnb
+Content\Map\Blocks\Brick\BloodyBricks1.xnb
+Content\Map\Blocks\Brick\BloodyBricks2.xnb
+Content\Map\Blocks\Brick\BloodyBricks3.xnb
+Content\Map\Blocks\Brick\Bricks.xnb
+Content\Map\Blocks\Brick\MossyBricks1.xnb
+Content\Map\Blocks\Brick\MossyBricks2.xnb
+Content\Map\Blocks\Wood\LogBack.xnb
+Content\Map\Blocks\Wood\LogCDL.xnb
+Content\Map\Blocks\Wood\LogCDR.xnb
+Content\Map\Blocks\Wood\LogCUL.xnb
+Content\Map\Blocks\Wood\LogCUR.xnb
+Content\Map\Blocks\Wood\LogFront.xnb
+Content\Map\Blocks\Wood\LogLeft.xnb
+Content\Map\Blocks\Wood\LogRight.xnb

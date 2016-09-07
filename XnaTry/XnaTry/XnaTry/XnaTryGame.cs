@@ -29,9 +29,10 @@ namespace XnaTry
         public GraphicsDeviceManager Graphics { get; }
         SpriteBatch spriteBatch;
 
-        private ClientGameManager ClientGameManager { get; }
-        private ResourcesManager ResourceManager { get; }
-        private ConnectionHandler ConnectionHandler { get; }
+        private readonly ClientGameManager clientGameManager;
+        private readonly ResourcesManager resourceManager;
+        private readonly ConnectionHandler connectionHandler;
+        private readonly GameObject map;
 
         private KeyboardState previousKeyboardState;
         private KeyboardState currentKeyboardState;
@@ -49,6 +50,7 @@ namespace XnaTry
             Name = "Bad",
             Frame = "Player/GUI/RedTeam"
         };
+
 
         public Dictionary<string, TeamData> Teams { get; }
 
@@ -70,8 +72,8 @@ namespace XnaTry
 
             Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            ResourceManager = new ResourcesManager();
-            ClientGameManager = new ClientGameManager(ResourceManager)
+            resourceManager = new ResourcesManager();
+            clientGameManager = new ClientGameManager(resourceManager)
             {
                 Teams = Teams
             };
@@ -80,22 +82,29 @@ namespace XnaTry
             previousKeyboardState = currentKeyboardState;
 
             var connectionArgs = new ConnectionArguments(args);
-            ConnectionHandler = new ConnectionHandler(connectionArgs.Hostname, 27015, ClientGameManager);
+            connectionHandler = new ConnectionHandler(connectionArgs.Hostname, 27015, clientGameManager);
             ConnectToServer(connectionArgs.Name, connectionArgs.TeamName);
             AddPingPrint();
+
+            map = clientGameManager.CreateGameObject();
+            map.Components.Add(new GameMap("xna_try_map1.tmx"));
         }
 
-        public string GetPintPrint()
+        #region Ping
+
+        private string GetPintPrint()
         {
-            return ConnectionHandler.IsDisposed
+            return connectionHandler.IsDisposed
                 ? "Server disconnected"
-                : string.Format("{0} ms", Math.Ceiling(ConnectionHandler.LastPing.TotalMilliseconds));
+                : string.Format("{0} ms", Math.Ceiling(connectionHandler.LastPing.TotalMilliseconds));
         }
 
         private void AddPingPrint()
         {
-            ClientGameManager.CreateDebugPrint(GetPintPrint, Color.Red);
+            clientGameManager.CreateDebugPrint(GetPintPrint, Color.LightGreen);
         }
+
+        #endregion
 
         #region Contants Configurations
 
@@ -108,7 +117,7 @@ namespace XnaTry
         GameObject CreatePlayer(DirectionalInput input, Vector2 initialPosition, TeamData team, string name = null, float health = 50)
         {
             // Create an entity
-            var entity = ClientGameManager.CreateGameObject();
+            var entity = clientGameManager.CreateGameObject();
             var components = entity.Components;
 
             // Now add input
@@ -116,7 +125,7 @@ namespace XnaTry
             components.Add(input);
 
             // Show a character
-            var sprite = ResourceManager.Register(new Sprite("Player/Images/Down_001"));
+            var sprite = resourceManager.Register(new Sprite("Player/Images/Down_001"));
             components.Add(sprite);
 
             // Change Transform
@@ -128,10 +137,10 @@ namespace XnaTry
             var stateAnimation = new StateAnimation<MovementDirection>(MovementDirection.Down,
                 new Dictionary<MovementDirection, Animation>
                 {
-                    { MovementDirection.Down,  ResourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Up,  ResourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Left,  ResourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Right,  ResourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame)) }
+                    { MovementDirection.Down,  resourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)) },
+                    { MovementDirection.Up,  resourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)) },
+                    { MovementDirection.Left,  resourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)) },
+                    { MovementDirection.Right,  resourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame)) }
                 });
 
             components.Add(stateAnimation);
@@ -149,7 +158,7 @@ namespace XnaTry
 
             components.Add(attributes);
 
-            components.Add(ResourceManager.Register(new PlayerStatusBar(components, Constants.Assets.PlayerHealthBar,
+            components.Add(resourceManager.Register(new PlayerStatusBar(components, Constants.Assets.PlayerHealthBar,
                 Constants.Assets.PlayerNameFont)));
 
             return entity;
@@ -175,10 +184,12 @@ namespace XnaTry
         {
             base.Initialize();
             IsMouseVisible = true;
-            
-            ClientGameManager.RegisterSystem(new LinkerSystem());
-            ClientGameManager.RegisterSystem(new InterpolationSystem());
-            ClientGameManager.RegisterSystem(new LifespanSystem());
+            InitializeGameSettings(1024, 768);
+
+
+            clientGameManager.RegisterSystem(new LinkerSystem());
+            //clientGameManager.RegisterSystem(new InterpolationSystem());
+            clientGameManager.RegisterSystem(new LifespanSystem());
         }
 
         /// <summary>
@@ -190,12 +201,16 @@ namespace XnaTry
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             var defaultFont = Content.Load<SpriteFont>("DefaultFont");
+            var mapLoader = map.Components.Get<GameMap>();
+            mapLoader.LoadContent(Content);
 
-            ResourceManager.SetContentManager(Content);
-            ClientGameManager.RegisterDrawingSystem(new AnimationSystem());
-            ClientGameManager.RegisterDrawingSystem(new RendererSystem(spriteBatch, ClientGameManager.Camera));
-            ClientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, ClientGameManager.Camera));
-            ClientGameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
+            resourceManager.SetContentManager(Content);
+            clientGameManager.RegisterDrawingSystem(new AnimationSystem());
+            clientGameManager.RegisterDrawingSystem(new RendererSystem(spriteBatch, clientGameManager.Camera));
+            clientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, clientGameManager.Camera));
+            clientGameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
+
+            clientGameManager.Camera.Bounds = mapLoader.Bounds;
         }
 
         /// <summary>
@@ -222,26 +237,26 @@ namespace XnaTry
                 Exit();
 
             if (currentKeyboardState.IsKeyDown(Keys.NumPad1) && !previousKeyboardState.IsKeyDown(Keys.NumPad1))
-                ConnectionHandler.Broadcast(
+                connectionHandler.Broadcast(
                     MessageBuilder.Create(Constants.Messages.DamagePlayers)
                         .Add("damage", 25)
                         .Get());
 
             if (currentKeyboardState.IsKeyDown(Keys.NumPad2) && !previousKeyboardState.IsKeyDown(Keys.NumPad2))
-                ConnectionHandler.Broadcast(
+                connectionHandler.Broadcast(
                     MessageBuilder.Create(Constants.Messages.DamagePlayers)
-                        .Add(Constants.Fields.PlayerGuid, ConnectionHandler.GameObject.Entity.Id)
+                        .Add(Constants.Fields.PlayerGuid, connectionHandler.GameObject.Entity.Id)
                         .Get());
 
             if (currentKeyboardState.IsKeyDown(Keys.P) && !previousKeyboardState.IsKeyDown(Keys.P))
                 CreateStupidAiPlayer();
 
-            ResourceManager.LoadContent();
-            ClientGameManager.Update(gameTime, GraphicsDevice.Viewport);
+            resourceManager.LoadContent();
+            clientGameManager.Update(gameTime, GraphicsDevice.Viewport);
 
             var title = string.Format("{2} | XnaTryGame | {0} | {1}",
-                ConnectionHandler.GameObject.Components.Get<PlayerAttributes>().Name,
-                ConnectionHandler.GameObject.Entity.Id, DateTime.Now);
+                connectionHandler.GameObject.Components.Get<PlayerAttributes>().Name,
+                connectionHandler.GameObject.Entity.Id, DateTime.Now);
             Window.Title = title;
 
             base.Update(gameTime);
@@ -251,7 +266,7 @@ namespace XnaTry
         {
             try
             {
-                ConnectionHandler.ConnectAndInitializeLocalPlayer(name, team);
+                connectionHandler.ConnectAndInitializeLocalPlayer(name, team);
             }
             catch (Exception x)
             {
@@ -264,7 +279,7 @@ namespace XnaTry
         private DialogResult ShowConnectionFailedError(Exception x)
         {
             return MessageBox.Show(
-                string.Format("Failed to connect the server {0}:{1}{2}{3}{2}Throw exception for debug?", ConnectionHandler.HostName, ConnectionHandler.Port, Environment.NewLine, x), 
+                string.Format("Failed to connect the server {0}:{1}{2}{3}{2}Throw exception for debug?", connectionHandler.HostName, connectionHandler.Port, Environment.NewLine, x), 
                 "Connection failed",
                 MessageBoxButtons.YesNo, 
                 MessageBoxIcon.Error,
@@ -276,7 +291,7 @@ namespace XnaTry
         /// </summary>
         protected override void EndRun()
         {
-            ConnectionHandler.Dispose();
+            connectionHandler.Dispose();
             base.EndRun();
         }
 
@@ -287,7 +302,7 @@ namespace XnaTry
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            ClientGameManager.Draw(gameTime);
+            clientGameManager.Draw(gameTime);
             base.Draw(gameTime);
         }
     }
