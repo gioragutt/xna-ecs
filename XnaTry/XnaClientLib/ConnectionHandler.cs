@@ -7,7 +7,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UtilsLib.Consts;
-using UtilsLib.Exceptions.Common;
 using XnaClientLib.ECS;
 using XnaClientLib.ECS.Compnents.Network;
 using XnaCommonLib.ECS;
@@ -19,6 +18,9 @@ namespace XnaClientLib
     {
         public void Dispose()
         {
+            if (IsDisposed)
+                return;
+
             Connection?.Client.Disconnect(true);
             Connection?.Close();
             Reader.Dispose();
@@ -177,14 +179,9 @@ namespace XnaClientLib
                     else
                         timeoutCounter.Update(DateTime.Now - LastUpdateTime);
                 }
-                catch (CommunicationTimeoutException ex)
-                {
-                    throw new CommunicationTimeoutException("Client side of " + Connection.Client.LocalEndPoint, ex);
-                }
                 catch (Exception)
                 {
-                    Connection.Close();
-                    throw;
+                    Dispose();
                 }
 
                 Thread.Sleep(Constants.Time.UpdateThreadSleepTime);

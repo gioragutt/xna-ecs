@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UtilsLib.Exceptions.Common
 {
@@ -51,7 +49,7 @@ namespace UtilsLib.Exceptions.Common
         {
             return
                 string.Format(
-                    "MaxTimeout: {0}\nElapsedReached: {1}\nBeginningOfTimeoutSamping: {2}\nTimeStamp: {3}\n LastDelta: {4}",
+                    "MaxTimeout: {0}\nElapsedReached: {1}\nBeginningOfTimeoutSamping: {2}\nTimeStamp: {3}\nLastDelta: {4}",
                     MaxTimeout, 
                     ElapsedReached, 
                     BeginningOfTimeoutSample.TimeOfDay, 
