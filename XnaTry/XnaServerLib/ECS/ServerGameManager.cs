@@ -10,7 +10,8 @@ namespace XnaServerLib.ECS
 {
     public class ServerGameManager : GameManagerBase
     {
-        private Server Server { get; }
+        public  Server Server { get; }
+
         public ServerGameManager(Server server)
         {
             Server = server;

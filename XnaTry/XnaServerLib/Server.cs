@@ -69,6 +69,8 @@ namespace XnaServerLib
 
         public DateTime LastUpdateTime { get; private set; }
 
+        public MapManager MapManager { get; }
+
         #endregion Properties
 
         #region Constructors
@@ -92,6 +94,8 @@ namespace XnaServerLib
             {
                 IsBackground = true
             };
+
+            MapManager = new MapManager("xna_try_map1.tmx");
 
             ConnectionListener = new TcpListener(IPAddress.Any, Port);
             Listening = false;

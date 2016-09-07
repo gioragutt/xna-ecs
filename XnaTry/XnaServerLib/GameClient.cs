@@ -213,7 +213,7 @@ namespace XnaServerLib
             var loginMessage = JsonConvert.DeserializeObject<ClientLoginMessage>(serializedMessage);
 
             GameObject.Transform.Scale = 0.4f;
-            GameObject.Transform.Position = new Vector2(50, 300);
+            GameObject.Transform.Position = GameManager.Server.MapManager.GetRandomSpawnPosition(loginMessage.PlayerTeam);
 
             GameObject.Components.Add(new PlayerAttributes
             {

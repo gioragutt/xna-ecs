@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="15" height="15" tilewidth="200" tileheight="200" nextobjectid="18">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="15" height="15" tilewidth="200" tileheight="200" nextobjectid="24">
  <tileset firstgid="1" source="game_of_throws_blocks.tsx"/>
  <layer name="BorderLayer" width="15" height="15">
   <data encoding="csv">
@@ -44,5 +44,11 @@
   <object id="13" name="top_block" x="0" y="0" width="3000" height="200"/>
   <object id="14" name="bottom_block" x="0" y="2800" width="3000" height="200"/>
   <object id="15" name="left_block" x="0" y="0" width="200" height="3000"/>
+ </objectgroup>
+ <objectgroup name="SpawningAreas">
+  <object id="18" name="Good_1" x="498" y="430" width="488" height="448"/>
+  <object id="19" name="Bad_1" x="2116" y="392" width="496" height="496"/>
+  <object id="22" name="Bad_2" x="468" y="2096" width="496" height="496"/>
+  <object id="23" name="Good_2" x="2104" y="2140" width="488" height="448"/>
  </objectgroup>
 </map>
