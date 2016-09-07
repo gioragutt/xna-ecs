@@ -1,8 +1,9 @@
 using System.Net;
+using UtilsLib.Exceptions.Common;
 
 namespace UtilsLib.Exceptions.Server
 {
-    public class InvalidPortException : BaseXnaServerException
+    public class InvalidPortException : BaseGameException
     {
         public InvalidPortException(int port) 
             : base(ErrorMessage(port))

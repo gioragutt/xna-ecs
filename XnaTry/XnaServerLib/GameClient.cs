@@ -23,10 +23,15 @@ namespace XnaServerLib
     {
         public void Dispose()
         {
-            if (Connection != null && Connection.Connected)
-                Connection.Close();
+            if (Connection.Connected)
+            {
+                Connection?.Client.Disconnect(true);
+                Connection?.Close();
+            }
             Reader.Dispose();
             Writer.Dispose();
+            GameObject.Entity.Dispose();
+            GameObject = null;
         }
 
         #region Properties
@@ -68,6 +73,13 @@ namespace XnaServerLib
 
         private PacketProtocol PacketProtocol { get; }
 
+        /// <summary>
+        /// Stores the time of the last update from the client
+        /// </summary>
+        public DateTime LastUpdateTime { get; private set; }
+
+        private TimeoutTimer TimeoutTimer { get; }
+
         #endregion Properties
 
         #region Constructor
@@ -84,7 +96,7 @@ namespace XnaServerLib
             Utils.AssertArgumentNotNull(gameObject, "gameObject");
 
             EmsServerEndpoint = new EmsServerEndpoint();
-
+            TimeoutTimer = new TimeoutTimer(Constants.Time.MaxTimeout);
             GameObject = gameObject;
             GameManager = gameManager;
             Connection = connection;
@@ -113,18 +125,14 @@ namespace XnaServerLib
             {
                 try
                 {
-                    HelperMethods.Receive(Connection, Reader, PacketProtocol);
+                    if (HelperMethods.Receive(Connection, Reader, PacketProtocol))
+                        TimeoutTimer.Reset();
+                    else
+                        TimeoutTimer.Update(DateTime.Now - LastUpdateTime);
                 }
-                catch (IOException)
+                catch (Exception e)
                 {
-                    Console.WriteLine("IOException caught for {0}", GameObject.Components.Get<PlayerAttributes>().Name);
-                    Connection.Close();
-                    break;
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine("Exception caught for {0}", GameObject.Components.Get<PlayerAttributes>().Name);
-                    Connection.Close();
+                    Console.WriteLine("{0} caught for {1}\n{2}", e.GetType().FullName, GameObject.Components.Get<PlayerAttributes>().Name, e);
                     break;
                 }
 
@@ -141,11 +149,11 @@ namespace XnaServerLib
                     .Get());
 
             GameManager.DisposeOfClient(this);
-            GameObject = null;
         }
 
         private void PacketProtocol_MessageArrivedCallback(byte[] bytes)
         {
+            LastUpdateTime = DateTime.Now;
             if (bytes.Length == 0)
                 return;
 
@@ -192,6 +200,7 @@ namespace XnaServerLib
 
         private void ReadClientLoginDataAndInitializePlayer()
         {
+            LastUpdateTime = DateTime.Now;
             var serializedMessage = Reader.ReadString();
             var loginMessage = JsonConvert.DeserializeObject<ClientLoginMessage>(serializedMessage);
 

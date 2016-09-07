@@ -48,7 +48,8 @@
     <Compile Include="Consts\GUI.cs" />
     <Compile Include="Consts\Messages.cs" />
     <Compile Include="Consts\Time.cs" />
-    <Compile Include="Exceptions\Server\BaseXnaServerException.cs" />
+    <Compile Include="Exceptions\Common\BaseGameException.cs" />
+    <Compile Include="Exceptions\Common\CommunicationTimeoutException.cs" />
     <Compile Include="Exceptions\Server\ConnectionEstablishmentErrorException.cs" />
     <Compile Include="Exceptions\Server\InvalidPortException.cs" />
     <Compile Include="Exceptions\Server\ServerAlreadyRunningException.cs" />

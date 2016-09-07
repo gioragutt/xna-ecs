@@ -1,23 +1,23 @@
 using System;
 
-namespace UtilsLib.Exceptions.Server
+namespace UtilsLib.Exceptions.Common
 {
-    public class BaseXnaServerException : Exception
+    public class BaseGameException : Exception
     {
         public DateTime TimeStamp { get; }
 
-        public BaseXnaServerException()
+        public BaseGameException()
         {
             TimeStamp = DateTime.Now;
         }
 
-        public BaseXnaServerException(string message) 
+        public BaseGameException(string message) 
             : base(message)
         {
             TimeStamp = DateTime.Now;
         }
 
-        public BaseXnaServerException(string message, Exception innerException) 
+        public BaseGameException(string message, Exception innerException) 
             : base(message, innerException)
         {
             TimeStamp = DateTime.Now;

@@ -3,11 +3,11 @@ using EMS;
 using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UtilsLib.Consts;
+using UtilsLib.Exceptions.Common;
 using XnaClientLib.ECS;
 using XnaClientLib.ECS.Compnents.Network;
 using XnaCommonLib.ECS;
@@ -19,8 +19,11 @@ namespace XnaClientLib
     {
         public void Dispose()
         {
-            if (Connected)
-                Connection.Close();
+            Connection?.Client.Disconnect(true);
+            Connection?.Close();
+            Reader.Dispose();
+            Writer.Dispose();
+            IsDisposed = true;
         }
 
         #region Network Components and Properties
@@ -28,7 +31,7 @@ namespace XnaClientLib
         /// <summary>
         /// The EMS Server Endpoint to receive and broadcasts from and to the server
         /// </summary>
-        private EmsServerEndpoint EmsServerEndpoint { get; }
+        private readonly EmsServerEndpoint emsServerEndpoint;
 
         /// <summary>
         /// The TcpClient object with which connection is established
@@ -56,17 +59,6 @@ namespace XnaClientLib
         public string HostName { get; set; }
 
         /// <summary>
-        /// Indicates whether the client is connected to the server or not
-        /// </summary>
-        public bool Connected
-        {
-            get
-            {
-                return Connection != null && Connection.Connected;
-            }
-        }
-
-        /// <summary>
         /// Stores the time of the last update from the server
         /// </summary>
         public DateTime LastUpdateTime { get; private set; }
@@ -76,7 +68,14 @@ namespace XnaClientLib
         /// </summary>
         public TimeSpan LastPing { get; private set; }
 
+        /// <summary>
+        /// Manages the MessageFraming protocol
+        /// </summary>
         private PacketProtocol PacketProtocol { get; }
+
+        private readonly TimeoutTimer timeoutCounter;
+
+        public bool IsDisposed { get; private set; }
 
         #endregion
 
@@ -103,12 +102,14 @@ namespace XnaClientLib
 
         public ConnectionHandler(string hostName, int port, ClientGameManager gameManager)
         {
+            IsDisposed = false;
+            timeoutCounter = new TimeoutTimer(Constants.Time.MaxTimeout);
             HostName = hostName;
             Port = port;
             ClientGameManager = gameManager;
             GameObject = null;
             UpdateThread = new Thread(ConnectionHandler_InteractWithServer);
-            EmsServerEndpoint = new EmsServerEndpoint();
+            emsServerEndpoint = new EmsServerEndpoint();
             PacketProtocol = new PacketProtocol(0)
             {
                 MessageArrived = PacketProtocol_MessageRecievedCallback
@@ -126,7 +127,10 @@ namespace XnaClientLib
 
             var hostname = string.IsNullOrEmpty(HostName) ? "localhost" : HostName;
 
-            Connection = new TcpClient(hostname, Port);
+            Connection = new TcpClient(hostname, Port)
+            {
+                ReceiveTimeout = (int)Constants.Time.MaxTimeout.TotalMilliseconds
+            };
 
             Reader = new BinaryReader(Connection.GetStream());
             Writer = new BinaryWriter(Connection.GetStream());
@@ -168,12 +172,19 @@ namespace XnaClientLib
             {
                 try
                 {
-                    HelperMethods.Receive(Connection, Reader, PacketProtocol);
+                    if (HelperMethods.Receive(Connection, Reader, PacketProtocol))
+                        timeoutCounter.Reset();
+                    else
+                        timeoutCounter.Update(DateTime.Now - LastUpdateTime);
+                }
+                catch (CommunicationTimeoutException ex)
+                {
+                    throw new CommunicationTimeoutException("Client side of " + Connection.Client.LocalEndPoint, ex);
                 }
                 catch (Exception)
                 {
                     Connection.Close();
-                    break;
+                    throw;
                 }
 
                 Thread.Sleep(Constants.Time.UpdateThreadSleepTime);
@@ -195,7 +206,7 @@ namespace XnaClientLib
             UpdatePing();
 
             var incomingUpdate = JsonConvert.DeserializeObject<ServerToClientUpdateMessage>(message);
-            EmsServerEndpoint.BroadcastIncomingEvents(incomingUpdate.Broadcasts);
+            emsServerEndpoint.BroadcastIncomingEvents(incomingUpdate.Broadcasts);
 
             foreach (var update in incomingUpdate.PlayerUpdates)
                 ApplyUpdate(update);
@@ -221,7 +232,7 @@ namespace XnaClientLib
         {
             var message = new ClientToServerUpdateMessage
             {
-                Broadcasts = EmsServerEndpoint.Flush(),
+                Broadcasts = emsServerEndpoint.Flush(),
                 PlayerUpdate = new PlayerUpdate(GameObject.Components)
             };
 

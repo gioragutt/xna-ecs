@@ -155,7 +155,7 @@ namespace XnaServerLib
                 try
                 {
                     var acceptedConnection = ConnectionListener.AcceptTcpClient();
-                    Console.WriteLine("Accepted new connection");
+                    Console.WriteLine("{0} Accepted new connection", DateTime.Now.TimeOfDay);
                     var newGameClient = new GameClient(acceptedConnection, GameManager.CreateGameObject(), GameManager);
                     var attr = newGameClient.GameObject.Components.Get<PlayerAttributes>();
                     Console.WriteLine("{2} - {0} Connected to {1}", attr.Name, attr.Team.Name, acceptedConnection.Client.RemoteEndPoint);
@@ -165,8 +165,6 @@ namespace XnaServerLib
                             .Add(Constants.Fields.PlayerName, attr.Name)
                             .Add(Constants.Fields.TeamName, attr.Team.Name)
                             .Get());
-
-                    Thread.Sleep(1000);
                 }
                 catch (SocketException se)
                 {

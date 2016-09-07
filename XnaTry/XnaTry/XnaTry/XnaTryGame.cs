@@ -85,10 +85,16 @@ namespace XnaTry
             AddPingPrint();
         }
 
+        public string GetPintPrint()
+        {
+            return ConnectionHandler.IsDisposed
+                ? "Server disconnected"
+                : string.Format("{0} ms", Math.Ceiling(ConnectionHandler.LastPing.TotalMilliseconds));
+        }
+
         private void AddPingPrint()
         {
-            ClientGameManager.CreateDebugPrint(
-                () => string.Format("{0} ms", Math.Ceiling(ConnectionHandler.LastPing.TotalMilliseconds)), Color.Red);
+            ClientGameManager.CreateDebugPrint(GetPintPrint, Color.Red);
         }
 
         #region Contants Configurations
