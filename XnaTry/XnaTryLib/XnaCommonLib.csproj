@@ -71,7 +71,6 @@
     <Compile Include="ECS\GameObject.cs" />
     <Compile Include="ECS\Components\Transform.cs" />
     <Compile Include="Extentions.cs" />
-    <Compile Include="Map\Block.cs" />
     <Compile Include="Network\ClientLoginMessage.cs" />
     <Compile Include="Network\TimeoutTimer.cs" />
     <Compile Include="Network\HelperMethods.cs" />
