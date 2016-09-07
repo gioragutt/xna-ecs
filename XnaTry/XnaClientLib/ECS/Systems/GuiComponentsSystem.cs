@@ -22,10 +22,10 @@ namespace XnaClientLib.ECS.Systems
         public override void Update(IList<IComponentContainer> entities, long delta)
         {
             var allGuiComponents = entities.SelectMany(c => c.GetAllOf<GuiComponent>()).ToList();
+            allGuiComponents.Sort((first, second) => first.DrawOrder().CompareTo(second.DrawOrder()));
             SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
-            for (var i = 0; i < allGuiComponents.Count; ++i)
+            foreach (var guiComponent in allGuiComponents)
             {
-                var guiComponent = allGuiComponents[i];
                 guiComponent.Update(guiComponent.Container);
                 guiComponent.Draw(SpriteBatch);
             }

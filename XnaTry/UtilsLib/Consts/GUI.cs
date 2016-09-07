@@ -8,6 +8,12 @@
             public const int DebugPrintInitialX = 10;
             public const int DebugPrintInitialY = 10;
             public const int DebugPrintSpacing = 0;
+
+            public static class DrawOrder
+            {
+                public const int Map = 0;
+                public const int Player = 1;
+            }
         }
     }
 }

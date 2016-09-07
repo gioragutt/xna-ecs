@@ -68,7 +68,6 @@
     <Compile Include="ECS\Compnents\DebugPrintText.cs" />
     <Compile Include="ECS\Compnents\GamepadDirectionalInput.cs" />
     <Compile Include="ECS\Compnents\GuiComponent.cs" />
-    <Compile Include="ECS\Compnents\GuiComponentCollection.cs" />
     <Compile Include="ECS\Compnents\Interpolator.cs" />
     <Compile Include="ECS\Compnents\KeyboardDirectionalInput.cs" />
     <Compile Include="ECS\Compnents\Label.cs" />

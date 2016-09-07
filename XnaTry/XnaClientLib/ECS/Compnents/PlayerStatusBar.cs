@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using UtilsLib.Consts;
 using UtilsLib.Utility;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
@@ -56,6 +57,11 @@ namespace XnaClientLib.ECS.Compnents
             Transform = entity.Get<Transform>();
             HealthBarTextureAsset = healthBarTextureAsset;
             NameFontAsset = nameFontAsset;
+        }
+
+        public override int DrawOrder()
+        {
+            return Constants.GUI.DrawOrder.Player;
         }
 
         public override void LoadContent(ContentManager content)
