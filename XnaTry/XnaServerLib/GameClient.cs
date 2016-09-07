@@ -105,8 +105,16 @@ namespace XnaServerLib
             Reader = new BinaryReader(connectionStream);
             Writer = new BinaryWriter(connectionStream);
 
-            ReadClientLoginDataAndInitializePlayer();
-            SendClientLoginResponse();
+            try
+            {
+                ReadClientLoginDataAndInitializePlayer();
+                SendClientLoginResponse();
+            }
+            catch (Exception)
+            {
+                Dispose();
+                return;
+            }
 
             PacketProtocol = new PacketProtocol(0)
             {

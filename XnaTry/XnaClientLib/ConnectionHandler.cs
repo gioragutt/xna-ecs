@@ -137,8 +137,17 @@ namespace XnaClientLib
             Reader = new BinaryReader(Connection.GetStream());
             Writer = new BinaryWriter(Connection.GetStream());
 
-            WriteLoginDataToServer(name, team);
-            ReadLoginResponseFromServer();
+            try
+            {
+                WriteLoginDataToServer(name, team);
+                ReadLoginResponseFromServer();
+            }
+            catch (Exception)
+            {
+                Dispose();
+                return;
+            }
+
             WritePlayerData();
             UpdateThread.Start();
         }
