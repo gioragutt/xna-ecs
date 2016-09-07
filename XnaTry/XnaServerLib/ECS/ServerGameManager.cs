@@ -21,8 +21,7 @@ namespace XnaServerLib.ECS
         public void DisposeOfClient(GameClient client)
         {
             Server.GameClients.Remove(client);
-
-            client.GameObject.Entity.Dispose();
+            client.Dispose();
         }
 
         private void Callback_CllientDisconnected(JObject message)
@@ -55,7 +54,7 @@ namespace XnaServerLib.ECS
         private bool IsNameAvailable(string name)
         {
             var allEntities = EntityPool.GetAllOf<PlayerAttributes>();
-            return allEntities.All(entity => entity.Name != name);
+            return allEntities.All(entity => entity?.Name != null && entity.Name != name);
         }
     }
 }

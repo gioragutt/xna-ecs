@@ -29,7 +29,16 @@ namespace XnaClientLib.ECS.Compnents
         /// <summary>
         /// The origin of rotation of the texture
         /// </summary>
-        public Vector2 Origin => new Vector2(Texture.Width / 2.0f, Texture.Height / 2.0f);
+        public Vector2 Origin
+        {
+            get
+            {
+                if (Texture == null)
+                    return Vector2.Zero;
+
+                return new Vector2(Texture.Width / 2.0f, Texture.Height / 2.0f);
+            }
+        }
 
         /// <summary>
         /// Initializes a Sprite component with an asset name to load

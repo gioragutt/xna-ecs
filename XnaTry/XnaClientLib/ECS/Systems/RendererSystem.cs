@@ -33,6 +33,9 @@ namespace XnaClientLib.ECS.Systems
             var transform = entity.Get<Transform>();
             var spriteEffect = entity.Get<SpriteEffect>();
 
+            if (sprite.Texture == null)
+                return;
+
             SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
             ApplyEffectIfEnabled(spriteEffect);
             SpriteBatch.Draw(
@@ -57,7 +60,7 @@ namespace XnaClientLib.ECS.Systems
 
         private static void ApplyEffectIfEnabled(SpriteEffect spriteEffect)
         {
-            if (Component.IsEnabled(spriteEffect))
+            if (Component.IsEnabled(spriteEffect) && !string.IsNullOrEmpty(spriteEffect.AppliedPass))
                 spriteEffect.Effect.CurrentTechnique.Passes[spriteEffect.AppliedPass].Apply();
         }
 

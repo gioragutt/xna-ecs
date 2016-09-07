@@ -32,6 +32,9 @@ namespace XnaClientLib.ECS.Compnents
             }
             set
             {
+                if (AnimationTextures == null)
+                    return;
+
                 currentTextureIndex = (value + AnimationTextures.Count) % AnimationTextures.Count;
             }
         }
@@ -82,7 +85,9 @@ namespace XnaClientLib.ECS.Compnents
             Enabled = false;
             CurrentTextureIndex = 0;
             CurrentTick = 0;
-            Sprite.Texture = AnimationTextures[CurrentTextureIndex];
+
+            if (AnimationTextures != null)
+                Sprite.Texture = AnimationTextures[CurrentTextureIndex];
         }
 
         public override void Update(long delta)

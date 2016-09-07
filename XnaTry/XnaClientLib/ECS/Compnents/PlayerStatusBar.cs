@@ -76,6 +76,9 @@ namespace XnaClientLib.ECS.Compnents
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (!Utils.NotNull(Sprite.Texture, FrameTexture))
+                return;
+
             if (Attributes.IsDead)
             {
                 DrawName(spriteBatch, Vector2.Zero);
