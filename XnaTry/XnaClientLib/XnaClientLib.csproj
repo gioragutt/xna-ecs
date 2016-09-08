@@ -66,6 +66,7 @@
     <Compile Include="ECS\ClientGameManager.cs" />
     <Compile Include="ECS\Compnents\Animation.cs" />
     <Compile Include="ECS\Compnents\DebugPrintText.cs" />
+    <Compile Include="ECS\Compnents\GameMinimap.cs" />
     <Compile Include="ECS\Compnents\GamepadDirectionalInput.cs" />
     <Compile Include="ECS\Compnents\GuiComponent.cs" />
     <Compile Include="ECS\Compnents\Interpolator.cs" />
@@ -91,7 +92,7 @@
     <Compile Include="ECS\Systems\RendererSystem.cs" />
     <Compile Include="IContentRequester.cs" />
     <Compile Include="IResourcesManager.cs" />
-    <Compile Include="GameMap.cs" />
+    <Compile Include="ECS\Compnents\GameMap.cs" />
     <Compile Include="MovementDirection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesManager.cs" />

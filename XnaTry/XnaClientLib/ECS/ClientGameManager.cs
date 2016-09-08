@@ -28,7 +28,7 @@ namespace XnaClientLib.ECS
         public ResourcesManager ResourceManager { get; }
         public Dictionary<string, TeamData> Teams { get; set; }
         public Camera Camera { get; }
-        private GameObject LocalPlayer { get; set; }
+        public GameObject LocalPlayer { get; set; }
 
         #endregion
 

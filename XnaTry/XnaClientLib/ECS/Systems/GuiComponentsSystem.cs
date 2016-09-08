@@ -23,13 +23,13 @@ namespace XnaClientLib.ECS.Systems
         {
             var allGuiComponents = entities.SelectMany(c => c.GetAllOf<GuiComponent>()).ToList();
             allGuiComponents.Sort((first, second) => first.DrawOrder().CompareTo(second.DrawOrder()));
-            SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
             foreach (var guiComponent in allGuiComponents)
             {
+                SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
                 guiComponent.Update(guiComponent.Container);
                 guiComponent.Draw(SpriteBatch);
+                SpriteBatch.End();
             }
-            SpriteBatch.End();
         }
 
         public override Predicate<IComponentContainer> RelevantEntities()

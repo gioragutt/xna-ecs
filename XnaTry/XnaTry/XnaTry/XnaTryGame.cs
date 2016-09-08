@@ -87,7 +87,9 @@ namespace XnaTry
             AddPingPrint();
 
             map = clientGameManager.CreateGameObject();
-            map.Components.Add(new GameMap("xna_try_map1.tmx"));
+            var gameMap = new GameMap("xna_try_map1.tmx");
+            map.Components.Add(resourceManager.Register(gameMap));
+            map.Components.Add(resourceManager.Register(new GameMinimap(gameMap, Constants.Assets.PlayerNameFont,clientGameManager)));
         }
 
         #region Ping
@@ -201,16 +203,16 @@ namespace XnaTry
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             var defaultFont = Content.Load<SpriteFont>("DefaultFont");
-            var mapLoader = map.Components.Get<GameMap>();
-            mapLoader.LoadContent(Content);
 
             resourceManager.SetContentManager(Content);
+            resourceManager.LoadContent();
             clientGameManager.RegisterDrawingSystem(new AnimationSystem());
             clientGameManager.RegisterDrawingSystem(new RendererSystem(spriteBatch, clientGameManager.Camera));
             clientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, clientGameManager.Camera));
             clientGameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
 
-            clientGameManager.Camera.Bounds = mapLoader.Bounds;
+
+            clientGameManager.Camera.Bounds = map.Components.Get<GameMap>().Bounds;
         }
 
         /// <summary>

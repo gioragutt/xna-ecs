@@ -5,18 +5,17 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using UtilsLib.Consts;
-using XnaClientLib.ECS.Compnents;
 using XnaCommonLib;
 
-namespace XnaClientLib
+namespace XnaClientLib.ECS.Compnents
 {
     public class GameMap : GuiComponent
     {
         #region Fields
 
-        private readonly string tmxMapName;
-        private TmxMapData map;
-        public readonly Dictionary<int, Texture2D> tilesByCode;
+        public string TmxMapName { get; }
+        protected TmxMapData map;
+        private readonly Dictionary<int, Texture2D> tilesByCode;
 
         #endregion
 
@@ -30,7 +29,7 @@ namespace XnaClientLib
 
         public GameMap(string mapName)
         {
-            tmxMapName = mapName;
+            TmxMapName = mapName;
             map = null;
             tilesByCode = new Dictionary<int, Texture2D>();
         }
@@ -41,17 +40,26 @@ namespace XnaClientLib
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            DrawMap(spriteBatch);
+        }
+
+        protected void DrawMap(SpriteBatch spriteBatch, double factor = 1.0, Vector2? origin = null)
+        {
+            origin = origin ?? Vector2.Zero;
+
+            var width = (int) (map.TileWidth * factor);
+            var height = (int)(map.TileHeight * factor);
+
             foreach (var tile in map.Map.Layers.SelectMany(layer => layer.Tiles.Where(t => t.Gid != 0)))
             {
                 spriteBatch.Draw(tilesByCode[tile.Gid - 1],
-                    new Rectangle(tile.X * map.TileWidth, tile.Y * map.TileHeight, map.TileWidth, map.TileHeight),
-                    Color.White);
+                    new Rectangle((int)origin.Value.X + tile.X * width, (int)origin.Value.Y + tile.Y * height, width, height), Color.White);
             }
         }
 
         public override void LoadContent(ContentManager content)
         {
-            map = new TmxMapData(tmxMapName);
+            map = new TmxMapData(TmxMapName);
 
             var tiles = map.Map.Tilesets[0].Tiles;
             foreach (var t in tiles)
@@ -66,7 +74,7 @@ namespace XnaClientLib
         #endregion GuiComponent Methods
 
         #region Helper Methods
-        
+
         /// <summary>
         /// Gets the Asset name of the source file
         /// </summary>
