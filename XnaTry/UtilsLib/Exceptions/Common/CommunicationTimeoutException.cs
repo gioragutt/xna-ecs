@@ -7,20 +7,17 @@ namespace UtilsLib.Exceptions.Common
         public TimeSpan MaxTimeout { get; }
         public TimeSpan ElapsedReached { get; }
         public DateTime BeginningOfTimeoutSample { get; }
-        public TimeSpan LastDelta { get; }
 
         public CommunicationTimeoutException(
             TimeSpan maxTimeout,
             TimeSpan elapsedReached,
-            DateTime beginningOfTimeoutSample, TimeSpan lastDelta) 
-            : this(null, null, maxTimeout, elapsedReached, beginningOfTimeoutSample, lastDelta)
+            DateTime beginningOfTimeoutSample) : this(null, null, maxTimeout, elapsedReached, beginningOfTimeoutSample)
         {
         }
 
         public CommunicationTimeoutException(string message, CommunicationTimeoutException other)
-            : this(message, other.MaxTimeout, other.ElapsedReached, other.BeginningOfTimeoutSample, other.LastDelta)
+            : this(message, other.MaxTimeout, other.ElapsedReached, other.BeginningOfTimeoutSample)
         {
-
         }
 
         public CommunicationTimeoutException(
@@ -28,20 +25,19 @@ namespace UtilsLib.Exceptions.Common
             Exception innerException,
             TimeSpan maxTimeout,
             TimeSpan elapsedReached,
-            DateTime beginningOfTimeoutSample, TimeSpan lastDelta) : base(message, innerException)
+            DateTime beginningOfTimeoutSample) : base(message, innerException)
         {
             MaxTimeout = maxTimeout;
             ElapsedReached = elapsedReached;
             BeginningOfTimeoutSample = beginningOfTimeoutSample;
-            LastDelta = lastDelta;
         }
 
         public CommunicationTimeoutException(
             string message,
             TimeSpan maxTimeout,
             TimeSpan elapsedReached,
-            DateTime beginningOfTimeoutSample, TimeSpan lastDelta)
-            : this(message, null, maxTimeout, elapsedReached, beginningOfTimeoutSample, lastDelta)
+            DateTime beginningOfTimeoutSample)
+            : this(message, null, maxTimeout, elapsedReached, beginningOfTimeoutSample)
         {
         }
 
@@ -49,12 +45,11 @@ namespace UtilsLib.Exceptions.Common
         {
             return
                 string.Format(
-                    "MaxTimeout: {0}\nElapsedReached: {1}\nBeginningOfTimeoutSamping: {2}\nTimeStamp: {3}\nLastDelta: {4}",
+                    "MaxTimeout: {0}\nElapsedReached: {1}\nBeginningOfTimeoutSamping: {2}\nTimeStamp: {3}\n",
                     MaxTimeout, 
                     ElapsedReached, 
                     BeginningOfTimeoutSample.TimeOfDay, 
-                    TimeStamp.TimeOfDay, 
-                    LastDelta);
+                    TimeStamp.TimeOfDay);
         }
     }
 }

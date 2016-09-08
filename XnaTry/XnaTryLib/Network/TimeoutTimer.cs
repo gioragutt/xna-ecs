@@ -15,14 +15,12 @@ namespace XnaCommonLib.Network
             MaxTime = maxTime;
         }
 
-        public void Update(TimeSpan delta)
+        public void Update(TimeSpan elapsedTimeout)
         {
-            Elapsed = delta;
+            Elapsed = elapsedTimeout;
 
-            if (Elapsed < MaxTime)
-                return;
-
-            throw new CommunicationTimeoutException(MaxTime, Elapsed, BeginningOfTimeoutSampling, delta);
+            if (Elapsed >= MaxTime)
+                throw new CommunicationTimeoutException(MaxTime, Elapsed, BeginningOfTimeoutSampling);
         }
 
         public void Reset()
