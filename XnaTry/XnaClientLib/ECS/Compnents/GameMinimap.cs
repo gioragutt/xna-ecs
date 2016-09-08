@@ -77,10 +77,18 @@ namespace XnaClientLib.ECS.Compnents
             Vector2 dotSize)
         {
             var position = player.Get<Transform>().Position;
-            var teamColor = Equals(player.Parent, gameManager.LocalPlayer.Entity)
-                ? Color.LightGreen
-                : player.Get<PlayerAttributes>().Team.Color;
+            var teamColor = DecideTeamColor(player);
             spriteBatch.DrawString(mapFont, playerOnMap, origin + position * factor - dotSize / 2f, teamColor);
+        }
+
+        private Color DecideTeamColor(IComponentContainer player)
+        {
+            var attributes = player.Get<PlayerAttributes>();
+            if (Equals(player.Parent, gameManager.LocalPlayer.Entity))
+                return Color.LightGreen;
+            if (attributes.IsDead)
+                return Color.Gray;
+            return attributes.Team.Color;
         }
 
         private static Vector2 MinimapPosition(Viewport viewport, Vector2 minimapSize)
