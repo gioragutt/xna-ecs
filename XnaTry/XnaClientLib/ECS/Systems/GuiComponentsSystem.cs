@@ -22,14 +22,22 @@ namespace XnaClientLib.ECS.Systems
         public override void Update(IList<IComponentContainer> entities, long delta)
         {
             var allGuiComponents = entities.SelectMany(c => c.GetAllOf<GuiComponent>()).ToList();
-            allGuiComponents.Sort((first, second) => first.DrawOrder().CompareTo(second.DrawOrder()));
+            allGuiComponents.Sort((first, second) => first.DrawOrder.CompareTo(second.DrawOrder));
             foreach (var guiComponent in allGuiComponents)
             {
-                SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
+                SpriteBatchBegin(guiComponent);
                 guiComponent.Update(guiComponent.Container);
                 guiComponent.Draw(SpriteBatch);
                 SpriteBatch.End();
             }
+        }
+
+        private void SpriteBatchBegin(GuiComponent guiComponent)
+        {
+            if (guiComponent.IsHud)
+                SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            else
+                SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Camera.CameraMatrix);
         }
 
         public override Predicate<IComponentContainer> RelevantEntities()

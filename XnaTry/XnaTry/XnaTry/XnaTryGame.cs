@@ -206,9 +206,9 @@ namespace XnaTry
 
             resourceManager.SetContentManager(Content);
             resourceManager.LoadContent();
+            clientGameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
             clientGameManager.RegisterDrawingSystem(new AnimationSystem());
             clientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, clientGameManager.Camera));
-            clientGameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
 
 
             clientGameManager.Camera.Bounds = map.Components.Get<GameMap>().Bounds;

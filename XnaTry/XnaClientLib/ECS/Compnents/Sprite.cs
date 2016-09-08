@@ -12,23 +12,27 @@ namespace XnaClientLib.ECS.Compnents
     /// </summary>
     public class Sprite : GuiComponent
     {
-        public override int DrawOrder()
-        {
-            return Constants.GUI.DrawOrder.Player;
-        }
-
+        #region Fields
+        
         /// <summary>
         /// Name of the asset you want to load
         /// </summary>
         /// <remarks>
         /// If the Texture property is not null, the asset specified will not be loaded
         /// </remarks>
-        private string AssetName { get; }
+        private readonly string assetName;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// The texture to be Rendered
         /// </summary>
-        public Texture2D Texture { get; set; }
+        public Texture2D Texture
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The origin of rotation of the texture
@@ -44,6 +48,10 @@ namespace XnaClientLib.ECS.Compnents
             }
         }
 
+        #endregion
+
+        #region Constructor
+
         /// <summary>
         /// Initializes a Sprite component with an asset name to load
         /// </summary>
@@ -53,12 +61,20 @@ namespace XnaClientLib.ECS.Compnents
         {
             Utils.AssertStringArgumentNotNull(assetName, "assetName");
 
-            AssetName = assetName;
+            this.assetName = assetName;
         }
+
+        #endregion
+
+        #region GuiComponent Methods
+
+        public override int DrawOrder => Constants.GUI.DrawOrder.Player;
+
+        public override bool IsHud => false;
 
         public override void LoadContent(ContentManager content)
         {
-            Texture = content.Load<Texture2D>(AssetName);
+            Texture = content.Load<Texture2D>(assetName);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -83,6 +99,10 @@ namespace XnaClientLib.ECS.Compnents
             DisableEffect(spriteEffect);
         }
 
+        #endregion
+
+        #region Helper Methods
+
         private static void DisableEffect(SpriteEffect spriteEffect)
         {
             if (IsEnabled(spriteEffect))
@@ -94,5 +114,7 @@ namespace XnaClientLib.ECS.Compnents
             if (IsEnabled(spriteEffect) && !string.IsNullOrEmpty(spriteEffect.AppliedPass))
                 spriteEffect.Effect.CurrentTechnique.Passes[spriteEffect.AppliedPass].Apply();
         }
+
+        #endregion
     }
 }

@@ -23,12 +23,12 @@ namespace XnaClientLib.ECS.Compnents
 
         private Vector2 healthBarPaddingInFrame = Vector2.Zero;
 
-        private string HealthBarTextureAsset { get; }
-        private string NameFontAsset { get; }
+        private readonly string healthBarTextureAsset;
+        private readonly string nameFontAsset;
 
-        private Texture2D FrameTexture { get; set; }
-        private Texture2D HealthBarTexture { get; set; }
-        private SpriteFont NameFont { get; set; }
+        private Texture2D frameTexture;
+        private Texture2D healthBarTexture;
+        private SpriteFont nameFont;
 
         #endregion
 
@@ -40,6 +40,8 @@ namespace XnaClientLib.ECS.Compnents
         private const int HealthBarHeightPadding = -2;
 
         #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Initializes a new PlayerStatusBar
@@ -55,34 +57,32 @@ namespace XnaClientLib.ECS.Compnents
             Attributes = entity.Get<PlayerAttributes>();
             Sprite = entity.Get<Sprite>();
             Transform = entity.Get<Transform>();
-            HealthBarTextureAsset = healthBarTextureAsset;
-            NameFontAsset = nameFontAsset;
+            this.healthBarTextureAsset = healthBarTextureAsset;
+            this.nameFontAsset = nameFontAsset;
         }
 
-        public override int DrawOrder()
-        {
-            return Constants.GUI.DrawOrder.Player;
-        }
+        #endregion
+
+        #region GuiComponent Methods
+
+        public override bool IsHud => false;
+
+        public override int DrawOrder => Constants.GUI.DrawOrder.Player;
 
         public override void LoadContent(ContentManager content)
         {
-            FrameTexture = content.Load<Texture2D>(Attributes.Team.Frame);
+            frameTexture = content.Load<Texture2D>(Attributes.Team.Frame);
 
             healthBarPaddingInFrame = new Vector2(HealthBarWidthPadding,
-                FrameTexture.Height + HealthBarHeightPadding - HealthBarHeight);
+                frameTexture.Height + HealthBarHeightPadding - HealthBarHeight);
 
-            HealthBarTexture = content.Load<Texture2D>(HealthBarTextureAsset);
-            NameFont = content.Load<SpriteFont>(NameFontAsset);
-        }
-
-        private static Rectangle CreateRectangleFromVector2(Vector2 position, Vector2 size)
-        {
-            return new Rectangle((int)position.X, (int)position.Y, (int)size.X, (int)size.Y);
+            healthBarTexture = content.Load<Texture2D>(healthBarTextureAsset);
+            nameFont = content.Load<SpriteFont>(nameFontAsset);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (!Utils.NotNull(Sprite.Texture, FrameTexture))
+            if (!Utils.NotNull(Sprite.Texture, frameTexture))
                 return;
 
             if (Attributes.IsDead)
@@ -96,15 +96,22 @@ namespace XnaClientLib.ECS.Compnents
             DrawName(spriteBatch, framePosition);
         }
 
+        #endregion GuiComponent Methods
+
+        private static Rectangle CreateRectangleFromVector2(Vector2 position, Vector2 size)
+        {
+            return new Rectangle((int) position.X, (int) position.Y, (int) size.X, (int) size.Y);
+        }
+
         private void DrawName(SpriteBatch spriteBatch, Vector2 framePosition)
         {
             var upperCaseName = Attributes.Name.ToUpper();
-            var nameTextSize = NameFont.MeasureString(upperCaseName);
+            var nameTextSize = nameFont.MeasureString(upperCaseName);
             Vector2 textPosition;
 
             if (!Attributes.IsDead)
             {
-                textPosition = new Vector2(framePosition.X + (FrameTexture.Width / 2f) - (nameTextSize.X / 2f),
+                textPosition = new Vector2(framePosition.X + (frameTexture.Width / 2f) - (nameTextSize.X / 2f),
                     framePosition.Y - nameTextSize.Y - NamePaddingHealthBar);
             }
             else
@@ -113,25 +120,25 @@ namespace XnaClientLib.ECS.Compnents
                 textPosition = new Vector2(topCenter.X - nameTextSize.X / 2, topCenter.Y - nameTextSize.Y);
             }
 
-            spriteBatch.DrawString(NameFont, upperCaseName, textPosition, Attributes.Team.Color);
+            spriteBatch.DrawString(nameFont, upperCaseName, textPosition, Attributes.Team.Color);
         }
 
         private void DrawHealthBar(SpriteBatch spriteBatch, Vector2 framePosition)
         {
             var healthBarPosition = Vector2.Add(framePosition, healthBarPaddingInFrame);
-            var healthBarWidth = (FrameTexture.Width - healthBarPaddingInFrame.X * 2f) *
+            var healthBarWidth = (frameTexture.Width - healthBarPaddingInFrame.X * 2f) *
                                  (Attributes.Health / Attributes.MaxHealth);
             var healthBarRectangle = CreateRectangleFromVector2(healthBarPosition, new Vector2(healthBarWidth, HealthBarHeight));
 
-            spriteBatch.Draw(HealthBarTexture, healthBarRectangle, Color.White);
+            spriteBatch.Draw(healthBarTexture, healthBarRectangle, Color.White);
         }
 
         private Vector2 DrawFrameAndGetPosition(SpriteBatch spriteBatch)
         {
             var topCenter = GetTopCenterPointOfSprite(Sprite, Transform);
-            var framePosition = topCenter - new Vector2(FrameTexture.Width / 2f, FrameTexture.Height);
+            var framePosition = topCenter - new Vector2(frameTexture.Width / 2f, frameTexture.Height);
 
-            spriteBatch.Draw(FrameTexture, framePosition, Color.White);
+            spriteBatch.Draw(frameTexture, framePosition, Color.White);
             return framePosition;
         }
 

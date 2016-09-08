@@ -13,7 +13,6 @@ namespace XnaClientLib.ECS.Compnents
     {
         #region Fields
 
-        public string TmxMapName { get; }
         protected TmxMapData map;
         private readonly Dictionary<int, Texture2D> tilesByCode;
 
@@ -21,6 +20,7 @@ namespace XnaClientLib.ECS.Compnents
 
         #region Properties
 
+        public string TmxMapName { get; }
         public Rectangle Bounds => new Rectangle(0, 0, map.MapWidth, map.MapHeight);
 
         #endregion
@@ -66,10 +66,9 @@ namespace XnaClientLib.ECS.Compnents
                 tilesByCode.Add(t.Id, content.Load<Texture2D>(SourceToAsset(t.Image.Source)));
         }
 
-        public override int DrawOrder()
-        {
-            return Constants.GUI.DrawOrder.Map;
-        }
+        public override int DrawOrder => Constants.GUI.DrawOrder.Map;
+
+        public override bool IsHud => false;
 
         #endregion GuiComponent Methods
 

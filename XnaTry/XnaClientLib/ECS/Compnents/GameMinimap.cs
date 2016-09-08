@@ -10,16 +10,26 @@ namespace XnaClientLib.ECS.Compnents
 {
     public class GameMinimap : GameMap
     {
+        #region Fields
+
         private readonly string mapFontAsset;
         private readonly ClientGameManager gameManager;
         private SpriteFont mapFont;
 
-        public GameMinimap(GameMap gameMap, string mapFontAsset, ClientGameManager gameManager) 
+        #endregion
+
+        #region Constructor
+
+        public GameMinimap(GameMap gameMap, string mapFontAsset, ClientGameManager gameManager)
             : base(gameMap.TmxMapName)
         {
             this.mapFontAsset = mapFontAsset;
             this.gameManager = gameManager;
         }
+
+        #endregion
+
+        #region GuiComponent Methods
 
         public override void LoadContent(ContentManager content)
         {
@@ -27,19 +37,21 @@ namespace XnaClientLib.ECS.Compnents
             mapFont = content.Load<SpriteFont>(mapFontAsset);
         }
 
-        public override int DrawOrder()
-        {
-            return Constants.GUI.DrawOrder.Minimap;
-        }
+        public override int DrawOrder => Constants.GUI.DrawOrder.Minimap;
+
+        public override bool IsHud => true;
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            PrepareNonCameraSpriteBatch(spriteBatch);
             var minimapSize = new Vector2(map.MapWidth, map.MapHeight) * Constants.GUI.MinimapSize;
             var minimapPosition = MinimapPosition(spriteBatch.GraphicsDevice.Viewport, minimapSize);
             DrawMap(spriteBatch, Constants.GUI.MinimapSize, minimapPosition);
             DrawPlayersPosition(spriteBatch, Constants.GUI.MinimapSize, minimapPosition);
         }
+
+        #endregion
+
+        #region Helper Methods
 
         private void DrawPlayersPosition(SpriteBatch spriteBatch, float factor = 1.0f, Vector2? origin = null)
         {
@@ -71,15 +83,11 @@ namespace XnaClientLib.ECS.Compnents
             spriteBatch.DrawString(mapFont, playerOnMap, origin + position * factor - dotSize / 2f, teamColor);
         }
 
-        private static void PrepareNonCameraSpriteBatch(SpriteBatch spriteBatch)
-        {
-            spriteBatch.End();
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-        }
-
-        public static Vector2 MinimapPosition(Viewport viewport, Vector2 minimapSize)
+        private static Vector2 MinimapPosition(Viewport viewport, Vector2 minimapSize)
         {
             return new Vector2(viewport.Width, viewport.Height) - minimapSize;
         }
+
+        #endregion
     }
 }

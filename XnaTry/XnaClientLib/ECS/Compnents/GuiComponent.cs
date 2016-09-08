@@ -10,6 +10,7 @@ namespace XnaClientLib.ECS.Compnents
         public virtual void Update(IComponentContainer entity) { }
         public abstract void Draw(SpriteBatch spriteBatch);
         public abstract void LoadContent(ContentManager content);
-        public abstract int DrawOrder();
+        public abstract int DrawOrder { get; }
+        public abstract bool IsHud { get; }
     }
 }
