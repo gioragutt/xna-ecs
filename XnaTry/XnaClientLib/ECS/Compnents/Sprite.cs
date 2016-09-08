@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using UtilsLib.Consts;
 using UtilsLib.Utility;
-using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
 namespace XnaClientLib.ECS.Compnents
@@ -10,8 +10,12 @@ namespace XnaClientLib.ECS.Compnents
     /// <summary>
     /// The base sprite component of entities in the game
     /// </summary>
-    public class Sprite : Component, IContentRequester
+    public class Sprite : GuiComponent
     {
+        public override int DrawOrder()
+        {
+            return Constants.GUI.DrawOrder.Player;
+        }
 
         /// <summary>
         /// Name of the asset you want to load
@@ -52,6 +56,43 @@ namespace XnaClientLib.ECS.Compnents
             AssetName = assetName;
         }
 
-        public void LoadContent(ContentManager content) { Texture = content.Load<Texture2D>(AssetName); }
+        public override void LoadContent(ContentManager content)
+        {
+            Texture = content.Load<Texture2D>(AssetName);
+        }
+
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            var transform = Container.Get<Transform>();
+            var spriteEffect = Container.Get<SpriteEffect>();
+
+            if (Texture == null)
+                return;
+
+            ApplyEffectIfEnabled(spriteEffect);
+            spriteBatch.Draw(
+                texture: Texture,
+                position: transform.Position,
+                sourceRectangle: null, // draw whole texture; can be used for spritesheets
+                color: Color.White,
+                rotation: transform.Rotation,
+                origin: Origin,
+                scale: transform.Scale,
+                effects: SpriteEffects.None,
+                layerDepth: 0);
+            DisableEffect(spriteEffect);
+        }
+
+        private static void DisableEffect(SpriteEffect spriteEffect)
+        {
+            if (IsEnabled(spriteEffect))
+                spriteEffect.ResetPass();
+        }
+
+        private static void ApplyEffectIfEnabled(SpriteEffect spriteEffect)
+        {
+            if (IsEnabled(spriteEffect) && !string.IsNullOrEmpty(spriteEffect.AppliedPass))
+                spriteEffect.Effect.CurrentTechnique.Passes[spriteEffect.AppliedPass].Apply();
+        }
     }
 }

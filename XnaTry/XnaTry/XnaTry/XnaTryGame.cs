@@ -207,7 +207,6 @@ namespace XnaTry
             resourceManager.SetContentManager(Content);
             resourceManager.LoadContent();
             clientGameManager.RegisterDrawingSystem(new AnimationSystem());
-            clientGameManager.RegisterDrawingSystem(new RendererSystem(spriteBatch, clientGameManager.Camera));
             clientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, clientGameManager.Camera));
             clientGameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
 
