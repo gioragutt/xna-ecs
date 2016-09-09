@@ -11,12 +11,14 @@ namespace XnaClientLib.ECS.Systems
     {
         public SpriteBatch SpriteBatch { get; }
         public Camera Camera { get; }
+        public Viewport DefaultViewport { get; }
 
         public GuiComponentsSystem(SpriteBatch spriteBatch, Camera camera, bool enabled = true) 
             : base(enabled)
         {
             SpriteBatch = spriteBatch;
             Camera = camera;
+            DefaultViewport = SpriteBatch.GraphicsDevice.Viewport;
         }
 
         public override void Update(IList<IComponentContainer> entities, long delta)
@@ -25,11 +27,23 @@ namespace XnaClientLib.ECS.Systems
             allGuiComponents.Sort((first, second) => first.DrawOrder.CompareTo(second.DrawOrder));
             foreach (var guiComponent in allGuiComponents)
             {
+                SetViewport(guiComponent);
                 SpriteBatchBegin(guiComponent);
                 guiComponent.Update(guiComponent.Container);
                 guiComponent.Draw(SpriteBatch);
                 SpriteBatch.End();
             }
+            ResetViewport();
+        }
+
+        private void ResetViewport()
+        {
+            SpriteBatch.GraphicsDevice.Viewport = DefaultViewport;
+        }
+
+        private void SetViewport(GuiComponent guiComponent)
+        {
+            SpriteBatch.GraphicsDevice.Viewport = guiComponent.Viewport ?? DefaultViewport;
         }
 
         private void SpriteBatchBegin(GuiComponent guiComponent)

@@ -188,10 +188,24 @@ namespace XnaTry
             IsMouseVisible = true;
             InitializeGameSettings(1024, 768);
 
+            clientGameManager.Camera.Bounds = map.Components.Get<GameMap>().Bounds;
+            SetDefualtAndHudViewports();
 
+            clientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, clientGameManager.Camera));
             clientGameManager.RegisterSystem(new LinkerSystem());
-            //clientGameManager.RegisterSystem(new InterpolationSystem());
             clientGameManager.RegisterSystem(new LifespanSystem());
+        }
+
+        private void SetDefualtAndHudViewports()
+        {
+            var minimap = map.Components.Get<GameMinimap>();
+            var minimapHeight = (int) minimap.MinimapSize.Y;
+            var vpBounds = new Rectangle(0, 0, Graphics.GraphicsDevice.Viewport.Width,
+                Graphics.GraphicsDevice.Viewport.Height - minimapHeight);
+            var vp = new Viewport(vpBounds);
+            var lowerHudViewport = new Viewport(0, vp.Height, vp.Width, minimapHeight);
+            Graphics.GraphicsDevice.Viewport = vp;
+            minimap.Viewport = lowerHudViewport;
         }
 
         /// <summary>
@@ -208,10 +222,6 @@ namespace XnaTry
             resourceManager.LoadContent();
             clientGameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
             clientGameManager.RegisterDrawingSystem(new AnimationSystem());
-            clientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, clientGameManager.Camera));
-
-
-            clientGameManager.Camera.Bounds = map.Components.Get<GameMap>().Bounds;
         }
 
         /// <summary>
@@ -302,7 +312,8 @@ namespace XnaTry
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            var background = new Color(96, 88, 88);
+            GraphicsDevice.Clear(background);
             clientGameManager.Draw(gameTime);
             base.Draw(gameTime);
         }

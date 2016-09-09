@@ -18,6 +18,12 @@ namespace XnaClientLib.ECS.Compnents
 
         #endregion
 
+        #region Properties
+
+        public Vector2 MinimapSize => new Vector2(map.MapWidth, map.MapHeight) * Constants.GUI.MinimapSize;
+
+        #endregion Properties
+
         #region Constructor
 
         public GameMinimap(GameMap gameMap, string mapFontAsset, ClientGameManager gameManager)
@@ -43,8 +49,7 @@ namespace XnaClientLib.ECS.Compnents
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var minimapSize = new Vector2(map.MapWidth, map.MapHeight) * Constants.GUI.MinimapSize;
-            var minimapPosition = MinimapPosition(spriteBatch.GraphicsDevice.Viewport, minimapSize);
+            var minimapPosition = MinimapPosition(spriteBatch.GraphicsDevice.Viewport, MinimapSize);
             DrawMap(spriteBatch, Constants.GUI.MinimapSize, minimapPosition);
             DrawPlayersPosition(spriteBatch, Constants.GUI.MinimapSize, minimapPosition);
         }

@@ -9,7 +9,7 @@
             public const int DebugPrintInitialY = 10;
             public const int DebugPrintSpacing = 0;
 
-            public const int MinimapRatio = 9;
+            public const int MinimapRatio = 10;
             public const float MinimapSize = MinimapRatio / 100f;
 
             public static class DrawOrder

@@ -12,5 +12,6 @@ namespace XnaClientLib.ECS.Compnents
         public abstract void LoadContent(ContentManager content);
         public abstract int DrawOrder { get; }
         public abstract bool IsHud { get; }
+        public Viewport? Viewport { get; set; } = null;
     }
 }
