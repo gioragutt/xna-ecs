@@ -8,7 +8,8 @@ namespace XnaTry
         /// </summary>
         static void Main(string[] args)
         {
-            using (var game = new XnaTryGame(args))
+            var arguments = new ConnectionArguments(args);
+            using (var game = new XnaTryGame(arguments))
             {
                 game.Run();
             }

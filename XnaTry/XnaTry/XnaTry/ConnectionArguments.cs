@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace XnaTry
 {
@@ -11,6 +13,12 @@ namespace XnaTry
 
         public ConnectionArguments(IList<string> args)
         {
+            if (args.Count < 2)
+            {
+                MessageBox.Show("Please run the game through the launcher", "Don't be a dick :)", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Process.GetCurrentProcess().Kill();
+            }
+
             Name = "giorag";
             Hostname = "localhost";
             TeamName = Convert.ToBoolean(new Random().Next(0, 2)) ? "Good" : "Bad";

@@ -62,7 +62,7 @@ namespace XnaTry
             IsMouseVisible = true;
         }
 
-        public XnaTryGame(IList<string> args)
+        public XnaTryGame(ConnectionArguments connectionArgs)
         {
             Teams = new Dictionary<string, TeamData>
             {
@@ -81,7 +81,6 @@ namespace XnaTry
             currentKeyboardState = Keyboard.GetState();
             previousKeyboardState = currentKeyboardState;
 
-            var connectionArgs = new ConnectionArguments(args);
             connectionHandler = new ConnectionHandler(connectionArgs.Hostname, 27015, clientGameManager);
             ConnectToServer(connectionArgs.Name, connectionArgs.TeamName);
 
