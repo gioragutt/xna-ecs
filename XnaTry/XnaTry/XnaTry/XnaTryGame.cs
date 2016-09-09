@@ -32,7 +32,7 @@ namespace XnaTry
         private readonly ClientGameManager clientGameManager;
         private readonly ResourcesManager resourceManager;
         private readonly ConnectionHandler connectionHandler;
-        private readonly GameObject map;
+        private readonly GraphicalUserInterface gui;
 
         private KeyboardState previousKeyboardState;
         private KeyboardState currentKeyboardState;
@@ -84,26 +84,17 @@ namespace XnaTry
             var connectionArgs = new ConnectionArguments(args);
             connectionHandler = new ConnectionHandler(connectionArgs.Hostname, 27015, clientGameManager);
             ConnectToServer(connectionArgs.Name, connectionArgs.TeamName);
-            AddPingPrint();
 
-            map = clientGameManager.CreateGameObject();
-            var gameMap = new GameMap("xna_try_map1.tmx");
-            map.Components.Add(resourceManager.Register(gameMap));
-            map.Components.Add(resourceManager.Register(new GameMinimap(gameMap, Constants.Assets.PlayerNameFont,clientGameManager)));
+            gui = new GraphicalUserInterface(clientGameManager, "xna_try_map1.tmx", GetPing);
         }
 
         #region Ping
 
-        private string GetPintPrint()
+        private string GetPing()
         {
             return connectionHandler.IsDisposed
                 ? "Server disconnected"
                 : string.Format("{0} ms", Math.Ceiling(connectionHandler.LastPing.TotalMilliseconds));
-        }
-
-        private void AddPingPrint()
-        {
-            clientGameManager.CreateDebugPrint(GetPintPrint, Color.LightGreen);
         }
 
         #endregion
@@ -188,24 +179,12 @@ namespace XnaTry
             IsMouseVisible = true;
             InitializeGameSettings(1024, 768);
 
-            clientGameManager.Camera.Bounds = map.Components.Get<GameMap>().Bounds;
-            SetDefualtAndHudViewports();
+            gui.Initialize(Graphics.GraphicsDevice);
+            clientGameManager.Camera.Bounds = gui.Map.Bounds;
 
             clientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, clientGameManager.Camera));
             clientGameManager.RegisterSystem(new LinkerSystem());
             clientGameManager.RegisterSystem(new LifespanSystem());
-        }
-
-        private void SetDefualtAndHudViewports()
-        {
-            var minimap = map.Components.Get<GameMinimap>();
-            var minimapHeight = (int) minimap.MinimapSize.Y;
-            var vpBounds = new Rectangle(0, 0, Graphics.GraphicsDevice.Viewport.Width,
-                Graphics.GraphicsDevice.Viewport.Height - minimapHeight);
-            var vp = new Viewport(vpBounds);
-            var lowerHudViewport = new Viewport(0, vp.Height, vp.Width, minimapHeight);
-            Graphics.GraphicsDevice.Viewport = vp;
-            minimap.Viewport = lowerHudViewport;
         }
 
         /// <summary>

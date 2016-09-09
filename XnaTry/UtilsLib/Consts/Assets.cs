@@ -6,6 +6,7 @@
         {
             public const string PlayerHealthBar = "Player/GUI/HealthBar";
             public const string PlayerNameFont = "Player/Fonts/NameFont";
+            public const string DefaultFont = "DefaultFont";
         }
     }
 }

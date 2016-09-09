@@ -89,6 +89,7 @@
     <Compile Include="ECS\Systems\GuiComponentsSystem.cs" />
     <Compile Include="ECS\Systems\InterpolationSystem.cs" />
     <Compile Include="ECS\Systems\LinkerSystem.cs" />
+    <Compile Include="GraphicalUserInterface.cs" />
     <Compile Include="IContentRequester.cs" />
     <Compile Include="IResourcesManager.cs" />
     <Compile Include="ECS\Compnents\GameMap.cs" />
