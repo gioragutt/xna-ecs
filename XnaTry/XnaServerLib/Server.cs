@@ -158,25 +158,25 @@ namespace XnaServerLib
             {
                 try
                 {
-                    var acceptedConnection = ConnectionListener.AcceptTcpClient();
-                    Console.WriteLine("{0} Accepted new connection", DateTime.Now.TimeOfDay);
-                    var newGameClient = new GameClient(acceptedConnection, GameManager.CreateGameObject(), GameManager);
-                    var attr = newGameClient.GameObject.Components.Get<PlayerAttributes>();
-                    Console.WriteLine("{2} - {0} Connected to {1}", attr.Name, attr.Team.Name, acceptedConnection.Client.RemoteEndPoint);
-                    GameClients.Add(newGameClient);
-                    Broadcast(
-                        MessageBuilder.Create(Constants.Messages.ClientAcceptedOnServer)
-                            .Add(Constants.Fields.PlayerName, attr.Name)
-                            .Add(Constants.Fields.TeamName, attr.Team.Name)
-                            .Get());
+                        var acceptedConnection = ConnectionListener.AcceptTcpClient();
+                        Console.WriteLine("{0} Accepted new connection", DateTime.Now.TimeOfDay);
+                        var newGameClient = new GameClient(acceptedConnection, GameManager.CreateGameObject(), GameManager);
+                        var attr = newGameClient.GameObject.Components.Get<PlayerAttributes>();
+                        Console.WriteLine("{2} - {0} Connected to {1}", attr.Name, attr.Team.Name, acceptedConnection.Client.RemoteEndPoint);
+                        GameClients.Add(newGameClient);
+                        Broadcast(
+                            MessageBuilder.Create(Constants.Messages.ClientAcceptedOnServer)
+                                .Add(Constants.Fields.PlayerName, attr.Name)
+                                .Add(Constants.Fields.TeamName, attr.Team.Name)
+                                .Get());
                 }
                 catch (SocketException se)
                 {
-                    throw new ConnectionEstablishmentErrorException("Encountered a network error while trying to accept a new client", se);
+                    Console.WriteLine(new ConnectionEstablishmentErrorException("Encountered a network error while trying to accept a new client", se));
                 }
                 catch (Exception ex)
                 {
-                    throw new ConnectionEstablishmentErrorException("Encountered an error while trying to accept a new client", ex);
+                    Console.WriteLine(new ConnectionEstablishmentErrorException("Encountered an error while trying to accept a new client", ex));
                 }
             }
         }

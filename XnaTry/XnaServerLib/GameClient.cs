@@ -113,7 +113,7 @@ namespace XnaServerLib
             catch (Exception)
             {
                 Dispose();
-                return;
+                throw;
             }
 
             PacketProtocol = new PacketProtocol(0)
