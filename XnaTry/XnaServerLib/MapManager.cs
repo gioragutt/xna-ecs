@@ -68,7 +68,18 @@ namespace XnaServerLib
         /// <remarks>The spawning area's team is decided by the object's "Team" property in the tmx map</remarks>
         private void AddTeamSpawningAreas(IEnumerable<TmxObject> spawningAreas, string teamName)
         {
-            teamRespawnAreas[teamName] = spawningAreas.Where(a => a.Name.StartsWith(teamName)).Select(GetSpawningArea).ToList();
+            teamRespawnAreas[teamName] = spawningAreas.Where(a => IsSpawningAreaForTeam(a, teamName)).Select(ParseSpawningArea).ToList();
+        }
+
+        /// <summary>
+        /// Checks if the tmx object is a spawning are representing a given team
+        /// </summary>
+        /// <param name="obj">The checked tmx object</param>
+        /// <param name="team">name of the team</param>
+        /// <returns></returns>
+        private static bool IsSpawningAreaForTeam(TmxObject obj, string team)
+        {
+            return obj.Properties["Team"] == team;
         }
 
         /// <summary>
