@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using SharedGameData;
 using UtilsLib;
 using UtilsLib.Consts;
 using UtilsLib.Utility;
@@ -206,22 +207,26 @@ namespace XnaServerLib
             Writer.Write(JsonConvert.SerializeObject(responseMessage));
         }
 
+        private string RandomTeam()
+        {
+            var rnd = new Random();
+            var values = TeamsData.Teams.Keys;
+            return values.ToList()[rnd.Next(0, values.Count)];
+        }
+
         private void ReadClientLoginDataAndInitializePlayer()
         {
             LastUpdateTime = DateTime.Now;
             var serializedMessage = Reader.ReadString();
             var loginMessage = JsonConvert.DeserializeObject<ClientLoginMessage>(serializedMessage);
-
+            var teamName = TeamsData.Teams.ContainsKey(loginMessage.PlayerTeam) ? loginMessage.PlayerTeam : RandomTeam();
             GameObject.Transform.Scale = 0.4f;
             GameObject.Transform.Position = GameManager.Server.MapManager.GetRandomSpawnPosition(loginMessage.PlayerTeam);
 
             GameObject.Components.Add(new PlayerAttributes
             {
                 Name = GameManager.GetAvailablePlayerName(loginMessage.PlayerName),
-                Team = new TeamData
-                {
-                    Name = loginMessage.PlayerTeam
-                },
+                Team = TeamsData.Teams[teamName],
                 MaxHealth = 100,
                 Health = 50
             });

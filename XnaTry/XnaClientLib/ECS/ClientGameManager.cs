@@ -25,10 +25,15 @@ namespace XnaClientLib.ECS
         #region Properties and Variables
 
         private readonly SystemManager drawingSystems;
-        public ResourcesManager ResourceManager { get; }
-        public Dictionary<string, TeamData> Teams { get; set; }
+        private readonly Dictionary<string, TeamData> teams;
+
+        #endregion
+
+        #region Properties
+
         public Camera Camera { get; }
-        public GameObject LocalPlayer { get; set; }
+        public GameObject LocalPlayer { get; private set; }
+        public ResourcesManager ResourceManager { get; }
 
         #endregion
 
@@ -38,9 +43,11 @@ namespace XnaClientLib.ECS
         /// Initialize a new ClientGameManager
         /// </summary>
         /// <param name="resourceManager">The games ResouceManager</param>
-        public ClientGameManager(ResourcesManager resourceManager)
+        /// <param name="teamsData">Data about all teams</param>
+        public ClientGameManager(ResourcesManager resourceManager, Dictionary<string, TeamData> teamsData)
         {
             ResourceManager = resourceManager;
+            teams = teamsData;
             drawingSystems = new SystemManager(EntityPool);
             Camera = new Camera();
 
@@ -279,7 +286,7 @@ namespace XnaClientLib.ECS
         /// <param name="components">The component container to add the component to</param>
         private void AddStatusBar(IComponentContainer components)
         {
-            components.Get<PlayerAttributes>().Team = Teams[components.Get<PlayerAttributes>().Team.Name];
+            components.Get<PlayerAttributes>().Team = teams[components.Get<PlayerAttributes>().Team.Name];
             components.Add(ResourceManager.Register(new PlayerStatusBar(components, Constants.Assets.PlayerHealthBar, Constants.Assets.PlayerNameFont)));
         }
 

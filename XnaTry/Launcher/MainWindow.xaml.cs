@@ -1,9 +1,12 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using SharedGameData;
+using XnaCommonLib;
 using Application = System.Windows.Forms.Application;
 
 namespace Launcher
@@ -11,33 +14,48 @@ namespace Launcher
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
+        #region Registry Names
+
         private const string IpRegistry = "IP";
         private const string NameRegistry = "Name";
+        private const string TeamRegistry = "Team";
+
+        #endregion
+
+        #region Login Data
+
         public string IpAddress { get; set; }
         public string PlayerName { get; set; }
+        public string PlayerTeam { get; set; }
 
+        #endregion
+
+        public Dictionary<string, TeamData> Teams { get; }
         public MainWindow()
         {
             InitializeComponent();
+            Teams = TeamsData.Teams;
+            DataContext = this;
 
             var appData = Application.UserAppDataRegistry;
-
             object nameRegistry = null;
             object ipRegistry = null;
+            object teamRegistry = null;
 
             if (appData != null)
             {
                 nameRegistry = appData.GetValue(NameRegistry);
                 ipRegistry = appData.GetValue(IpRegistry);
+                teamRegistry = appData.GetValue(TeamRegistry);
             }
 
             PlayerName = nameRegistry?.ToString() ?? "Player Name";
             IpAddress = ipRegistry?.ToString() ?? "localhost";
+            PlayerTeam = teamRegistry?.ToString() ?? Teams.Keys.First();
 
-            NameBox.Text = PlayerName;
-            AddressBox.Text = IpAddress;
+            ResetInput();
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -57,7 +75,7 @@ namespace Launcher
             var ipInserted = !string.IsNullOrEmpty(AddressBox.Text.Trim());
             IPAddress dummy;
             var isIpLegit = ipInserted && (IPAddress.TryParse(AddressBox.Text, out dummy) || AddressBox.Text.Trim().Equals("localhost"));
-            var teamSelected = (GoodTeamRadioButton.IsChecked ?? false) || (BadTeamRadioButton.IsChecked ?? false);
+            var teamSelected = TeamsDropdown.SelectedIndex != -1;
             var error = new StringBuilder();
             if (!nameInserted)
                 error.AppendLine("A name must be entered");
@@ -71,8 +89,14 @@ namespace Launcher
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
+            ResetInput();
+        }
+
+        private void ResetInput()
+        {
             NameBox.Text = PlayerName;
             AddressBox.Text = IpAddress;
+            TeamsDropdown.SelectedIndex = Teams.Keys.ToList().IndexOf(PlayerTeam);
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
@@ -84,11 +108,7 @@ namespace Launcher
                 return;
             }
 
-            var teamName = string.Empty;
-            if (GoodTeamRadioButton.IsChecked ?? false)
-                teamName = "Good";
-            else if (BadTeamRadioButton.IsChecked ?? false)
-                teamName = "Bad";
+            var teamName = ((KeyValuePair<string, TeamData>) TeamsDropdown.SelectedItem).Value.Name;
 
             PlayerName = NameBox.Text.Trim();
             IpAddress = AddressBox.Text.Trim();
@@ -112,6 +132,7 @@ namespace Launcher
             {
                 appData.SetValue(NameRegistry, PlayerName);
                 appData.SetValue(IpRegistry, IpAddress);
+                appData.SetValue(TeamRegistry, teamName);
             }
 
             // Starting game process

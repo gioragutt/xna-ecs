@@ -20,12 +20,23 @@ namespace XnaClientLib.ECS.Compnents
 
         #region Properties
 
+        /// <summary>
+        /// The color of the team
+        /// </summary>
         public Color Color { get; set; }
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of Lable
+        /// </summary>
+        /// <param name="textFunc">A getter for the text of the label</param>
+        /// <param name="color">The color of the label</param>
+        /// <param name="fontAssetName">The asset of the font of the label</param>
+        /// <param name="labelPosition">The position of the label</param>
+        /// <exception cref="System.ArgumentNullException">fontAssetName is null or empty</exception>
         public Label(Func<string> textFunc, Color color, string fontAssetName, Vector2 labelPosition)
         {
             Utils.AssertStringArgumentNotNull(fontAssetName, "fontAssetName");

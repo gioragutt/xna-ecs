@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FF330F45-8687-4BC8-8BEA-DD590528ED50}</ProjectGuid>
+    <ProjectGuid>{4016D7D9-C694-454D-9F2A-C74C92F6C445}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XnaServerLib</RootNamespace>
-    <AssemblyName>XnaServerLib</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>SharedGameData</RootNamespace>
+    <AssemblyName>SharedGameData</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,49 +31,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\XnaTryLib\bin\x86\Debug\Microsoft.Xna.Framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="TiledSharp, Version=0.15.5889.20321, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\TiledSharp.0.15\lib\TiledSharp.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ECS\ServerGameManager.cs" />
-    <Compile Include="ECS\Systems\MovementSystem.cs" />
-    <Compile Include="GameClient.cs" />
-    <Compile Include="MapManager.cs" />
-    <Compile Include="Server.cs" />
+    <Compile Include="TeamsData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpawningArea.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ECS\ECS.csproj">
-      <Project>{CEB4ACAA-E8E2-477D-BD7E-07EBF4FCA9D0}</Project>
-      <Name>ECS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EMS\EMS.csproj">
-      <Project>{9dd1b6d5-18d4-4ff1-86ca-c382ecd42fe4}</Project>
-      <Name>EMS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SharedGameData\SharedGameData.csproj">
-      <Project>{4016d7d9-c694-454d-9f2a-c74c92f6c445}</Project>
-      <Name>SharedGameData</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\UtilsLib\UtilsLib.csproj">
-      <Project>{fe20fb76-e79d-46f5-97dd-fc4d8f83fc05}</Project>
-      <Name>UtilsLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\XnaTryLib\XnaCommonLib.csproj">
       <Project>{0c3b9106-ee61-42ea-9593-2c45f8b8100b}</Project>
       <Name>XnaCommonLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

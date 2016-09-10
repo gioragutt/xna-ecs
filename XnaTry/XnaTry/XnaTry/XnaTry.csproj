@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{B6312F93-BF2F-4347-A87C-F48CEE57C708}</ProjectGuid>
@@ -91,6 +91,10 @@
     <ProjectReference Include="..\..\EMS\EMS.csproj">
       <Project>{9dd1b6d5-18d4-4ff1-86ca-c382ecd42fe4}</Project>
       <Name>EMS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SharedGameData\SharedGameData.csproj">
+      <Project>{4016d7d9-c694-454d-9f2a-c74c92f6c445}</Project>
+      <Name>SharedGameData</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UtilsLib\UtilsLib.csproj">
       <Project>{fe20fb76-e79d-46f5-97dd-fc4d8f83fc05}</Project>

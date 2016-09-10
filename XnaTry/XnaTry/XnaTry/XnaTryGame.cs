@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Windows.Forms;
+using SharedGameData;
 using UtilsLib;
 using UtilsLib.Consts;
 using UtilsLib.Exceptions.Server;
@@ -26,57 +28,41 @@ namespace XnaTry
     /// </summary>
     public class XnaTryGame : Game
     {
-        public GraphicsDeviceManager Graphics { get; }
-        SpriteBatch spriteBatch;
+        #region Fields
+
+        #region Xna
+
+        private readonly GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+
+        #endregion
+
+        #region Game
 
         private readonly ClientGameManager clientGameManager;
         private readonly ResourcesManager resourceManager;
         private readonly ConnectionHandler connectionHandler;
         private readonly GraphicalUserInterface gui;
 
+        #endregion
+
+        #region User Input
+
         private KeyboardState previousKeyboardState;
         private KeyboardState currentKeyboardState;
 
-        public TeamData goodTeam = new TeamData
-        {
-            Color = Color.Blue,
-            Name = "Good",
-            Frame = "Player/GUI/GreenTeam"
-        };
+        #endregion
 
-        public TeamData badTeam = new TeamData
-        {
-            Color = Color.Red,
-            Name = "Bad",
-            Frame = "Player/GUI/RedTeam"
-        };
+        #endregion
 
-
-        public Dictionary<string, TeamData> Teams { get; }
-
-        public void InitializeGameSettings(int width, int height)
-        {
-            Graphics.PreferredBackBufferHeight = height;
-            Graphics.PreferredBackBufferWidth = width;
-            Graphics.ApplyChanges();
-            IsMouseVisible = true;
-        }
+        #region Constructor
 
         public XnaTryGame(ConnectionArguments connectionArgs)
         {
-            Teams = new Dictionary<string, TeamData>
-            {
-                [goodTeam.Name] = goodTeam,
-                [badTeam.Name] = badTeam
-            };
-
-            Graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             resourceManager = new ResourcesManager();
-            clientGameManager = new ClientGameManager(resourceManager)
-            {
-                Teams = Teams
-            };
+            clientGameManager = new ClientGameManager(resourceManager, TeamsData.Teams);
 
             currentKeyboardState = Keyboard.GetState();
             previousKeyboardState = currentKeyboardState;
@@ -84,16 +70,7 @@ namespace XnaTry
             connectionHandler = new ConnectionHandler(connectionArgs.Hostname, 27015, clientGameManager);
             ConnectToServer(connectionArgs.Name, connectionArgs.TeamName);
 
-            gui = new GraphicalUserInterface(clientGameManager, "xna_try_map1.tmx", GetPing);
-        }
-
-        #region Ping
-
-        private string GetPing()
-        {
-            return connectionHandler.IsDisposed
-                ? "Server disconnected"
-                : string.Format("{0} ms", Math.Ceiling(connectionHandler.LastPing.TotalMilliseconds));
+            gui = new GraphicalUserInterface(clientGameManager, "xna_try_map1.tmx", connectionHandler.GetPing);
         }
 
         #endregion
@@ -105,6 +82,8 @@ namespace XnaTry
         public readonly KeyboardLayoutOptions numpadArrowKeys = new KeyboardLayoutOptions(Keys.NumPad4, Keys.NumPad6, Keys.NumPad8, Keys.NumPad2);
 
         #endregion
+
+        #region Dummy Players
 
         GameObject CreatePlayer(DirectionalInput input, Vector2 initialPosition, TeamData team, string name = null, float health = 50)
         {
@@ -159,8 +138,7 @@ namespace XnaTry
         void CreateStupidAiPlayer()
         {
             var rnd = new Random();
-            var isGoodTeam = Convert.ToBoolean(rnd.Next(0, 2));
-            var team = isGoodTeam ? goodTeam : badTeam;
+            var team = TeamsData.Teams.Values.ToList()[rnd.Next(0, TeamsData.Teams.Count)];
 
             var initialX = rnd.Next(100, 700);
             var initialY = rnd.Next(100, 400);
@@ -172,13 +150,20 @@ namespace XnaTry
             aiPlayer.Destroy(5000);
         }
 
+        #endregion
+
+        #region Game Methods
+
+        /// <summary>
+        /// Initialize will be called once per game and is the place to initialize you settings
+        /// </summary>
         protected override void Initialize()
         {
             base.Initialize();
             IsMouseVisible = true;
             InitializeGameSettings(1024, 768);
 
-            gui.Initialize(Graphics.GraphicsDevice);
+            gui.Initialize(graphics.GraphicsDevice);
             clientGameManager.Camera.Bounds = gui.Map.Bounds;
 
             clientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, clientGameManager.Camera));
@@ -251,30 +236,6 @@ namespace XnaTry
             base.Update(gameTime);
         }
 
-        private void ConnectToServer(string name, string team)
-        {
-            try
-            {
-                connectionHandler.ConnectAndInitializeLocalPlayer(name, team);
-            }
-            catch (Exception x)
-            {
-                if (ShowConnectionFailedError(x) == DialogResult.Yes)
-                    throw new ConnectionEstablishmentErrorException("Failed to connect the server", x);
-                Exit();
-            }
-        }
-
-        private DialogResult ShowConnectionFailedError(Exception x)
-        {
-            return MessageBox.Show(
-                string.Format("Failed to connect the server {0}:{1}{2}{3}{2}Throw exception for debug?", connectionHandler.HostName, connectionHandler.Port, Environment.NewLine, x), 
-                "Connection failed",
-                MessageBoxButtons.YesNo, 
-                MessageBoxIcon.Error,
-                MessageBoxDefaultButton.Button2);
-        }
-
         /// <summary>
         /// Close TCP Connection when game ends
         /// </summary>
@@ -295,5 +256,58 @@ namespace XnaTry
             clientGameManager.Draw(gameTime);
             base.Draw(gameTime);
         }
+
+        #endregion
+
+        #region Helper Methods
+
+        /// <summary>
+        /// Try to connect to the server, showing message box specifing the error if the connection fails
+        /// </summary>
+        /// <param name="name">Name of the player</param>
+        /// <param name="team">Team of the player</param>
+        private void ConnectToServer(string name, string team)
+        {
+            try
+            {
+                connectionHandler.ConnectAndInitializeLocalPlayer(name, team);
+            }
+            catch (Exception x)
+            {
+                if (ShowConnectionFailedError(x) == DialogResult.Yes)
+                    throw new ConnectionEstablishmentErrorException("Failed to connect the server", x);
+                Exit();
+            }
+        }
+
+        /// <summary>
+        /// Shpws a connection failed error and returns the users response
+        /// </summary>
+        /// <param name="x">Connectino exception</param>
+        /// <returns>The users repsponse</returns>
+        private DialogResult ShowConnectionFailedError(Exception x)
+        {
+            return MessageBox.Show(
+                string.Format("Failed to connect the server {0}:{1}{2}{3}{2}Throw exception for debug?", connectionHandler.HostName, connectionHandler.Port, Environment.NewLine, x),
+                "Connection failed",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Error,
+                MessageBoxDefaultButton.Button2);
+        }
+
+        /// <summary>
+        /// Initializes game settings
+        /// </summary>
+        /// <param name="width">Width of game window</param>
+        /// <param name="height">Height of game window</param>
+        private void InitializeGameSettings(int width, int height)
+        {
+            graphics.PreferredBackBufferHeight = height;
+            graphics.PreferredBackBufferWidth = width;
+            graphics.ApplyChanges();
+            IsMouseVisible = true;
+        }
+
+        #endregion
     }
 }

@@ -122,6 +122,13 @@ namespace XnaClientLib
 
         #region API
 
+        public string GetPing()
+        {
+            return IsDisposed
+                ? "Server disconnected"
+                : string.Format("{0} ms", Math.Ceiling(LastPing.TotalMilliseconds));
+        }
+
         public void ConnectAndInitializeLocalPlayer(string name, string team)
         {
             if (Connection != null && Connection.Connected)
