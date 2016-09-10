@@ -12,7 +12,6 @@ using SharedGameData;
 using UtilsLib;
 using UtilsLib.Consts;
 using UtilsLib.Utility;
-using XnaCommonLib;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
 using XnaCommonLib.Network;
@@ -154,7 +153,7 @@ namespace XnaServerLib
             Broadcast(
                 MessageBuilder.Create(Constants.Messages.ClientDisconnected)
                     .Add(Constants.Fields.PlayerGuid, GameObject.Entity.Id)
-                    .Add(Constants.Fields.PlayerName, GameObject.Components.Get<PlayerAttributes>().Name)
+                    .Add(Constants.Fields.PlayerName, playerName)
                     .Get());
 
             GameManager.DisposeOfClient(this);
@@ -207,7 +206,7 @@ namespace XnaServerLib
             Writer.Write(JsonConvert.SerializeObject(responseMessage));
         }
 
-        private string RandomTeam()
+        private static string RandomTeam()
         {
             var rnd = new Random();
             var values = TeamsData.Teams.Keys;
@@ -220,8 +219,9 @@ namespace XnaServerLib
             var serializedMessage = Reader.ReadString();
             var loginMessage = JsonConvert.DeserializeObject<ClientLoginMessage>(serializedMessage);
             var teamName = TeamsData.Teams.ContainsKey(loginMessage.PlayerTeam) ? loginMessage.PlayerTeam : RandomTeam();
+
             GameObject.Transform.Scale = 0.4f;
-            GameObject.Transform.Position = GameManager.Server.MapManager.GetRandomSpawnPosition(loginMessage.PlayerTeam);
+            GameObject.Transform.Position = GameManager.Server.MapManager.GetRandomSpawnPosition(teamName);
 
             GameObject.Components.Add(new PlayerAttributes
             {
