@@ -98,10 +98,8 @@ namespace XnaClientLib.ECS.Compnents
 
         #endregion GuiComponent Methods
 
-        private static Rectangle CreateRectangleFromVector2(Vector2 position, Vector2 size)
-        {
-            return new Rectangle((int) position.X, (int) position.Y, (int) size.X, (int) size.Y);
-        }
+
+        #region Helper Methods
 
         private void DrawName(SpriteBatch spriteBatch, Vector2 framePosition)
         {
@@ -120,6 +118,7 @@ namespace XnaClientLib.ECS.Compnents
                 textPosition = new Vector2(topCenter.X - nameTextSize.X / 2, topCenter.Y - nameTextSize.Y);
             }
 
+            spriteBatch.DrawString(nameFont, upperCaseName, textPosition + new Vector2(0.5f), Color.White);
             spriteBatch.DrawString(nameFont, upperCaseName, textPosition, Attributes.Team.Color);
         }
 
@@ -154,5 +153,12 @@ namespace XnaClientLib.ECS.Compnents
         {
             return transform.Position - sprite.Origin * transform.Scale;
         }
+
+        private static Rectangle CreateRectangleFromVector2(Vector2 position, Vector2 size)
+        {
+            return new Rectangle((int) position.X, (int) position.Y, (int) size.X, (int) size.Y);
+        }
+        
+        #endregion
     }
 }
