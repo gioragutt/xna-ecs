@@ -12,6 +12,7 @@ namespace XnaClientLib
         public GameMap Map { get; }
         private readonly GameMinimap minimap;
         private readonly Label pingLabel;
+        private readonly TimedMessagesBox messagesBox;
 
         public GraphicalUserInterface(ClientGameManager gameManager, string tmxMapName, Func<string> pingGetter)
         {
@@ -22,6 +23,12 @@ namespace XnaClientLib
             gameObject.Components.Add(gameManager.ResourceManager.Register(minimap));
             pingLabel = new Label(pingGetter, Color.LightGreen, Constants.Assets.DefaultFont, new Vector2(5, 5));
             gameObject.Components.Add(gameManager.ResourceManager.Register(pingLabel));
+            messagesBox = new TimedMessagesBox(Constants.Assets.DefaultFont)
+            {
+                Position = new Vector2(5, 25),
+                MaxTime = TimeSpan.FromSeconds(3)
+            };
+            gameObject.Components.Add(gameManager.ResourceManager.Register(messagesBox));
         }
 
         public void Initialize(GraphicsDevice graphicsDevice)
@@ -33,6 +40,7 @@ namespace XnaClientLib
             graphicsDevice.Viewport = upperViewport;
             minimap.Viewport = lowerViewport;
             pingLabel.Viewport = lowerViewport;
+            messagesBox.Viewport = lowerViewport;
         }
     }
 }

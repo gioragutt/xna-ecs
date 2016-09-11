@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework.Content;
 using UtilsLib.Utility;
-using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
-namespace XnaClientLib.ECS.Compnents
+namespace XnaClientLib.ECS.Compnents.GUI
 {
     public abstract class Animation : Component, IContentRequester
     {

@@ -43,7 +43,7 @@ namespace XnaClientLib.ECS.Compnents
             mapFont = content.Load<SpriteFont>(mapFontAsset);
         }
 
-        public override int DrawOrder => Constants.GUI.DrawOrder.Minimap;
+        public override int DrawOrder => Constants.GUI.DrawOrder.Hud;
 
         public override bool IsHud => true;
 

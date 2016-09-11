@@ -9,6 +9,7 @@
             public const string ClientDisconnected = "CLIENT-DISCONNECTED";
             public const string DamagePlayers = "DAMAGE-PLAYERS";
             public const string PlayerLogin = "PLAYER-LOGIN";
+            public const string AddMessageToBox = "ADD-MESSAGE-TO-BOX";
         }
     }
 }

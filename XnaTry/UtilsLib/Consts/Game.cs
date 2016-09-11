@@ -12,6 +12,9 @@ namespace UtilsLib.Consts
             public const float FullPositiveInput = 1;
             public const float FullNegativeInput = -1;
             public const float TileScale = 0.5f;
+
+            public const uint LoginMessageHeader = 0xdeadbeaf;
+            public const uint LoginMessageFooter = 0xbeafdead;
         }
     }
 }

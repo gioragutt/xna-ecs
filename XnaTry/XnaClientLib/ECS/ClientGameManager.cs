@@ -115,67 +115,7 @@ namespace XnaClientLib.ECS
         }
 
         #endregion
-
-        #region Debug Prints API
-
-        /// <summary>
-        /// Adds a debug print component with a reference to an object to print
-        /// </summary>
-        /// <param name="obj">GameObject to add component to</param>
-        /// <param name="value">object reference to print</param>
-        /// <param name="color">Color of test; defaults to Blue if color is null</param>
-        public void AppendDebugPrint(GameObject obj, object value, Color? color = null)
-        {
-            obj.Components.Add(new DebugPrintText
-            {
-                PrintValue = value,
-                Color = color ?? Color.Blue
-            });
-        }
-
-        /// <summary>
-        /// Adds a debug print component with a reference to an object to print
-        /// </summary>
-        /// <param name="obj">GameObject to add component to</param>
-        /// <param name="valueGetter">Function to get the string to print</param>
-        /// <param name="color">Color of test; defaults to Blue if color is null</param>
-        public void AppendDebugPrint(GameObject obj, Func<string> valueGetter, Color? color = null)
-        {
-            obj.Components.Add(new DebugPrintText
-            {
-                PrintFunc = valueGetter,
-                Color = color ?? Color.Blue
-            });
-        }
-
-        /// <summary>
-        /// Creates a new GameObject with a debug print attached to it, printing the references object
-        /// </summary>
-        /// <param name="value">object reference to print</param>
-        /// <param name="color">Color of test; defaults to Blue if color is null</param>
-        /// <returns>The newly created game object</returns>
-        public GameObject CreateDebugPrint(object value, Color? color = null)
-        {
-            var newGameObject = CreateGameObject();
-            AppendDebugPrint(newGameObject, value, color);
-            return newGameObject;
-        }
-
-        /// <summary>
-        /// Creates a new GameObject with a debug print attached to it, printing the string receives by the valueGetter
-        /// </summary>
-        /// <param name="valueGetter">Function to get the string to print</param>
-        /// <param name="color">Color of test; defaults to Blue if color is null</param>
-        /// <returns>The newly created game object</returns>
-        public GameObject CreateDebugPrint(Func<string> valueGetter, Color? color = null)
-        {
-            var newGameObject = CreateGameObject();
-            AppendDebugPrint(newGameObject, valueGetter, color);
-            return newGameObject;
-        }
-
-        #endregion
-
+        
         #region Game Loop API
 
         public void Update(GameTime gameTime, Viewport viewport)

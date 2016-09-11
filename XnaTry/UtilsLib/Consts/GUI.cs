@@ -16,7 +16,7 @@
             {
                 public const int Map = 0;
                 public const int Player = 1;
-                public const int Minimap = 2;
+                public const int Hud = 2;
             }
         }
     }

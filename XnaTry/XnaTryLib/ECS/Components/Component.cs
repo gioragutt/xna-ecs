@@ -1,9 +1,10 @@
 ﻿using ECS.Interfaces;
+using EMS;
 using Newtonsoft.Json;
 
 namespace XnaCommonLib.ECS.Components
 {
-    public abstract class Component : IComponent
+    public abstract class Component : EmsClient, IComponent
     {
         [JsonIgnore]
         public IComponentContainer Container { get; set; }

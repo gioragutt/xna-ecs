@@ -29,7 +29,7 @@ namespace XnaClientLib.ECS.Systems
             {
                 SetViewport(guiComponent);
                 SpriteBatchBegin(guiComponent);
-                guiComponent.Update(guiComponent.Container);
+                guiComponent.Update(TimeSpan.FromMilliseconds(delta));
                 guiComponent.Draw(SpriteBatch);
                 SpriteBatch.End();
             }

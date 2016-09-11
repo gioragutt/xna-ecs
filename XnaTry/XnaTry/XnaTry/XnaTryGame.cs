@@ -160,13 +160,16 @@ namespace XnaTry
         protected override void Initialize()
         {
             base.Initialize();
-            IsMouseVisible = true;
             InitializeGameSettings(1024, 768);
+
+            resourceManager.SetContentManager(Content);
+            resourceManager.LoadContent();
 
             gui.Initialize(graphics.GraphicsDevice);
             clientGameManager.Camera.Bounds = gui.Map.Bounds;
 
             clientGameManager.RegisterDrawingSystem(new GuiComponentsSystem(spriteBatch, clientGameManager.Camera));
+            clientGameManager.RegisterDrawingSystem(new AnimationSystem());
             clientGameManager.RegisterSystem(new LinkerSystem());
             clientGameManager.RegisterSystem(new LifespanSystem());
         }
@@ -177,14 +180,7 @@ namespace XnaTry
         protected override void LoadContent()
         {
             base.LoadContent();
-
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            var defaultFont = Content.Load<SpriteFont>("DefaultFont");
-
-            resourceManager.SetContentManager(Content);
-            resourceManager.LoadContent();
-            clientGameManager.RegisterDrawingSystem(new DebugPrintSystem(spriteBatch, defaultFont));
-            clientGameManager.RegisterDrawingSystem(new AnimationSystem());
         }
 
         /// <summary>

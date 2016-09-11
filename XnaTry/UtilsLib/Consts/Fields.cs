@@ -11,6 +11,7 @@
             public const string TeamName = "team_name";
             public const string BroadcastMessages = "broadcast_messages";
             public const string PlayerUpdates = "player_updates";
+            public const string Content = "content";
         }
     }
 }

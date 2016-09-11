@@ -117,7 +117,17 @@ namespace XnaServerLib
             if (player != null)
                 attrs = attrs.Where(c => c.Container.Parent.Id == player).ToList();
 
-            attrs.ForEach(a => a.Health -= damage);
+            attrs.ForEach(a =>
+            {
+                a.Health -= damage;
+                if (a.JustDied)
+                {
+                    Broadcast(
+                        MessageBuilder.Create(Constants.Messages.AddMessageToBox)
+                        .Add(Constants.Fields.Content, string.Format("{0} died!", a.Name))
+                        .Get());
+                }
+            });
         }
 
         #endregion Constructors

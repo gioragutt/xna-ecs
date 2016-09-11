@@ -1,3 +1,4 @@
+using System;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,7 +8,7 @@ namespace XnaClientLib.ECS.Compnents
 {
     public abstract class GuiComponent : Component, IContentRequester
     {
-        public virtual void Update(IComponentContainer entity) { }
+        public virtual void Update(TimeSpan delta) { }
         public abstract void Draw(SpriteBatch spriteBatch);
         public abstract void LoadContent(ContentManager content);
         public abstract int DrawOrder { get; }

@@ -1,5 +1,6 @@
 ﻿
 using Newtonsoft.Json;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace XnaCommonLib.ECS.Components
 {
@@ -25,13 +26,18 @@ namespace XnaCommonLib.ECS.Components
 
         public float MaxHealth { get; set; }
 
+        public TeamData Team { get; set; } = new TeamData();
+
+        #region Utility Properties
+
         [JsonIgnore]
         public float PreviousHealth { get; private set; }
 
-        public TeamData Team { get; set; } = new TeamData();
-
         [JsonIgnore]
         public bool IsDead => HealthPercentage == 0.0f;
+
+        [JsonIgnore]
+        public bool JustDied => IsDead && PreviousHealth != 0.0f;
 
         [JsonIgnore]
         public float HealthPercentage
@@ -43,6 +49,8 @@ namespace XnaCommonLib.ECS.Components
                 return Health / MaxHealth;
             }
         }
+
+        #endregion
 
         #endregion Properties
 
