@@ -217,7 +217,16 @@ namespace XnaServerLib
         {
             LastUpdateTime = DateTime.Now;
             var serializedMessage = Reader.ReadString();
+            if (serializedMessage.StartsWith("ET"))
+            {
+                Writer.Write("Server is OK!");
+                throw new Exception("Keep-Alive Request");
+            }
+
             var loginMessage = JsonConvert.DeserializeObject<ClientLoginMessage>(serializedMessage);
+
+            AssertHeaderAndFooter(loginMessage);
+
             var teamName = TeamsData.Teams.ContainsKey(loginMessage.PlayerTeam) ? loginMessage.PlayerTeam : RandomTeam();
 
             GameObject.Transform.Scale = 0.4f;
@@ -233,6 +242,17 @@ namespace XnaServerLib
 
             GameObject.Components.Add(new InputData());
             GameObject.Components.Add(new Velocity(new Vector2(500)));
+        }
+
+        private static void AssertHeaderAndFooter(ClientLoginMessage loginMessage)
+        {
+            if (loginMessage.MessageHeader != Constants.Game.LoginMessageHeader ||
+                loginMessage.MessageFooter != Constants.Game.LoginMessageFooter)
+            {
+                throw new InvalidDataException(string.Format("Invalid header({0} should be {1}) or footer({2} should be {3})",
+                    loginMessage.MessageHeader, Constants.Game.LoginMessageHeader, loginMessage.MessageFooter,
+                    Constants.Game.LoginMessageFooter));
+            }
         }
     }
 }

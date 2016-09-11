@@ -172,11 +172,11 @@ namespace XnaServerLib
                 }
                 catch (SocketException se)
                 {
-                    Console.WriteLine(new ConnectionEstablishmentErrorException("Encountered a network error while trying to accept a new client", se));
+                    Console.WriteLine("Encountered a network error while trying to accept a new client: " + se.Message);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(new ConnectionEstablishmentErrorException("Encountered an error while trying to accept a new client", ex));
+                    Console.WriteLine("Encountered an error while trying to accept a new client: " + ex.Message);
                 }
             }
         }

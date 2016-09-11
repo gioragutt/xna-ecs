@@ -177,8 +177,10 @@ namespace XnaClientLib
         {
             var loginMessage = new ClientLoginMessage
             {
+                MessageHeader = Constants.Game.LoginMessageHeader,
                 PlayerName = name,
-                PlayerTeam = team
+                PlayerTeam = team,
+                MessageFooter = Constants.Game.LoginMessageFooter,
             };
             var serializedMessage = JsonConvert.SerializeObject(loginMessage);
             Writer.Write(serializedMessage);
