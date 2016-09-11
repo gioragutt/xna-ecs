@@ -4,6 +4,7 @@ using System.Linq;
 using ECS.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using XnaClientLib.ECS.Compnents;
+using XnaClientLib.ECS.Compnents.GUI;
 
 namespace XnaClientLib.ECS.Systems
 {

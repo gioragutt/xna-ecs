@@ -12,6 +12,7 @@ using UtilsLib;
 using UtilsLib.Consts;
 using UtilsLib.Utility;
 using XnaClientLib.ECS.Compnents;
+using XnaClientLib.ECS.Compnents.GUI;
 using XnaClientLib.ECS.Compnents.Network;
 using XnaClientLib.ECS.Linkers;
 using XnaCommonLib;

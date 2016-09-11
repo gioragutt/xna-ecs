@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ECS.Interfaces;
 using XnaClientLib.ECS.Compnents;
+using XnaClientLib.ECS.Compnents.GUI;
 
 namespace XnaClientLib.ECS.Systems
 {

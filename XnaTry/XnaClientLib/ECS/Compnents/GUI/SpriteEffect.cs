@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using XnaCommonLib.ECS.Components;
 
-namespace XnaClientLib.ECS.Compnents
+namespace XnaClientLib.ECS.Compnents.GUI
 {
     public class SpriteEffect : Component, IContentRequester
     {

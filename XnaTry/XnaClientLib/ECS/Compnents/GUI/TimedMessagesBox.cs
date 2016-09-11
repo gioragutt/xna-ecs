@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -9,7 +8,7 @@ using Newtonsoft.Json.Linq;
 using UtilsLib;
 using UtilsLib.Consts;
 
-namespace XnaClientLib.ECS.Compnents
+namespace XnaClientLib.ECS.Compnents.GUI
 {
     public class TimedMessagesBoxItem
     {

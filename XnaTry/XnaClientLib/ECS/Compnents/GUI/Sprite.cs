@@ -5,7 +5,7 @@ using UtilsLib.Consts;
 using UtilsLib.Utility;
 using XnaCommonLib.ECS.Components;
 
-namespace XnaClientLib.ECS.Compnents
+namespace XnaClientLib.ECS.Compnents.GUI
 {
     /// <summary>
     /// The base sprite component of entities in the game

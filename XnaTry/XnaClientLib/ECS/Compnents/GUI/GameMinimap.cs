@@ -6,7 +6,7 @@ using UtilsLib.Consts;
 using UtilsLib.Utility;
 using XnaCommonLib.ECS.Components;
 
-namespace XnaClientLib.ECS.Compnents
+namespace XnaClientLib.ECS.Compnents.GUI
 {
     public class GameMinimap : GameMap
     {

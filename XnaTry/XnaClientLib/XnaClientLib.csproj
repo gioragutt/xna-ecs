@@ -64,23 +64,23 @@
     <Compile Include="Camera.cs" />
     <Compile Include="ConnectionHandler.cs" />
     <Compile Include="ECS\ClientGameManager.cs" />
-    <Compile Include="ECS\Compnents\Animation.cs" />
-    <Compile Include="ECS\Compnents\GameMinimap.cs" />
+    <Compile Include="ECS\Compnents\GUI\Animation.cs" />
+    <Compile Include="ECS\Compnents\GUI\GameMinimap.cs" />
     <Compile Include="ECS\Compnents\GamepadDirectionalInput.cs" />
-    <Compile Include="ECS\Compnents\GuiComponent.cs" />
+    <Compile Include="ECS\Compnents\GUI\GuiComponent.cs" />
     <Compile Include="ECS\Compnents\Interpolator.cs" />
     <Compile Include="ECS\Compnents\KeyboardDirectionalInput.cs" />
-    <Compile Include="ECS\Compnents\Label.cs" />
+    <Compile Include="ECS\Compnents\GUI\Label.cs" />
     <Compile Include="ECS\Compnents\Network\LocalPlayer.cs" />
     <Compile Include="ECS\Compnents\Network\NetworkPlayer.cs" />
     <Compile Include="ECS\Compnents\Network\RemotePlayer.cs" />
-    <Compile Include="ECS\Compnents\PlayerStatusBar.cs" />
+    <Compile Include="ECS\Compnents\GUI\PlayerStatusBar.cs" />
     <Compile Include="ECS\Compnents\RotateToMouse.cs" />
-    <Compile Include="ECS\Compnents\Sprite.cs" />
-    <Compile Include="ECS\Compnents\SpriteEffect.cs" />
-    <Compile Include="ECS\Compnents\StateAnimation.cs" />
-    <Compile Include="ECS\Compnents\TextureCollectionAnimation.cs" />
-    <Compile Include="ECS\Compnents\TimedMessagesBox.cs" />
+    <Compile Include="ECS\Compnents\GUI\Sprite.cs" />
+    <Compile Include="ECS\Compnents\GUI\SpriteEffect.cs" />
+    <Compile Include="ECS\Compnents\GUI\StateAnimation.cs" />
+    <Compile Include="ECS\Compnents\GUI\TextureCollectionAnimation.cs" />
+    <Compile Include="ECS\Compnents\GUI\TimedMessagesBox.cs" />
     <Compile Include="ECS\Linkers\ActionLinker.cs" />
     <Compile Include="ECS\Linkers\Linker.cs" />
     <Compile Include="ECS\Linkers\MovementToAnimationLinker.cs" />
@@ -91,7 +91,7 @@
     <Compile Include="GraphicalUserInterface.cs" />
     <Compile Include="IContentRequester.cs" />
     <Compile Include="IResourcesManager.cs" />
-    <Compile Include="ECS\Compnents\GameMap.cs" />
+    <Compile Include="ECS\Compnents\GUI\GameMap.cs" />
     <Compile Include="MovementDirection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesManager.cs" />
@@ -114,9 +114,7 @@
       <Name>XnaCommonLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ECS\Compnents\GUI\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

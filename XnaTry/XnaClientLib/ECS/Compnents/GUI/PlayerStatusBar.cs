@@ -4,10 +4,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using UtilsLib.Consts;
 using UtilsLib.Utility;
-using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
-namespace XnaClientLib.ECS.Compnents
+namespace XnaClientLib.ECS.Compnents.GUI
 {
     public class PlayerStatusBar : GuiComponent
     {

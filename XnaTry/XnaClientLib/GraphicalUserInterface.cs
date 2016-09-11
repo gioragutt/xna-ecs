@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using UtilsLib.Consts;
 using XnaClientLib.ECS;
 using XnaClientLib.ECS.Compnents;
+using XnaClientLib.ECS.Compnents.GUI;
 
 namespace XnaClientLib
 {

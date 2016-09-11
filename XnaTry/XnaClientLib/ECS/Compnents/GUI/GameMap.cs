@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using UtilsLib.Consts;
 using XnaCommonLib;
 
-namespace XnaClientLib.ECS.Compnents
+namespace XnaClientLib.ECS.Compnents.GUI
 {
     public class GameMap : GuiComponent
     {
