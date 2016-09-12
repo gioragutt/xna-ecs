@@ -3,8 +3,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using UtilsLib.Consts;
 using XnaClientLib.ECS;
-using XnaClientLib.ECS.Compnents;
 using XnaClientLib.ECS.Compnents.GUI;
+using XnaClientLib.ECS.Compnents.GUI.TimedMessageBox;
+using XnaClientLib.ECS.Compnents.GUI.TimedMessageBox.Style;
 
 namespace XnaClientLib
 {
@@ -13,7 +14,7 @@ namespace XnaClientLib
         public GameMap Map { get; }
         private readonly GameMinimap minimap;
         private readonly Label pingLabel;
-        private readonly TimedMessagesBox messagesBox;
+        private readonly TimedMessageBox messageBox;
 
         public GraphicalUserInterface(ClientGameManager gameManager, string tmxMapName, Func<string> pingGetter)
         {
@@ -24,12 +25,13 @@ namespace XnaClientLib
             gameObject.Components.Add(gameManager.ResourceManager.Register(minimap));
             pingLabel = new Label(pingGetter, Color.LightGreen, Constants.Assets.DefaultFont, new Vector2(5, 5));
             gameObject.Components.Add(gameManager.ResourceManager.Register(pingLabel));
-            messagesBox = new TimedMessagesBox(Constants.Assets.DefaultFont)
+            messageBox = new TimedMessageBox(Constants.Assets.DefaultFont)
             {
                 Position = new Vector2(5, 25),
-                MaxTime = TimeSpan.FromSeconds(3)
+                MaxTime = TimeSpan.FromSeconds(3),
+                Style = TimedMessageBoxStyle.Fading
             };
-            gameObject.Components.Add(gameManager.ResourceManager.Register(messagesBox));
+            gameObject.Components.Add(gameManager.ResourceManager.Register(messageBox));
         }
 
         public void Initialize(GraphicsDevice graphicsDevice)
@@ -41,7 +43,7 @@ namespace XnaClientLib
             graphicsDevice.Viewport = upperViewport;
             minimap.Viewport = lowerViewport;
             pingLabel.Viewport = lowerViewport;
-            messagesBox.Viewport = lowerViewport;
+            messageBox.Viewport = lowerViewport;
         }
     }
 }

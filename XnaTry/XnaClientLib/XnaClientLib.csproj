@@ -68,6 +68,10 @@
     <Compile Include="ECS\Compnents\GUI\GameMinimap.cs" />
     <Compile Include="ECS\Compnents\GamepadDirectionalInput.cs" />
     <Compile Include="ECS\Compnents\GUI\GuiComponent.cs" />
+    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\TimedMessageBoxItem.cs" />
+    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\TimedMessageBoxItemStyleStrategy.cs" />
+    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\TimedMessageBoxStyle.cs" />
+    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\TimedMessageBoxStyleFactory.cs" />
     <Compile Include="ECS\Compnents\Interpolator.cs" />
     <Compile Include="ECS\Compnents\KeyboardDirectionalInput.cs" />
     <Compile Include="ECS\Compnents\GUI\Label.cs" />
@@ -80,7 +84,7 @@
     <Compile Include="ECS\Compnents\GUI\SpriteEffect.cs" />
     <Compile Include="ECS\Compnents\GUI\StateAnimation.cs" />
     <Compile Include="ECS\Compnents\GUI\TextureCollectionAnimation.cs" />
-    <Compile Include="ECS\Compnents\GUI\TimedMessagesBox.cs" />
+    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\TimedMessageBox.cs" />
     <Compile Include="ECS\Linkers\ActionLinker.cs" />
     <Compile Include="ECS\Linkers\Linker.cs" />
     <Compile Include="ECS\Linkers\MovementToAnimationLinker.cs" />

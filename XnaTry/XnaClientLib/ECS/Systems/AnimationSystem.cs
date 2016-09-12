@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ECS.Interfaces;
-using XnaClientLib.ECS.Compnents;
 using XnaClientLib.ECS.Compnents.GUI;
 
 namespace XnaClientLib.ECS.Systems
@@ -10,7 +9,8 @@ namespace XnaClientLib.ECS.Systems
     {
         public override void Update(IList<IComponentContainer> entities, long delta)
         {
-            for (var index = 0; index < entities.Count; index++)
+            var currentCount = entities.Count;
+            for (var index = 0; index < currentCount; index++)
                 HandleAnimation(entities[index], delta);
         }
 

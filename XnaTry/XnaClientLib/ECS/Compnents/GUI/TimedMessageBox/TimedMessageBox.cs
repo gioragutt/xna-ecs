@@ -7,45 +7,16 @@ using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 using UtilsLib;
 using UtilsLib.Consts;
+using XnaClientLib.ECS.Compnents.GUI.TimedMessageBox.Style;
 
-namespace XnaClientLib.ECS.Compnents.GUI
+namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
 {
-    public class TimedMessagesBoxItem
+    public class TimedMessageBox : GuiComponent
     {
         #region Fields
 
-        private readonly TimeSpan maxTime;
-        protected Color color;
-
-        #endregion
-
-        #region Properties
-
-        public TimeSpan Elapsed { get; set; } = TimeSpan.Zero;
-        public object Value { get; set; }
-
-        public Color Color => color * MathHelper.Lerp(1, 0, (float)(Elapsed.TotalMilliseconds / maxTime.TotalMilliseconds));
-        public bool IsExpired => Elapsed >= maxTime;
-
-        #endregion
-
-        #region Constructor
-
-        public TimedMessagesBoxItem(object value, TimeSpan maxExpiredTime, Color itemColor)
-        {
-            Value = value;
-            maxTime = maxExpiredTime;
-            color = itemColor;
-        }
-
-        #endregion
-    }
-
-    public class TimedMessagesBox : GuiComponent
-    {
-        #region Fields
-
-        private readonly LinkedList<TimedMessagesBoxItem> messages;
+        private readonly LinkedList<TimedMessageBoxItem> messages;
+        private readonly TimedMessageBoxStyleFactory styleFactory;
         private readonly string fontAsset;
         private SpriteFont font;
 
@@ -57,15 +28,17 @@ namespace XnaClientLib.ECS.Compnents.GUI
         public TimeSpan MaxTime { get; set; } = TimeSpan.FromSeconds(1);
         public Vector2 Position { get; set; } = Vector2.Zero;
         public Color Color { get; set; } = Color.Orange;
+        public TimedMessageBoxStyle Style { get; set; } = TimedMessageBoxStyle.None;
 
         #endregion Properties
-
+        
         #region Constructor
 
-        public TimedMessagesBox(string fontAssetName)
+        public TimedMessageBox(string fontAssetName)
         {
             fontAsset = fontAssetName;
-            messages = new LinkedList<TimedMessagesBoxItem>();
+            messages = new LinkedList<TimedMessageBoxItem>();
+            styleFactory = new TimedMessageBoxStyleFactory();
             Subscribe(Constants.Messages.AddMessageToBox, TimedMessagesBox_AddMessageToBox);
             Subscribe(Constants.Messages.ClientAcceptedOnServer, TimedMessagesBox_ClientAcceptedOnServer);
             Subscribe(Constants.Messages.ClientDisconnected, TimedMessagesBox_ClientDisconnected);
@@ -96,7 +69,9 @@ namespace XnaClientLib.ECS.Compnents.GUI
 
         public void AddMessage(object message)
         {
-            messages.AddLast(new LinkedListNode<TimedMessagesBoxItem>(new TimedMessagesBoxItem(message, MaxTime, Color)));
+            var item = new TimedMessageBoxItem(message, MaxTime, Color);
+            item.Style = styleFactory.Create(item, Style);
+            messages.AddLast(new LinkedListNode<TimedMessageBoxItem>(item));
         }
 
         #endregion API
@@ -106,7 +81,7 @@ namespace XnaClientLib.ECS.Compnents.GUI
         public override void Update(TimeSpan delta)
         {
             base.Update(delta);
-            UpdateMessagesElapsedTime(delta);
+            UpdateMessages(delta);
             RemoveExpiredMessages();
         }
 
@@ -115,7 +90,7 @@ namespace XnaClientLib.ECS.Compnents.GUI
             if (messages.Count == 0)
                 return;
 
-            var currentMessages = new List<TimedMessagesBoxItem>(messages.Reverse());
+            var currentMessages = new List<TimedMessageBoxItem>(messages.Reverse());
             var totalHeight = 0f;
             foreach (var message in currentMessages)
             {
@@ -145,11 +120,14 @@ namespace XnaClientLib.ECS.Compnents.GUI
         /// <summary>
         /// Iterates over all current messages and updates their elapsed time
         /// </summary>
-        private void UpdateMessagesElapsedTime(TimeSpan delta)
+        private void UpdateMessages(TimeSpan delta)
         {
-            var currentMessages = new List<TimedMessagesBoxItem>(messages);
+            var currentMessages = new List<TimedMessageBoxItem>(messages);
             foreach (var message in currentMessages)
+            {
                 message.Elapsed += delta;
+                message.Style?.Update();
+            }
         }
 
         /// <summary>
@@ -157,7 +135,7 @@ namespace XnaClientLib.ECS.Compnents.GUI
         /// </summary>
         private void RemoveExpiredMessages()
         {
-            var currentMessages = new List<TimedMessagesBoxItem>(messages);
+            var currentMessages = new List<TimedMessageBoxItem>(messages);
             foreach (var message in currentMessages.Where(message => message.IsExpired))
                 messages.Remove(message);
         }
