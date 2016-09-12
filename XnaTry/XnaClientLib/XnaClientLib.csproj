@@ -81,7 +81,6 @@
     <Compile Include="ECS\Compnents\Network\NetworkPlayer.cs" />
     <Compile Include="ECS\Compnents\Network\RemotePlayer.cs" />
     <Compile Include="ECS\Compnents\GUI\PlayerStatusBar\PlayerStatusBar.cs" />
-    <Compile Include="ECS\Compnents\RotateToMouse.cs" />
     <Compile Include="ECS\Compnents\GUI\Sprite.cs" />
     <Compile Include="ECS\Compnents\GUI\SpriteEffect.cs" />
     <Compile Include="ECS\Compnents\GUI\Animation\StateAnimation.cs" />
