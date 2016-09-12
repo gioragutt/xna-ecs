@@ -20,7 +20,7 @@ namespace XnaCommonLib.ECS.Components
             set
             {
                 PreviousHealth = health;
-                health = value;
+                health = value <= 0 ? 0 : value;
             }
         }
 
@@ -37,7 +37,7 @@ namespace XnaCommonLib.ECS.Components
         public bool IsDead => HealthPercentage == 0.0f;
 
         [JsonIgnore]
-        public bool JustDied => IsDead && PreviousHealth != 0.0f;
+        public bool JustDied => IsDead && PreviousHealth > float.Epsilon;
 
         [JsonIgnore]
         public float HealthPercentage
