@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using UtilsLib.Utility;
 
-namespace XnaClientLib.ECS.Compnents.GUI
+namespace XnaClientLib.ECS.Compnents.GUI.Animation
 {
     public class TextureCollectionAnimation : Animation
     {

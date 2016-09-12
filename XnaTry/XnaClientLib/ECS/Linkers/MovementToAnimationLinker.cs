@@ -1,5 +1,5 @@
 ﻿using ECS.Interfaces;
-using XnaClientLib.ECS.Compnents.GUI;
+using XnaClientLib.ECS.Compnents.GUI.Animation;
 using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 

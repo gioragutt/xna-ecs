@@ -14,6 +14,8 @@ using XnaClientLib;
 using XnaClientLib.ECS;
 using XnaClientLib.ECS.Compnents;
 using XnaClientLib.ECS.Compnents.GUI;
+using XnaClientLib.ECS.Compnents.GUI.Animation;
+using XnaClientLib.ECS.Compnents.GUI.PlayerStatusBar;
 using XnaClientLib.ECS.Linkers;
 using XnaClientLib.ECS.Systems;
 using XnaCommonLib;
@@ -130,8 +132,20 @@ namespace XnaTry
 
             components.Add(attributes);
 
-            components.Add(resourceManager.Register(new PlayerStatusBar(components, Constants.Assets.PlayerHealthBar,
-                Constants.Assets.PlayerNameFont)));
+            components.Add(resourceManager.Register(new PlayerStatusBar(components, Constants.Assets.PlayerNameFont)
+            {
+                StatusBarItems = new List<StatusBarItem>
+              {
+                new StatusBarItem(Constants.Assets.PlayerHealthBar)
+                {
+                    FillPercentage = () => 1 - attributes.HealthPercentage
+                },
+                new StatusBarItem(Constants.Assets.PlayerManaBar)
+                {
+                    FillPercentage = () => attributes.HealthPercentage
+                },
+              }
+            }));
 
             return entity;
         }

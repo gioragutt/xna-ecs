@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ECS.Interfaces;
-using XnaClientLib.ECS.Compnents.GUI;
+using XnaClientLib.ECS.Compnents.GUI.Animation;
 
 namespace XnaClientLib.ECS.Systems
 {

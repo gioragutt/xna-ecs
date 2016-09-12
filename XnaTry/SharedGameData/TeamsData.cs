@@ -10,14 +10,14 @@ namespace SharedGameData
         {
             Color = Color.Blue,
             Name = "Good",
-            Frame = "Player/GUI/GreenTeam"
+            Frame = "Player/GUI/GreenTeamV2"
         };
 
         public static readonly TeamData BadTeam = new TeamData
         {
             Color = Color.Red,
             Name = "Bad",
-            Frame = "Player/GUI/RedTeam"
+            Frame = "Player/GUI/RedTeamV2"
         };
 
         public static Dictionary<string, TeamData> Teams { get; } = new Dictionary<string, TeamData>

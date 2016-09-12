@@ -13,6 +13,8 @@ using UtilsLib.Consts;
 using UtilsLib.Utility;
 using XnaClientLib.ECS.Compnents;
 using XnaClientLib.ECS.Compnents.GUI;
+using XnaClientLib.ECS.Compnents.GUI.Animation;
+using XnaClientLib.ECS.Compnents.GUI.PlayerStatusBar;
 using XnaClientLib.ECS.Compnents.Network;
 using XnaClientLib.ECS.Linkers;
 using XnaCommonLib;
@@ -227,8 +229,22 @@ namespace XnaClientLib.ECS
         /// <param name="components">The component container to add the component to</param>
         private void AddStatusBar(IComponentContainer components)
         {
-            components.Get<PlayerAttributes>().Team = teams[components.Get<PlayerAttributes>().Team.Name];
-            components.Add(ResourceManager.Register(new PlayerStatusBar(components, Constants.Assets.PlayerHealthBar, Constants.Assets.PlayerNameFont)));
+            var attributes = components.Get<PlayerAttributes>();
+            attributes.Team = teams[attributes.Team.Name];
+            components.Add(ResourceManager.Register(new PlayerStatusBar(components, Constants.Assets.PlayerNameFont)
+            {
+                StatusBarItems = new List<StatusBarItem>
+                {
+                    new StatusBarItem(Constants.Assets.PlayerHealthBar)
+                    {
+                        FillPercentage = () => attributes.HealthPercentage
+                    },
+                    new StatusBarItem(Constants.Assets.PlayerManaBar)
+                    {
+                        FillPercentage = () => 1 - attributes.HealthPercentage
+                    },
+                }
+            }));
         }
 
         /// <summary>

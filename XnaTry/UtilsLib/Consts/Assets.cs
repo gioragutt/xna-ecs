@@ -5,6 +5,7 @@
         public static class Assets
         {
             public const string PlayerHealthBar = "Player/GUI/HealthBar";
+            public const string PlayerManaBar = "Player/GUI/ManaBar";
             public const string PlayerNameFont = "Player/Fonts/NameFont";
             public const string DefaultFont = "DefaultFont";
         }

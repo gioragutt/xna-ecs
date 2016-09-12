@@ -2,7 +2,7 @@
 using UtilsLib.Utility;
 using XnaCommonLib.ECS.Components;
 
-namespace XnaClientLib.ECS.Compnents.GUI
+namespace XnaClientLib.ECS.Compnents.GUI.Animation
 {
     public abstract class Animation : Component, IContentRequester
     {
