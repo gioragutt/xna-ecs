@@ -11,10 +11,21 @@ namespace XnaClientLib
 {
     public class GraphicalUserInterface
     {
-        public GameMap Map { get; }
+        #region Fields
+
         private readonly GameMinimap minimap;
         private readonly Label pingLabel;
         private readonly TimedMessageBox messageBox;
+
+        #endregion Fields
+
+        #region Properties
+
+        public GameMap Map { get; }
+
+        #endregion
+
+        #region Constructor
 
         public GraphicalUserInterface(ClientGameManager gameManager, string tmxMapName, Func<string> pingGetter)
         {
@@ -27,23 +38,30 @@ namespace XnaClientLib
             gameObject.Components.Add(gameManager.ResourceManager.Register(pingLabel));
             messageBox = new TimedMessageBox(Constants.Assets.DefaultFont)
             {
-                Position = new Vector2(5, 25),
+                Position = new Vector2(5, 5),
                 MaxTime = TimeSpan.FromSeconds(3),
-                Style = TimedMessageBoxStyle.Fading
+                Style = TimedMessageBoxStyle.Fading,
+                Color = Color.White
             };
             gameObject.Components.Add(gameManager.ResourceManager.Register(messageBox));
         }
 
+        #endregion Constructor
+
+        #region Initialization
+
         public void Initialize(GraphicsDevice graphicsDevice)
         {
-            var minimapHeight = (int) minimap.MinimapSize.Y;
+            var minimapHeight = (int)minimap.MinimapSize.Y;
             var upperViewportBounds = new Rectangle(0, 0, graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height - minimapHeight);
             var upperViewport = new Viewport(upperViewportBounds);
             var lowerViewport = new Viewport(0, upperViewport.Height, upperViewport.Width, minimapHeight);
             graphicsDevice.Viewport = upperViewport;
             minimap.Viewport = lowerViewport;
             pingLabel.Viewport = lowerViewport;
-            messageBox.Viewport = lowerViewport;
+            messageBox.Viewport = upperViewport;
         }
+
+        #endregion
     }
 }
