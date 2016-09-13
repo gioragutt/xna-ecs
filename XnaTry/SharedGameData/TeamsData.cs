@@ -20,7 +20,7 @@ namespace SharedGameData
             Frame = "Player/GUI/RedTeamV2"
         };
 
-        public static Dictionary<string, TeamData> Teams { get; } = new Dictionary<string, TeamData>
+        public static readonly Dictionary<string, TeamData> Teams = new Dictionary<string, TeamData>
         {
             [GoodTeam.Name] = GoodTeam,
             [BadTeam.Name] = BadTeam
