@@ -17,6 +17,11 @@ namespace XnaCommonLib.ECS.Components
             Enabled = enabled;
         }
 
+        public void Dispose()
+        {
+            Container.Remove(GetType());
+        }
+
         public static bool IsEnabled(Component comp) { return comp != null && comp.Enabled; }
     }
 }

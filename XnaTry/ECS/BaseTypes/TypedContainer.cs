@@ -10,7 +10,12 @@ namespace ECS.BaseTypes
     {
         protected static bool ImplementsType<TDerived>(Type otherType)
         {
-            return typeof(TDerived).IsAssignableFrom(otherType);
+            return ImplementsType(typeof(TDerived), otherType);
+        }
+
+        protected static bool ImplementsType(Type myType, Type otherType)
+        {
+            return myType.IsAssignableFrom(otherType);
         }
 
         public virtual void Add<TDerived>(TDerived instance) where TDerived : class, TBase
@@ -48,18 +53,27 @@ namespace ECS.BaseTypes
 
         public void Remove<TDerived>() where TDerived : class, TBase
         {
-            TBase outVal;
-            TryRemove(typeof (TDerived), out outVal);
+            Remove(typeof (TDerived));
         }
 
         public void RemoveAllOf<TDerived>() where TDerived : class, TBase
         {
-            var allOfTDerived = Keys.Where(ImplementsType<TDerived>).ToList();
+            RemoveAllOf(typeof(TDerived));
+        }
+
+        public void Remove(Type type)
+        {
+            TBase outVal;
+            TryRemove(type, out outVal);
+        }
+
+        public void RemoveAllOf(Type type)
+        {
+            var allOfTDerived = Keys.Where(t => ImplementsType(type, t)).ToList();
             var count = allOfTDerived.Count;
             for (var i = 0; i < count; i++)
             {
-                TBase outVal;
-                TryRemove(allOfTDerived[i], out outVal);
+                Remove(allOfTDerived[i]);
             }
         }
     }

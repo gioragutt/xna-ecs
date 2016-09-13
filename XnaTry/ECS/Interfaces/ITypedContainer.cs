@@ -49,5 +49,15 @@ namespace ECS.Interfaces
         /// </summary>
         /// <typeparam name="TDerived">Type that implements interface TBase</typeparam>
         void RemoveAllOf<TDerived>() where TDerived : class, TBase;
+
+        /// <summary>
+        /// Removed an instance of given type from the container
+        /// </summary>
+        void Remove(System.Type type);
+
+        /// <summary>
+        /// Removed all instances of given type (and those who derive from it)
+        /// </summary>
+        void RemoveAllOf(System.Type type);
     }
 }
