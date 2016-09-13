@@ -2,11 +2,11 @@ using Microsoft.Xna.Framework;
 
 namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox.Style
 {
-    public class FadingStyleStrategy : TimedMessageBoxItemStyleStrategy
+    public class FadingStyleStrategy : TimedLabelStyleStrategy
     {
         #region Constructor
 
-        public FadingStyleStrategy(TimedMessageBoxItem styledItem) 
+        public FadingStyleStrategy(TimedLabel styledItem) 
             : base(styledItem)
         {
         }

@@ -1,16 +1,16 @@
 namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox.Style
 {
-    public abstract class TimedMessageBoxItemStyleStrategy
+    public abstract class TimedLabelStyleStrategy
     {
         #region Fields
 
-        protected readonly TimedMessageBoxItem item;
+        protected readonly TimedLabel item;
 
         #endregion Fields
 
         #region Constructor
 
-        protected TimedMessageBoxItemStyleStrategy(TimedMessageBoxItem styledItem)
+        protected TimedLabelStyleStrategy(TimedLabel styledItem)
         {
             item = styledItem;
         }

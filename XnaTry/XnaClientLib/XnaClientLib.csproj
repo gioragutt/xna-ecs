@@ -70,10 +70,10 @@
     <Compile Include="ECS\Compnents\GUI\GuiComponent.cs" />
     <Compile Include="ECS\Compnents\GUI\PlayerStatusBar\StatusBarItem.cs" />
     <Compile Include="ECS\Compnents\GUI\TimedMessageBox\Style\FadingStyleStrategy.cs" />
-    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\TimedMessageBoxItem.cs" />
-    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\Style\TimedMessageBoxItemStyleStrategy.cs" />
+    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\TimedLabel.cs" />
+    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\Style\TimedLabelStyleStrategy.cs" />
     <Compile Include="ECS\Compnents\GUI\TimedMessageBox\Style\TimedMessageBoxStyle.cs" />
-    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\Style\TimedMessageBoxStyleFactory.cs" />
+    <Compile Include="ECS\Compnents\GUI\TimedMessageBox\Style\TimedLabelStyleFactory.cs" />
     <Compile Include="ECS\Compnents\Interpolator.cs" />
     <Compile Include="ECS\Compnents\KeyboardDirectionalInput.cs" />
     <Compile Include="ECS\Compnents\GUI\Label.cs" />

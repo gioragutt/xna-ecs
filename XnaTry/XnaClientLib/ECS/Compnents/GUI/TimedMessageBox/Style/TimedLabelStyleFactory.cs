@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox.Style
 {
-    public class TimedMessageBoxStyleFactory
+    public class TimedLabelStyleFactory
     {
         #region Fields
 
-        private readonly Dictionary<TimedMessageBoxStyle, Func<TimedMessageBoxItem, TimedMessageBoxItemStyleStrategy>> styles;
+        private readonly Dictionary<TimedMessageBoxStyle, Func<TimedLabel, TimedLabelStyleStrategy>> styles;
 
         #endregion Fields
 
         #region Constructor
 
-        public TimedMessageBoxStyleFactory()
+        public TimedLabelStyleFactory()
         {
-            styles = new Dictionary<TimedMessageBoxStyle, Func<TimedMessageBoxItem, TimedMessageBoxItemStyleStrategy>>
+            styles = new Dictionary<TimedMessageBoxStyle, Func<TimedLabel, TimedLabelStyleStrategy>>
             {
                 [TimedMessageBoxStyle.None] = item => null,
                 [TimedMessageBoxStyle.Fading] = item => new FadingStyleStrategy(item)
@@ -24,7 +24,7 @@ namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox.Style
 
         #endregion Constructor
 
-        public TimedMessageBoxItemStyleStrategy Create(TimedMessageBoxItem item, TimedMessageBoxStyle style)
+        public TimedLabelStyleStrategy Create(TimedLabel item, TimedMessageBoxStyle style)
         {
             return styles[style](item);
         }

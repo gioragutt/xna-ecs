@@ -11,14 +11,21 @@ namespace XnaClientLib.ECS.Compnents.GUI
     {
         #region Fields
 
-        private readonly Vector2 position;
         private readonly string fontAsset;
-        private readonly Func<string> text;
+        private readonly Func<string> textFunc;
+        private readonly object textObject;
         private SpriteFont font;
+        private readonly bool isTextFunc;
 
         #endregion Fields
 
         #region Properties
+
+        /// <summary>
+        /// The position of the label
+        /// </summary>
+        /// <remarks>Relative to the viewport</remarks>
+        public Vector2 Position { get; set; }
 
         /// <summary>
         /// The color of the team
@@ -29,23 +36,90 @@ namespace XnaClientLib.ECS.Compnents.GUI
 
         #region Constructor
 
+        #region Base Constructor
+
         /// <summary>
-        /// Initializes a new instance of Lable
+        /// Initializes a new instance of Label
         /// </summary>
-        /// <param name="textFunc">A getter for the text of the label</param>
+        /// <param name="textFunction">A getter for the text of the label</param>
+        /// <param name="textObj">An object to get the string from</param>
+        /// <param name="color">The color of the label</param>
+        /// <param name="fontAssetName">The asset of the font of the label</param>
+        /// <param name="spriteFont">The SpriteFont of the label</param>
+        /// <param name="labelPosition">The position of the label</param>
+        private Label(Func<string> textFunction, object textObj, Color color, string fontAssetName, SpriteFont spriteFont, Vector2 labelPosition)
+        {
+            textFunc = textFunction;
+            textObject = textObj;
+            fontAsset = fontAssetName;
+            Color = color;
+            Position = labelPosition;
+            font = spriteFont;
+        }
+
+        #endregion
+
+        #region Text Function Constructors
+
+        /// <summary>
+        /// Initializes a new instance of Label
+        /// </summary>
+        /// <param name="textFunction">A getter for the text of the label</param>
+        /// <param name="color">The color of the label</param>
+        /// <param name="spriteFont">The SpriteFont of the label</param>
+        /// <param name="labelPosition">The position of the label</param>
+        public Label(Func<string> textFunction, Color color, SpriteFont spriteFont, Vector2 labelPosition)
+            : this(textFunction, null, color, null, spriteFont, labelPosition)
+        {
+            isTextFunc = true;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of Label
+        /// </summary>
+        /// <param name="textFunction">A getter for the text of the label</param>
         /// <param name="color">The color of the label</param>
         /// <param name="fontAssetName">The asset of the font of the label</param>
         /// <param name="labelPosition">The position of the label</param>
-        /// <exception cref="System.ArgumentNullException">fontAssetName is null or empty</exception>
-        public Label(Func<string> textFunc, Color color, string fontAssetName, Vector2 labelPosition)
+        public Label(Func<string> textFunction, Color color, string fontAssetName, Vector2 labelPosition)
+               : this(textFunction, null, color, fontAssetName, null, labelPosition)
         {
             Utils.AssertStringArgumentNotNull(fontAssetName, "fontAssetName");
-
-            text = textFunc;
-            fontAsset = fontAssetName;
-            Color = color;
-            position = labelPosition;
+            isTextFunc = true;
         }
+
+        #endregion
+
+        #region Text Object Constructors
+
+        /// <summary>
+        /// Initializes a new instance of Label
+        /// </summary>
+        /// <param name="textObj">An object to get the string from</param>
+        /// <param name="color">The color of the label</param>
+        /// <param name="spriteFont">The SpriteFont of the label</param>
+        /// <param name="labelPosition">The position of the label</param>
+        public Label(object textObj, Color color, SpriteFont spriteFont, Vector2 labelPosition)
+            : this(null, textObj, color, null, spriteFont, labelPosition)
+        {
+            isTextFunc = false;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of Label
+        /// </summary>
+        /// <param name="textObj">An object to get the string from</param>
+        /// <param name="color">The color of the label</param>
+        /// <param name="fontAssetName">The asset of the font of the label</param>
+        /// <param name="labelPosition">The position of the label</param>
+        public Label(object textObj, Color color, string fontAssetName, Vector2 labelPosition)
+            : this(null, textObj, color, fontAssetName, null, labelPosition)
+        {
+            Utils.AssertStringArgumentNotNull(fontAssetName, "fontAssetName");
+            isTextFunc = false;
+        }
+
+        #endregion
 
         #endregion
 
@@ -53,17 +127,29 @@ namespace XnaClientLib.ECS.Compnents.GUI
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(font, text(), position, Color);
+            spriteBatch.DrawString(font, Text, Position, Color);
         }
 
         public override void LoadContent(ContentManager content)
         {
-            font = content.Load<SpriteFont>(fontAsset);
+            if (font == null)
+                font = content.Load<SpriteFont>(fontAsset);
         }
 
         public override int DrawOrder => Constants.GUI.DrawOrder.Hud;
         public override bool IsHud => true;
 
         #endregion
+
+        #region Helper Methods
+
+        private string Text => isTextFunc ? textFunc() : textObject.ToString();
+
+        public override string ToString()
+        {
+            return Text;
+        }
+
+        #endregion Helper Methods
     }
 }

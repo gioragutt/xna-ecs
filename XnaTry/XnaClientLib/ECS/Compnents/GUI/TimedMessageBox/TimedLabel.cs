@@ -1,10 +1,11 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using XnaClientLib.ECS.Compnents.GUI.TimedMessageBox.Style;
 
 namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
 {
-    public class TimedMessageBoxItem
+    public class TimedLabel : Label
     {
         #region Fields
 
@@ -15,11 +16,9 @@ namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
         #region Properties
 
         public TimeSpan Elapsed { get; set; } = TimeSpan.Zero;
-        public object Value { get; set; }
 
         public Color OriginalColor { get; }
-        public Color Color { set; get; }
-        public TimedMessageBoxItemStyleStrategy Style { get; set; }
+        public TimedLabelStyleStrategy Style { get; set; }
 
         public bool IsExpired => Elapsed >= MaxTime;
 
@@ -27,11 +26,10 @@ namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
 
         #region Constructor
 
-        public TimedMessageBoxItem(object value, TimeSpan maxExpiredTime, Color itemColor)
+        public TimedLabel(object value, TimeSpan maxExpiredTime, Color itemColor, SpriteFont font)
+            : base(value, itemColor, font, Vector2.Zero)
         {
-            Value = value;
             MaxTime = maxExpiredTime;
-            Color = itemColor;
             OriginalColor = itemColor;
         }
 

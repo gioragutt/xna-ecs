@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using UtilsLib;
 using UtilsLib.Consts;
 using XnaClientLib.ECS.Compnents.GUI.TimedMessageBox.Style;
+// ReSharper disable LoopCanBePartlyConvertedToQuery
 
 namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
 {
@@ -15,8 +16,8 @@ namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
     {
         #region Fields
 
-        private readonly LinkedList<TimedMessageBoxItem> messages;
-        private readonly TimedMessageBoxStyleFactory styleFactory;
+        private readonly LinkedList<TimedLabel> messages;
+        private readonly TimedLabelStyleFactory styleFactory;
         private readonly string fontAsset;
         private SpriteFont font;
 
@@ -37,8 +38,8 @@ namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
         public TimedMessageBox(string fontAssetName)
         {
             fontAsset = fontAssetName;
-            messages = new LinkedList<TimedMessageBoxItem>();
-            styleFactory = new TimedMessageBoxStyleFactory();
+            messages = new LinkedList<TimedLabel>();
+            styleFactory = new TimedLabelStyleFactory();
             Subscribe(Constants.Messages.AddMessageToBox, TimedMessagesBox_AddMessageToBox);
             Subscribe(Constants.Messages.ClientAcceptedOnServer, TimedMessagesBox_ClientAcceptedOnServer);
             Subscribe(Constants.Messages.ClientDisconnected, TimedMessagesBox_ClientDisconnected);
@@ -69,9 +70,12 @@ namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
 
         public void AddMessage(object message)
         {
-            var item = new TimedMessageBoxItem(message, MaxTime, Color);
+            var item = new TimedLabel(message, MaxTime, Color, font)
+            {
+                Viewport = Viewport
+            };
             item.Style = styleFactory.Create(item, Style);
-            messages.AddLast(new LinkedListNode<TimedMessageBoxItem>(item));
+            messages.AddLast(new LinkedListNode<TimedLabel>(item));
         }
 
         #endregion API
@@ -90,17 +94,15 @@ namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
             if (messages.Count == 0)
                 return;
 
-            var currentMessages = new List<TimedMessageBoxItem>(messages.Reverse());
+            var currentMessages = new List<TimedLabel>(messages.Reverse());
             var totalHeight = 0f;
+
             foreach (var message in currentMessages)
             {
                 if (totalHeight > MaxHeight)
                     break;
 
-                var text = message.Value.ToString();
-                spriteBatch.DrawString(font, text, Position + new Vector2(0, totalHeight), message.Color);
-                var lineHeight = font.MeasureString(text).Y;
-                totalHeight += lineHeight;
+                totalHeight = DrawMessage(spriteBatch, message, totalHeight);
             }
         }
 
@@ -122,7 +124,7 @@ namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
         /// </summary>
         private void UpdateMessages(TimeSpan delta)
         {
-            var currentMessages = new List<TimedMessageBoxItem>(messages);
+            var currentMessages = new List<TimedLabel>(messages);
             foreach (var message in currentMessages)
             {
                 message.Elapsed += delta;
@@ -135,7 +137,7 @@ namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
         /// </summary>
         private void RemoveExpiredMessages()
         {
-            var currentMessages = new List<TimedMessageBoxItem>(messages);
+            var currentMessages = new List<TimedLabel>(messages);
             foreach (var message in currentMessages.Where(message => message.IsExpired))
                 messages.Remove(message);
         }
@@ -162,6 +164,22 @@ namespace XnaClientLib.ECS.Compnents.GUI.TimedMessageBox
         {
             var args = fields.ToList().Select(f => jObject.GetProp(f, string.Empty).Trim().ToString()).ToArray<object>();
             AddMessage(string.Format(format, args));
+        }
+
+        /// <summary>
+        /// Draw a label
+        /// </summary>
+        /// <param name="spriteBatch">SpriteBatch for drawing</param>
+        /// <param name="message">the label to draw</param>
+        /// <param name="totalHeight">The height to draw the label at</param>
+        /// <returns>Height for the next label to draw at</returns>
+        private float DrawMessage(SpriteBatch spriteBatch, Label message, float totalHeight)
+        {
+            var text = message.ToString();
+            spriteBatch.DrawString(font, text, Position + new Vector2(0, totalHeight), message.Color);
+            var lineHeight = font.MeasureString(text).Y;
+            totalHeight += lineHeight;
+            return totalHeight;
         }
 
         #endregion Helper Methods
