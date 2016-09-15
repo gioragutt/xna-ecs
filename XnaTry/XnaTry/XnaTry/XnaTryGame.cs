@@ -106,22 +106,6 @@ namespace XnaTry
             entity.Transform.Scale = 0.4f;
             entity.Transform.Position = initialPosition;
 
-            // Add Animation
-            const long msPerFrame = 100;
-            var stateAnimation = new StateAnimation<MovementDirection>(MovementDirection.Down,
-                new Dictionary<MovementDirection, Animation>
-                {
-                    { MovementDirection.Down,  resourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Up,  resourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Left,  resourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)) },
-                    { MovementDirection.Right,  resourceManager.Register(new TextureCollectionAnimation(components, Utils.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame)) }
-                });
-
-            components.Add(stateAnimation);
-
-            // Link Input to Animation
-            components.Add(new MovementToAnimationLinker(entity.Components, stateAnimation));
-
             var attributes = new PlayerAttributes
             {
                 MaxHealth = 100,
