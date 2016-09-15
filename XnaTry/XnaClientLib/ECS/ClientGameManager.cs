@@ -220,7 +220,7 @@ namespace XnaClientLib.ECS
         /// <param name="components">The component container to add the component to</param>
         public void AddSprite(IComponentContainer components)
         {
-            components.Add(ResourceManager.Register(new Sprite("Player/Images/Down_001")));
+            components.Add(ResourceManager.Register(new Sprite("TestCharacter/Walk/Down_001")));
         }
 
         /// <summary>
@@ -253,23 +253,37 @@ namespace XnaClientLib.ECS
         /// <param name="components">The component container the components are inserted into</param>
         private void AddAnimation(IComponentContainer components)
         {
-            const long msPerFrame = 100;
-            var stateAnimation = new StateAnimation<MovementDirection>(MovementDirection.Down,
-                new Dictionary<MovementDirection, Animation>
-                {
-                    [MovementDirection.Down] =
-                        ResourceManager.Register(new TextureCollectionAnimation(components,
-                            Utils.FormatRange("Player/Images/Down_{0:D3}", 1, 4), msPerFrame)),
-                    [MovementDirection.Up] =
-                        ResourceManager.Register(new TextureCollectionAnimation(components,
-                            Utils.FormatRange("Player/Images/Up_{0:D3}", 1, 4), msPerFrame)),
-                    [MovementDirection.Left] =
-                        ResourceManager.Register(new TextureCollectionAnimation(components,
-                            Utils.FormatRange("Player/Images/Left_{0:D3}", 1, 4), msPerFrame)),
-                    [MovementDirection.Right] =
-                        ResourceManager.Register(new TextureCollectionAnimation(components,
-                            Utils.FormatRange("Player/Images/Right_{0:D3}", 1, 4), msPerFrame))
-                });
+            const int walkAnimationFrameStart = 1;
+            const int walkAnimationFrameEndVerticalAnimation = 6;
+            const int walkAnimationFrameEndHorizontalAnimation = 7;
+            const long msPerFrame = 150;
+
+            var stateAnimation =
+                new StateAnimation<AnimationState>(AnimationState.Get(AnimationType.Stale, AnimationDirection.Down),
+                    new Dictionary<AnimationState, Animation>
+                    {
+                        [AnimationState.Get(AnimationType.Stale, AnimationDirection.Down)] =
+                            ResourceManager.Register(new TextureCollectionAnimation(components, new[]
+                            {
+                                "TestCharacter/Walk/Down_000"
+                            }, msPerFrame)),
+                        [AnimationState.Get(AnimationType.Walk, AnimationDirection.Down)] =
+                            ResourceManager.Register(new TextureCollectionAnimation(components,
+                                Utils.FormatRange("TestCharacter/Walk/Down_{0:D3}", walkAnimationFrameStart,
+                                    walkAnimationFrameEndVerticalAnimation), msPerFrame)),
+                        [AnimationState.Get(AnimationType.Walk, AnimationDirection.Up)] =
+                            ResourceManager.Register(new TextureCollectionAnimation(components,
+                                Utils.FormatRange("TestCharacter/Walk/Up_{0:D3}", walkAnimationFrameStart,
+                                    walkAnimationFrameEndVerticalAnimation), msPerFrame)),
+                        [AnimationState.Get(AnimationType.Walk, AnimationDirection.Left)] =
+                            ResourceManager.Register(new TextureCollectionAnimation(components,
+                                Utils.FormatRange("TestCharacter/Walk/Left_{0:D3}", walkAnimationFrameStart,
+                                    walkAnimationFrameEndHorizontalAnimation), msPerFrame)),
+                        [AnimationState.Get(AnimationType.Walk, AnimationDirection.Right)] =
+                            ResourceManager.Register(new TextureCollectionAnimation(components,
+                                Utils.FormatRange("TestCharacter/Walk/Right_{0:D3}", walkAnimationFrameStart,
+                                    walkAnimationFrameEndHorizontalAnimation), msPerFrame)),
+                    });
 
             components.Add(stateAnimation);
 

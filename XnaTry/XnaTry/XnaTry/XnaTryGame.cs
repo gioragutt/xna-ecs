@@ -99,7 +99,7 @@ namespace XnaTry
             components.Add(input);
 
             // Show a character
-            var sprite = resourceManager.Register(new Sprite("Player/Images/Down_001"));
+            var sprite = resourceManager.Register(new Sprite("TestCharacter/Walk/Down_001"));
             components.Add(sprite);
 
             // Change Transform
@@ -171,6 +171,7 @@ namespace XnaTry
             clientGameManager.RegisterDrawingSystem(new AnimationSystem());
             clientGameManager.RegisterSystem(new LinkerSystem());
             clientGameManager.RegisterSystem(new LifespanSystem());
+            clientGameManager.RegisterSystem(new InterpolationSystem());
         }
 
         /// <summary>

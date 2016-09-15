@@ -36,6 +36,7 @@ namespace XnaClientLib.ECS.Compnents.GUI.PlayerStatusBar
         private const int NamePaddingAboveBars = -3;
         private const int BarWidthPadding = 3;
         private const int BarHeightPadding = -2;
+        private const float FrameHeightAboveSprite = 3;
 
         #endregion Constants
 
@@ -113,7 +114,7 @@ namespace XnaClientLib.ECS.Compnents.GUI.PlayerStatusBar
             var nameTextSize = nameFont.MeasureString(upperCaseName);
             var textPosition = GetTextPosition(framePosition, nameTextSize);
 
-            spriteBatch.DrawString(nameFont, upperCaseName, textPosition + new Vector2(0.5f), Color.White);
+            spriteBatch.DrawString(nameFont, upperCaseName, textPosition + new Vector2(1f), Color.White);
             spriteBatch.DrawString(nameFont, upperCaseName, textPosition, attributes.Team.Color);
         }
 
@@ -143,7 +144,7 @@ namespace XnaClientLib.ECS.Compnents.GUI.PlayerStatusBar
         private Vector2 DrawFrameAndGetPosition(SpriteBatch spriteBatch)
         {
             var topCenter = GetTopCenterPointOfSprite(sprite, transform);
-            var framePosition = topCenter - new Vector2(frameTexture.Width / 2f, frameTexture.Height);
+            var framePosition = topCenter - new Vector2(frameTexture.Width / 2f, frameTexture.Height + FrameHeightAboveSprite);
 
             spriteBatch.Draw(frameTexture, framePosition, Color.White);
             return framePosition;

@@ -5,11 +5,11 @@ using XnaCommonLib.ECS.Components;
 
 namespace XnaClientLib.ECS.Linkers
 {
-    public class MovementToAnimationLinker : Linker<IComponentContainer, StateAnimation<MovementDirection>>
+    public class MovementToAnimationLinker : Linker<IComponentContainer, StateAnimation<AnimationState>>
     {
         private DirectionalInput Input { get; }
         private PlayerAttributes Attributes { get; }
-        public MovementToAnimationLinker(IComponentContainer first, StateAnimation<MovementDirection> second) : base(first, second)
+        public MovementToAnimationLinker(IComponentContainer first, StateAnimation<AnimationState> second) : base(first, second)
         {
             Input = First.Get<DirectionalInput>();
             Attributes = First.Get<PlayerAttributes>();
@@ -24,37 +24,38 @@ namespace XnaClientLib.ECS.Linkers
             }
 
             Second.Enabled = true;
-            var direction = Second.DefaultState;
             var animationSpeed = 0f;
-            direction = UpdateAnimation(direction, ref animationSpeed);
+            var direction = UpdateAnimation(ref animationSpeed);
 
             Second.CurrentState = direction;
             Second.AnimationSpeed = animationSpeed;
         }
 
-        private MovementDirection UpdateAnimation(MovementDirection direction, ref float animationSpeed)
+        private AnimationState UpdateAnimation(ref float animationSpeed)
         {
+            var state = Second.DefaultState;
+
             if (Input.Vertical > 0)
             {
-                direction = MovementDirection.Down;
+                state = AnimationState.Get(AnimationType.Walk, AnimationDirection.Down);
                 animationSpeed = Input.Vertical;
             }
             else if (Input.Vertical < 0)
             {
-                direction = MovementDirection.Up;
+                state = AnimationState.Get(AnimationType.Walk, AnimationDirection.Up);
                 animationSpeed = Input.Vertical;
             }
             if (Input.Horizontal > 0)
             {
-                direction = MovementDirection.Right;
+                state = AnimationState.Get(AnimationType.Walk, AnimationDirection.Right);
                 animationSpeed = Input.Horizontal;
             }
             else if (Input.Horizontal < 0)
             {
-                direction = MovementDirection.Left;
+                state = AnimationState.Get(AnimationType.Walk, AnimationDirection.Left);
                 animationSpeed = Input.Horizontal;
             }
-            return direction;
+            return state;
         }
     }
 }

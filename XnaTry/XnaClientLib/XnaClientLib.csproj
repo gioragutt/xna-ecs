@@ -65,6 +65,9 @@
     <Compile Include="ConnectionHandler.cs" />
     <Compile Include="ECS\ClientGameManager.cs" />
     <Compile Include="ECS\Compnents\GUI\Animation\Animation.cs" />
+    <Compile Include="ECS\Compnents\GUI\Animation\AnimationDirection.cs" />
+    <Compile Include="ECS\Compnents\GUI\Animation\AnimationState.cs" />
+    <Compile Include="ECS\Compnents\GUI\Animation\AnimationType.cs" />
     <Compile Include="ECS\Compnents\GUI\GameMinimap.cs" />
     <Compile Include="ECS\Compnents\GamepadDirectionalInput.cs" />
     <Compile Include="ECS\Compnents\GUI\GuiComponent.cs" />
@@ -97,7 +100,6 @@
     <Compile Include="IContentRequester.cs" />
     <Compile Include="IResourcesManager.cs" />
     <Compile Include="ECS\Compnents\GUI\GameMap.cs" />
-    <Compile Include="MovementDirection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourcesManager.cs" />
   </ItemGroup>

@@ -229,7 +229,7 @@ namespace XnaServerLib
 
             var teamName = TeamsData.Teams.ContainsKey(loginMessage.PlayerTeam) ? loginMessage.PlayerTeam : RandomTeam();
 
-            GameObject.Transform.Scale = 0.4f;
+            GameObject.Transform.Scale = 2;
             GameObject.Transform.Position = GameManager.Server.MapManager.GetRandomSpawnPosition(teamName);
 
             GameObject.Components.Add(new PlayerAttributes
@@ -241,7 +241,7 @@ namespace XnaServerLib
             });
 
             GameObject.Components.Add(new InputData());
-            GameObject.Components.Add(new Velocity(new Vector2(500)));
+            GameObject.Components.Add(new Velocity(new Vector2(350)));
         }
 
         private static void AssertHeaderAndFooter(ClientLoginMessage loginMessage)
