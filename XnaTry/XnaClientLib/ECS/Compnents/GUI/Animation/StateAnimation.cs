@@ -59,7 +59,7 @@ namespace XnaClientLib.ECS.Compnents.GUI.Animation
         /// <param name="animations">The animations managed by the state animation</param>
         public StateAnimation(T defaultState, Dictionary<T, Animation> animations)
         {
-            if (!animations.ContainsKey(DefaultState))
+            if (!animations.ContainsKey(defaultState))
                 throw new ArgumentOutOfRangeException("defaultState", defaultState, "The default state must be one of the states of the animation");
 
             Animations = animations;
