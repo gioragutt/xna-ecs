@@ -28,8 +28,9 @@ namespace ConsoleServer
         private static void Main(string[] args)
         {
             var printer = new ServerMessagesPrinter();
+
             var server = new Server();
-            server.Listen();
+            server.StartListen();
         }
     }
 }

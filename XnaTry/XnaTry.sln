@@ -29,6 +29,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "Launcher\Launch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedGameData", "SharedGameData\SharedGameData.csproj", "{4016D7D9-C694-454D-9F2A-C74C92F6C445}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfServer.Client", "WpfServer\WpfServer.Client.csproj", "{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WpfServer", "WpfServer", "{1EF9E0F8-A918-4B87-A823-2D9EF5DD0F9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfServer.Windows", "WpfServer.Windows\WpfServer.Windows.csproj", "{B1EE0664-0153-4E25-B4B4-822497627584}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -170,11 +176,37 @@ Global
 		{4016D7D9-C694-454D-9F2A-C74C92F6C445}.Release|x86.Build.0 = Release|Any CPU
 		{4016D7D9-C694-454D-9F2A-C74C92F6C445}.Release|Xbox 360.ActiveCfg = Release|Any CPU
 		{4016D7D9-C694-454D-9F2A-C74C92F6C445}.Release|Xbox 360.Build.0 = Release|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Debug|x86.Build.0 = Debug|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Debug|Xbox 360.ActiveCfg = Debug|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Debug|Xbox 360.Build.0 = Debug|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Release|x86.ActiveCfg = Release|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Release|x86.Build.0 = Release|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Release|Xbox 360.ActiveCfg = Release|Any CPU
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E}.Release|Xbox 360.Build.0 = Release|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Debug|x86.Build.0 = Debug|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Debug|Xbox 360.ActiveCfg = Debug|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Debug|Xbox 360.Build.0 = Debug|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Release|x86.ActiveCfg = Release|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Release|x86.Build.0 = Release|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Release|Xbox 360.ActiveCfg = Release|Any CPU
+		{B1EE0664-0153-4E25-B4B4-822497627584}.Release|Xbox 360.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5C015045-FE91-4543-AA2D-4B431C6BA2AD} = {7F06CBF7-19C7-480B-B95F-D9A9DA0CAD7A}
+		{FDBF7FBE-C296-4C0E-8BCB-324CF0D5045E} = {1EF9E0F8-A918-4B87-A823-2D9EF5DD0F9A}
+		{B1EE0664-0153-4E25-B4B4-822497627584} = {1EF9E0F8-A918-4B87-A823-2D9EF5DD0F9A}
 	EndGlobalSection
 EndGlobal

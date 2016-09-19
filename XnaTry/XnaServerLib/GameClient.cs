@@ -23,15 +23,9 @@ namespace XnaServerLib
     {
         public void Dispose()
         {
-            if (Connection.Connected)
-            {
-                Connection?.Client.Disconnect(true);
-                Connection?.Close();
-            }
-            Reader.Dispose();
-            Writer.Dispose();
             GameObject.Entity.Dispose();
             GameObject = null;
+            timeoutTimer = null;
         }
 
         #region Properties
@@ -126,6 +120,19 @@ namespace XnaServerLib
         }
 
         #endregion Constructor
+
+        public void StopClient()
+        {
+            if (Connection.Connected)
+            {
+                Connection?.Client?.Disconnect(false);
+                Connection?.Client?.Close();
+                Connection?.Close();
+            }
+
+            Reader.Dispose();
+            Writer.Dispose();
+        }
 
         private void GameClient_InteractWithClient()
         {

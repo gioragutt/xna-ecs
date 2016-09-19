@@ -31,12 +31,12 @@ namespace XnaServerLib
         /// <summary>
         /// The thread that accepts clients to the server
         /// </summary>
-        private Thread ClientAcceptingThread { get; }
+        private Thread clientAcceptingThread;
 
         /// <summary>
         /// The thread that runs the update loop
         /// </summary>
-        private Thread UpdateLoopThread { get; }
+        private Thread updateLoopThread;
 
         #endregion Threads
 
@@ -55,12 +55,17 @@ namespace XnaServerLib
         /// <summary>
         /// The port on which the server runs
         /// </summary>
-        public int Port { get; }
+        public int Port { get; set; }
 
         /// <summary>
         /// Indicates whether the server is listening for new connections
         /// </summary>
         public bool Listening { get; private set; }
+
+        /// <summary>
+        /// Indicates whether the server is listening for new connections
+        /// </summary>
+        private bool threadsRunning;
 
         /// <summary>
         /// The servers GameManager
@@ -85,25 +90,14 @@ namespace XnaServerLib
             GameClients = new List<GameClient>();
 
             Port = port;
-            ClientAcceptingThread = new Thread(Server_AcceptPlayers)
-            {
-                IsBackground = false
-            };
-
-            UpdateLoopThread = new Thread(Server_UpdateLoop)
-            {
-                IsBackground = true
-            };
 
             MapManager = new MapManager("xna_try_map1.tmx");
 
             ConnectionListener = new TcpListener(IPAddress.Any, Port);
             Listening = false;
-
+            threadsRunning = false;
             GameManager = new ServerGameManager(this);
             GameManager.RegisterSystem(new MovementSystem());
-
-            UpdateLoopThread.Start();
 
             Subscribe(Constants.Messages.DamagePlayers, Callback_DamagePlayers);
         }
@@ -134,23 +128,39 @@ namespace XnaServerLib
 
         #region API Methods
 
-        public void Listen()
+        public void StartListen()
         {
-            if (Listening)
+            if (threadsRunning)
                 throw new ServerAlreadyRunningException();
 
-            Console.WriteLine("Server listening");
-            ClientAcceptingThread.Start();
-            Listening = true;
+            Console.WriteLine("StartListen");
+            threadsRunning = true;
+            StartAcceptingClients();
+            StartUpdatingServer();
+        }
+
+        public void StopListen()
+        {
+            Console.WriteLine("StopListen");
+            threadsRunning = false;
+            ConnectionListener.Stop();
+            var clients = GameClients.Count;
+            for (var i = 0; i < clients; ++i)
+            {
+                GameClients[0].StopClient();
+                GameClients.RemoveAt(0);
+            }
         }
 
         #endregion API Methods
 
         #region Thread Methods
 
+        #region Update Loop Thread
+
         private void Server_UpdateLoop()
         {
-            while (true)
+            while (threadsRunning)
             {
                 var currentTime = DateTime.Now;
                 GameManager.Update(currentTime - LastUpdateTime);
@@ -160,25 +170,45 @@ namespace XnaServerLib
             }
         }
 
+        private void StartUpdatingServer()
+        {
+            updateLoopThread = null;
+            updateLoopThread = new Thread(Server_UpdateLoop)
+            {
+                IsBackground = true,
+                Name = "Update Server Thread"
+            };
+
+            updateLoopThread.Start();
+        }
+
+        #endregion Update Loop Thread
+
+        #region Client Accepting Thread
+
         private void Server_AcceptPlayers()
         {
             ConnectionListener.Start();
+            Listening = true;
 
-            while (Listening)
+            while (threadsRunning)
             {
                 try
                 {
-                        var acceptedConnection = ConnectionListener.AcceptTcpClient();
-                        Console.WriteLine("{0} Accepted new connection", DateTime.Now.TimeOfDay);
-                        var newGameClient = new GameClient(acceptedConnection, GameManager.CreateGameObject(), GameManager);
-                        var attr = newGameClient.GameObject.Components.Get<PlayerAttributes>();
-                        Console.WriteLine("{2} - {0} Connected to {1}", attr.Name, attr.Team.Name, acceptedConnection.Client.RemoteEndPoint);
-                        GameClients.Add(newGameClient);
-                        Broadcast(
-                            MessageBuilder.Create(Constants.Messages.ClientAcceptedOnServer)
-                                .Add(Constants.Fields.PlayerName, attr.Name)
-                                .Add(Constants.Fields.TeamName, attr.Team.Name)
-                                .Get());
+                    var acceptedConnection = ConnectionListener.AcceptTcpClient();
+                    Console.WriteLine("{0} Accepted new connection", DateTime.Now.TimeOfDay);
+                    var newGameClient = new GameClient(acceptedConnection, GameManager.CreateGameObject(), GameManager);
+                    var attr = newGameClient.GameObject.Components.Get<PlayerAttributes>();
+                    Console.WriteLine("{2} - {0} Connected to {1}", attr.Name, attr.Team.Name,
+                        acceptedConnection.Client.RemoteEndPoint);
+                    GameClients.Add(newGameClient);
+                    Broadcast(
+                        MessageBuilder.Create(Constants.Messages.ClientAcceptedOnServer).Add(
+                            Constants.Fields.PlayerName, attr.Name).Add(Constants.Fields.TeamName, attr.Team.Name).Get());
+                }
+                catch (ThreadAbortException)
+                {
+                    break;
                 }
                 catch (SocketException se)
                 {
@@ -189,7 +219,24 @@ namespace XnaServerLib
                     Console.WriteLine("Encountered an error while trying to accept a new client: " + ex.Message);
                 }
             }
+
+            Listening = false;
+            if (ConnectionListener.Server.Connected)
+                ConnectionListener.Stop();
         }
+
+        private void StartAcceptingClients()
+        {
+            clientAcceptingThread = null;
+            clientAcceptingThread = new Thread(Server_AcceptPlayers)
+            {
+                IsBackground = true,
+                Name = "Client Accepting Thread"
+            };
+            clientAcceptingThread.Start();
+        }
+
+        #endregion
 
         #endregion Thread Methods
     }

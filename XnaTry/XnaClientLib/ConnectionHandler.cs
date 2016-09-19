@@ -21,11 +21,18 @@ namespace XnaClientLib
             if (IsDisposed)
                 return;
 
-            Connection?.Client.Disconnect(true);
-            Connection?.Close();
-            Reader.Dispose();
-            Writer.Dispose();
-            IsDisposed = true;
+            try
+            {
+                Connection?.Client.Disconnect(true);
+                Connection?.Close();
+                Reader.Dispose();
+                Writer.Dispose();
+                IsDisposed = true;
+            }
+            catch
+            {
+                // ignored
+            }
         }
 
         #region Network Components and Properties
@@ -149,7 +156,7 @@ namespace XnaClientLib
                 WriteLoginDataToServer(name, team);
                 ReadLoginResponseFromServer();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 Dispose();
                 return;

@@ -141,7 +141,7 @@
   <PropertyGroup>
     <PostBuildEvent>copy $(ProjectDir)Map\* $(ProjectDir)$(OutDir)
 copy $(ProjectDir)Map\* $(SolutionDir)ConsoleServer\bin\Debug\
-</PostBuildEvent>
+copy $(ProjectDir)Map\* $(SolutionDir)WpfServer\bin\Debug\</PostBuildEvent>
   </PropertyGroup>
   <!--
       To modify your build process, add your task inside one of the targets below and uncomment it. 
