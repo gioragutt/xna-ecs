@@ -78,7 +78,7 @@ namespace XnaServerLib
         /// </summary>
         public DateTime LastUpdateTime { get; private set; }
 
-        private TimeoutTimer TimeoutTimer { get; }
+        private TimeoutTimer timeoutTimer;
 
         #endregion Properties
 
@@ -96,7 +96,7 @@ namespace XnaServerLib
             Utils.AssertArgumentNotNull(gameObject, "gameObject");
 
             EmsServerEndpoint = new EmsServerEndpoint();
-            TimeoutTimer = new TimeoutTimer(Constants.Time.MaxTimeout);
+            timeoutTimer = new TimeoutTimer(Constants.Time.MaxTimeout);
             GameObject = gameObject;
             GameManager = gameManager;
             Connection = connection;
@@ -134,9 +134,9 @@ namespace XnaServerLib
                 try
                 {
                     if (HelperMethods.Receive(Connection, Reader, PacketProtocol))
-                        TimeoutTimer.Reset();
+                        timeoutTimer.Reset();
                     else
-                        TimeoutTimer.Update(DateTime.Now - LastUpdateTime);
+                        timeoutTimer.Update(DateTime.Now - LastUpdateTime);
                 }
                 catch (Exception e)
                 {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace ECS.Interfaces
 {
@@ -53,11 +54,11 @@ namespace ECS.Interfaces
         /// <summary>
         /// Removed an instance of given type from the container
         /// </summary>
-        void Remove(System.Type type);
+        void Remove(Type type);
 
         /// <summary>
         /// Removed all instances of given type (and those who derive from it)
         /// </summary>
-        void RemoveAllOf(System.Type type);
+        void RemoveAllOf(Type type);
     }
 }

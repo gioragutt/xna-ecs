@@ -12,10 +12,14 @@ namespace XnaCommonLib.ECS.Components
             Scale = instance.Scale;
         }
 
-        #region Properties
+        #region Fields
 
         private float scale;
         private float rotation;
+
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// The scale of the entity
