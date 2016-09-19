@@ -90,32 +90,38 @@ namespace XnaClientLib.ECS.Compnents.GUI.Animation
                 Sprite.Texture = AnimationTextures[CurrentTextureIndex];
         }
 
-        public override void Update(long delta)
+        public override bool Update(long delta)
         {
             if (!texturesLoaded)
-                return;
+                // If textures aren't loaded yet, then it's safe to move on that the animation can change
+                return true;
 
             if (!Enabled)
             {
                 ResetToInitialFrame();
-                return;
+                // If we're already reseting, the animation is reseting anyway, so it can change
+                return true;
             }
 
             CurrentTick += delta;
             var tpr = TimePerFrame;
+
             if (CurrentTick >= tpr)
             {
                 CurrentTextureIndex++;
                 CurrentTick -= tpr;
             }
             else
-                return;
+                // We're not in the last frame yet, and we're not changing the frame, so animation can't change
+                return false;
+
+            var isAnimationFinished = CurrentTextureIndex == AnimationTextures.Count - 1;
 
             var textureToShow = AnimationTextures[CurrentTextureIndex];
-            if (Sprite.Texture == textureToShow)
-                return;
+            if (Sprite.Texture != textureToShow)
+                Sprite.Texture = textureToShow;
 
-            Sprite.Texture = textureToShow;
+            return isAnimationFinished;
         }
     }
 }

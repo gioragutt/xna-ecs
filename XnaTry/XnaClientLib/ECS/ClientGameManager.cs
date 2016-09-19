@@ -259,27 +259,27 @@ namespace XnaClientLib.ECS
             const long msPerFrame = 150;
 
             var stateAnimation =
-                new StateAnimation<AnimationState>(AnimationState.Get(AnimationType.Stale, AnimationDirection.Down),
-                    new Dictionary<AnimationState, Animation>
+                new CharacterAnimation(CharacterAnimationState.Get(AnimationType.Stale, AnimationDirection.Down),
+                    new Dictionary<CharacterAnimationState, Animation>
                     {
-                        [AnimationState.Get(AnimationType.Stale, AnimationDirection.Down)] =
+                        [CharacterAnimationState.Get(AnimationType.Stale, AnimationDirection.Down)] =
                             ResourceManager.Register(new TextureCollectionAnimation(components, new[]
                             {
                                 "TestCharacter/Walk/Down_000"
                             }, msPerFrame)),
-                        [AnimationState.Get(AnimationType.Walk, AnimationDirection.Down)] =
+                        [CharacterAnimationState.Get(AnimationType.Walk, AnimationDirection.Down)] =
                             ResourceManager.Register(new TextureCollectionAnimation(components,
                                 Utils.FormatRange("TestCharacter/Walk/Down_{0:D3}", walkAnimationFrameStart,
                                     walkAnimationFrameEndVerticalAnimation), msPerFrame)),
-                        [AnimationState.Get(AnimationType.Walk, AnimationDirection.Up)] =
+                        [CharacterAnimationState.Get(AnimationType.Walk, AnimationDirection.Up)] =
                             ResourceManager.Register(new TextureCollectionAnimation(components,
                                 Utils.FormatRange("TestCharacter/Walk/Up_{0:D3}", walkAnimationFrameStart,
                                     walkAnimationFrameEndVerticalAnimation), msPerFrame)),
-                        [AnimationState.Get(AnimationType.Walk, AnimationDirection.Left)] =
+                        [CharacterAnimationState.Get(AnimationType.Walk, AnimationDirection.Left)] =
                             ResourceManager.Register(new TextureCollectionAnimation(components,
                                 Utils.FormatRange("TestCharacter/Walk/Left_{0:D3}", walkAnimationFrameStart,
                                     walkAnimationFrameEndHorizontalAnimation), msPerFrame)),
-                        [AnimationState.Get(AnimationType.Walk, AnimationDirection.Right)] =
+                        [CharacterAnimationState.Get(AnimationType.Walk, AnimationDirection.Right)] =
                             ResourceManager.Register(new TextureCollectionAnimation(components,
                                 Utils.FormatRange("TestCharacter/Walk/Right_{0:D3}", walkAnimationFrameStart,
                                     walkAnimationFrameEndHorizontalAnimation), msPerFrame)),

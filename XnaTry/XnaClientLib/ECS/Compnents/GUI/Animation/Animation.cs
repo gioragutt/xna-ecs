@@ -63,6 +63,12 @@ namespace XnaClientLib.ECS.Compnents.GUI.Animation
         /// Update the state of the animation
         /// </summary>
         /// <param name="delta">Time since last update</param>
-        public abstract void Update(long delta);
+        /// <returns>true if animation can change; otherwise false</returns>
+        /// <remarks>
+        /// there are animations that we don't want to cut in the middle(like performing an AA),
+        /// so we want to let it finish first, then we can check the value of Update to see if the animation
+        /// can proceed
+        /// </remarks>
+        public abstract bool Update(long delta);
     }
 }
