@@ -128,15 +128,15 @@ namespace XnaServerLib
 
         #region API Methods
 
-        public void StartListen()
+        public void StartListen(bool isBackground = true)
         {
             if (threadsRunning)
                 throw new ServerAlreadyRunningException();
 
             Console.WriteLine("StartListen");
             threadsRunning = true;
-            StartAcceptingClients();
-            StartUpdatingServer();
+            StartAcceptingClients(isBackground);
+            StartUpdatingServer(isBackground);
         }
 
         public void StopListen()
@@ -170,12 +170,12 @@ namespace XnaServerLib
             }
         }
 
-        private void StartUpdatingServer()
+        private void StartUpdatingServer(bool isBackground)
         {
             updateLoopThread = null;
             updateLoopThread = new Thread(Server_UpdateLoop)
             {
-                IsBackground = true,
+                IsBackground = isBackground,
                 Name = "Update Server Thread"
             };
 
@@ -225,12 +225,12 @@ namespace XnaServerLib
                 ConnectionListener.Stop();
         }
 
-        private void StartAcceptingClients()
+        private void StartAcceptingClients(bool isBackground)
         {
             clientAcceptingThread = null;
             clientAcceptingThread = new Thread(Server_AcceptPlayers)
             {
-                IsBackground = true,
+                IsBackground = isBackground,
                 Name = "Client Accepting Thread"
             };
             clientAcceptingThread.Start();

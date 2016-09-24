@@ -30,7 +30,7 @@ namespace ConsoleServer
             var printer = new ServerMessagesPrinter();
 
             var server = new Server();
-            server.StartListen();
+            server.StartListen(false);
         }
     }
 }
