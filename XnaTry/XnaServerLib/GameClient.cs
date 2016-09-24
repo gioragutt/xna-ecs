@@ -256,9 +256,8 @@ namespace XnaServerLib
             if (loginMessage.MessageHeader != Constants.Game.LoginMessageHeader ||
                 loginMessage.MessageFooter != Constants.Game.LoginMessageFooter)
             {
-                throw new InvalidDataException(string.Format("Invalid header({0} should be {1}) or footer({2} should be {3})",
-                    loginMessage.MessageHeader, Constants.Game.LoginMessageHeader, loginMessage.MessageFooter,
-                    Constants.Game.LoginMessageFooter));
+                throw new InvalidHeaderOrFooterException(loginMessage.MessageHeader, Constants.Game.LoginMessageHeader,
+                    loginMessage.MessageFooter, Constants.Game.LoginMessageFooter);
             }
         }
     }

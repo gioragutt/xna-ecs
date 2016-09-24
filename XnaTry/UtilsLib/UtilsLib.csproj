@@ -51,6 +51,7 @@
     <Compile Include="Exceptions\Common\BaseGameException.cs" />
     <Compile Include="Exceptions\Common\CommunicationTimeoutException.cs" />
     <Compile Include="Exceptions\Server\ConnectionEstablishmentErrorException.cs" />
+    <Compile Include="Exceptions\Server\InvalidHeaderOrFooterException.cs" />
     <Compile Include="Exceptions\Server\InvalidPortException.cs" />
     <Compile Include="Exceptions\Server\ServerAlreadyRunningException.cs" />
     <Compile Include="Extentions.cs" />
