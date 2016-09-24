@@ -1,0 +1,48 @@
+﻿<Window x:Class="WpfServer.Views.PlayerInformationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfServer.Views"
+        xmlns:converters="clr-namespace:WpfServer.Windows.Converters;assembly=WpfServer.Windows"
+        Height="300" Width="450"
+        mc:Ignorable="d">
+    <Window.Resources>
+        <converters:PlayerGuidToDisplayerConverter x:Key="PlayerGuidToDisplayerConverter"/>
+        <converters:DecimalToIntegerPercentConverter x:Key="DecimalToIntegerPercentConverter"/>
+    </Window.Resources>
+    <Window.Title>
+        <MultiBinding StringFormat="{}{0} - {1}">
+            <Binding Path="Id" Converter="{StaticResource PlayerGuidToDisplayerConverter}"/>
+            <Binding Path="Attributes.Name" />
+        </MultiBinding>
+    </Window.Title>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- Player Team -->
+        <Label Grid.Column="0" Grid.Row="0" Content="Player Team" FontWeight="Bold" HorizontalContentAlignment="Right"/>
+        <TextBox Grid.Column="1" Grid.Row="0" Margin="0, 0, 5, 0" Text="{Binding Attributes.Team.Name, Mode=OneWay}" IsEnabled="False" VerticalAlignment="Center"/>
+        <!-- Player Health -->
+        <Label Grid.Column="0" Grid.Row="1" Content="Health" FontWeight="Bold" HorizontalContentAlignment="Right"/>
+        <TextBox Grid.Column="1" Grid.Row="1" Margin="0, 0, 5, 0" IsEnabled="False" VerticalAlignment="Center">
+            <TextBox.Text>
+                <MultiBinding Mode="OneWay" StringFormat="{}{0}/{1} ({2}%)">
+                    <Binding Path="Attributes.Health" />
+                    <Binding Path="Attributes.MaxHealth" />
+                    <Binding Path="Attributes.HealthPercentage" Converter="{StaticResource DecimalToIntegerPercentConverter}"/>
+                </MultiBinding>
+            </TextBox.Text>
+        </TextBox>
+        <!-- Player Position -->
+        <Label Grid.Column="0" Grid.Row="2" Content="Player Position" FontWeight="Bold" HorizontalContentAlignment="Right"/>
+        <TextBox Grid.Column="1" Grid.Row="2" Margin="0, 0, 5, 0" Text="{Binding Transform, Mode=OneWay}" IsEnabled="False" VerticalAlignment="Center"/>
+    </Grid>
+</Window>

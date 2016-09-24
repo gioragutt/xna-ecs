@@ -3,15 +3,20 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:WpfServer.Windows.Converters;assembly=WpfServer.Windows"
         mc:Ignorable="d"
-        d:DataContext="viewModels:ServerViewModel"
-        Title="MainWindow" Height="150" Width="525">
+        Closing="MainWindow_OnClosing"
+        Title="MainWindow" Height="400" Width="400">
+    <Window.Resources>
+        <converters:PlayerGuidToDisplayerConverter x:Key="PlayerGuidToDisplayerConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" FontSize="48" Content="{Binding ServerStatus, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
+        <Label Grid.Row="0" FontSize="36" Content="{Binding ServerStatus, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center"/>
         <Grid Grid.Row="1" VerticalAlignment="Top" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -20,5 +25,25 @@
             <Button Grid.Column="0" Command="{Binding StartListeningCommand}" Content="Start" Margin="5, 0, 5, 0" FontSize="18.667"/>
             <Button Grid.Column="1" Command="{Binding StopListeningCommand}" Content="Stop" Margin="5, 0, 5, 0" FontSize="18.667"/>
         </Grid>
+        <ListView x:Name="PlayersListView" Margin="5, 10, 5, 5" Grid.Row="2" ItemsSource="{Binding PlayerData, UpdateSourceTrigger=PropertyChanged}">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Kick" 
+                              Command="{Binding KickPlayerCommand}" 
+                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+
+                    <MenuItem Header="View Information" 
+                              Command="{Binding OpenPlayerInformationWindowCommand}" 
+                              CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Id" Width="120" DisplayMemberBinding="{Binding Id, Converter={StaticResource PlayerGuidToDisplayerConverter}}"/>
+                    <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Attributes.Name}" />
+                    <GridViewColumn Header="Team" Width="120" DisplayMemberBinding="{Binding Attributes.Team.Name}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

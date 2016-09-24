@@ -11,6 +11,7 @@ using System.Threading;
 using SharedGameData;
 using UtilsLib;
 using UtilsLib.Consts;
+using UtilsLib.Exceptions.Server;
 using UtilsLib.Utility;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
@@ -205,6 +206,11 @@ namespace XnaServerLib
         {
             var components = GameObject.Components;
             components.Get<DirectionalInput>().Update(playerUpdate.Input);
+
+            GameManager.Server.OnClientUpdateReceived(new PlayerObjectEventArgs
+            {
+                GameObject = GameObject
+            });
         }
 
         private void SendClientLoginResponse()
@@ -233,7 +239,11 @@ namespace XnaServerLib
             var loginMessage = JsonConvert.DeserializeObject<ClientLoginMessage>(serializedMessage);
 
             AssertHeaderAndFooter(loginMessage);
+            BuildClientGameObject(loginMessage);
+        }
 
+        private void BuildClientGameObject(ClientLoginMessage loginMessage)
+        {
             var teamName = TeamsData.Teams.ContainsKey(loginMessage.PlayerTeam) ? loginMessage.PlayerTeam : RandomTeam();
 
             GameObject.Transform.Scale = 2;

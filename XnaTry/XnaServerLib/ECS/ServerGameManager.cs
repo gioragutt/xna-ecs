@@ -21,6 +21,10 @@ namespace XnaServerLib.ECS
 
         public void DisposeOfClient(GameClient client)
         {
+            Server.OnClientDisconnected(new PlayerIdEventArgs
+            {
+                Id = client.GameObject.Entity.Id
+            });
             Server.GameClients.Remove(client);
             client.Dispose();
         }

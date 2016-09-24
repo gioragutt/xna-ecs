@@ -59,6 +59,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\OpenPlayerInformationWindowCommand.cs" />
+    <Compile Include="Views\PlayerInformationWindow.xaml.cs">
+      <DependentUpon>PlayerInformationWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,6 +71,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\KickPlayerCommand.cs" />
+    <Compile Include="Models\PlayerInformation.cs" />
+    <Compile Include="ViewModels\PlayerInformationViewModel.cs" />
     <Compile Include="ViewModels\ServerViewModel.cs" />
     <Compile Include="Commands\StartListeningCommand.cs" />
     <Compile Include="Commands\StopListeningCommand.cs" />
@@ -74,6 +81,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PlayerInformationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

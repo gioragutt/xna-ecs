@@ -45,6 +45,8 @@
     <Compile Include="ECS\ServerGameManager.cs" />
     <Compile Include="ECS\Systems\MovementSystem.cs" />
     <Compile Include="GameClient.cs" />
+    <Compile Include="PlayerIdEventArgs.cs" />
+    <Compile Include="PlayerObjectEventArgs.cs" />
     <Compile Include="MapManager.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

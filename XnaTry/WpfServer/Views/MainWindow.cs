@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Threading;
-using Newtonsoft.Json.Linq;
+﻿using System.ComponentModel;
 using WpfServer.ViewModels;
-using XnaServerLib;
-using ItemType = System.String;
 
 namespace WpfServer.Views
 {
@@ -14,34 +8,18 @@ namespace WpfServer.Views
     /// </summary>
     public partial class MainWindow
     {
-        //private readonly Server server;
-
-        //public string ServerStatus => string.Format("Sever is {0}", server.Listening ? "Running" : "Not Running");
-
-        //public ObservableCollection<ItemType> Items
-        //{
-        //    get
-        //    {
-        //        return (ObservableCollection<ItemType>)GetValue(ItemsProperty);
-        //    }
-        //    set
-        //    {
-        //        SetValue(ItemsProperty, value);
-        //    }
-        //}
-
-        //// Using a DependencyProperty as the backing store for Items.  This enables animation, styling, binding, etc...
-        //public static readonly DependencyProperty ItemsProperty =
-        //    DependencyProperty.Register("Items", typeof(ObservableCollection<ItemType>), typeof(MainWindow), new PropertyMetadata(null));
+        private readonly ServerViewModel server;
 
         public MainWindow()
         {
             InitializeComponent();
-            //server = new Server();
-            //server.SubscribeToAll(Callback_ToAll);
+            server = new ServerViewModel(Dispatcher);
+            DataContext = server;
+        }
 
-            //Items = new ObservableCollection<ItemType>();
-            DataContext = new ServerViewModel();
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            server?.StopListeningCommand.Execute(null);
         }
     }
 }

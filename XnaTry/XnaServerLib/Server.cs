@@ -26,6 +26,10 @@ namespace XnaServerLib
 
         #endregion Constants
 
+        public event EventHandler<PlayerObjectEventArgs> ClientConnected;
+        public event EventHandler<PlayerObjectEventArgs> ClientUpdateReceived;
+        public event EventHandler<PlayerIdEventArgs> ClientDisconnected;
+
         #region Threads
 
         /// <summary>
@@ -205,6 +209,11 @@ namespace XnaServerLib
                     Broadcast(
                         MessageBuilder.Create(Constants.Messages.ClientAcceptedOnServer).Add(
                             Constants.Fields.PlayerName, attr.Name).Add(Constants.Fields.TeamName, attr.Team.Name).Get());
+
+                    OnClientConnected(new PlayerObjectEventArgs
+                    {
+                        GameObject = newGameClient.GameObject
+                    });
                 }
                 catch (ThreadAbortException)
                 {
@@ -239,5 +248,24 @@ namespace XnaServerLib
         #endregion
 
         #endregion Thread Methods
+        
+        #region Event Invoketions
+
+        protected virtual void OnClientConnected(PlayerObjectEventArgs e)
+        {
+            ClientConnected?.Invoke(this, e);
+        }
+        public virtual void OnClientDisconnected(PlayerIdEventArgs e)
+        {
+            ClientDisconnected?.Invoke(this, e);
+        }
+
+        public virtual void OnClientUpdateReceived(PlayerObjectEventArgs e)
+        {
+            ClientUpdateReceived?.Invoke(this, e);
+        }
+
+        #endregion
+
     }
 }

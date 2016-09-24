@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,6 +44,10 @@
   <ItemGroup>
     <Compile Include="AsyncCommandBase.cs" />
     <Compile Include="CommandBase.cs" />
+    <Compile Include="Converters\DecimalToIntegerPercentConverter.cs" />
+    <Compile Include="Converters\PlayerGuidToDisplayerConverter.cs" />
+    <Compile Include="NotifyPropertyChangedBase.cs" />
+    <Compile Include="ObservableItemCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModelBase.cs" />
   </ItemGroup>
