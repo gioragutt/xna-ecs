@@ -262,6 +262,11 @@ namespace XnaClientLib.ECS
                 new CharacterAnimation(CharacterAnimationState.Get(AnimationType.Stale, AnimationDirection.Down),
                     new Dictionary<CharacterAnimationState, Animation>
                     {
+                        [CharacterAnimationState.Get(AnimationType.Dead, AnimationDirection.Down)] =
+                            ResourceManager.Register(new TextureCollectionAnimation(components, new[]
+                            {
+                                "Player/Images/Dead"
+                            }, msPerFrame)),
                         [CharacterAnimationState.Get(AnimationType.Stale, AnimationDirection.Down)] =
                             ResourceManager.Register(new TextureCollectionAnimation(components, new[]
                             {

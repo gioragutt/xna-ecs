@@ -17,7 +17,13 @@ namespace XnaClientLib.ECS.Linkers
 
         public override void Link()
         {
-            if (!Input.IsMoving() || Attributes.IsDead)
+            if (Attributes.IsDead)
+            {
+                Second.CurrentState = CharacterAnimationState.Get(AnimationType.Dead, AnimationDirection.Down);
+                Second.Enabled = true;
+                return;
+            }
+            if (!Input.IsMoving())
             {
                 Second.Enabled = false;
                 return;
