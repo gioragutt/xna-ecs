@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using UtilsLib.Exceptions.Common;
 
 namespace XnaCommonLib.Network
@@ -19,7 +20,7 @@ namespace XnaCommonLib.Network
         {
             Elapsed = elapsedTimeout;
 
-            if (Elapsed >= MaxTime)
+            if (Elapsed >= MaxTime && !Debugger.IsAttached)
                 throw new CommunicationTimeoutException(MaxTime, Elapsed, BeginningOfTimeoutSampling);
         }
 
