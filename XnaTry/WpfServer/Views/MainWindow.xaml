@@ -32,7 +32,7 @@
                               Command="{Binding KickPlayerCommand}" 
                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
 
-                    <MenuItem Header="View Information" 
+                    <MenuItem Header="View Information"
                               Command="{Binding OpenPlayerInformationWindowCommand}" 
                               CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
                 </ContextMenu>

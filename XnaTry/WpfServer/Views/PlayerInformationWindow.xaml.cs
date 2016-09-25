@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
 
 namespace WpfServer.Views
 {
@@ -7,9 +9,11 @@ namespace WpfServer.Views
     /// </summary>
     public partial class PlayerInformationWindow : Window
     {
-        public PlayerInformationWindow()
+        public PlayerInformationWindow() { InitializeComponent(); }
+
+        private void CloseWindowOnKick(object sender, RoutedEventArgs e)
         {
-            InitializeComponent();
+            Dispatcher.BeginInvoke(new Action(Close));
         }
     }
 }

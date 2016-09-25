@@ -13,10 +13,10 @@ namespace WpfServer.ViewModels
     public class ServerViewModel : ViewModelBase
     {
         public Server Server { get; }
-        public PlayerInformationViewModel PlayerInformationViewModel { get; }
+        public PlayerInformationService PlayerInformationService { get; }
         public Dispatcher Dispatcher { get; }
 
-        public ObservableItemCollection<PlayerInformation> PlayerData => PlayerInformationViewModel.PlayerData;
+        public ObservableItemCollection<PlayerInformation> PlayerData => PlayerInformationService.PlayerData;
 
         #region Commands
 
@@ -64,12 +64,12 @@ namespace WpfServer.ViewModels
         {
             Server = new Server();
             Dispatcher = dispatcher;
-            PlayerInformationViewModel = new PlayerInformationViewModel();
+            PlayerInformationService = new PlayerInformationService();
 
             StartListeningCommand = new StartListeningCommand(this);
             StopListeningCommand = new StopListeningCommand(this);
             KickPlayerCommand = new KickPlayerCommand(this);
-            OpenPlayerInformationWindowCommand = new OpenPlayerInformationWindowCommand(Dispatcher);
+            OpenPlayerInformationWindowCommand = new OpenPlayerInformationWindowCommand(this);
 
             ServerStatus = "Not Listening";
             EmsMessages = new ObservableCollection<JObject>();
@@ -83,19 +83,19 @@ namespace WpfServer.ViewModels
         private void ServerOnClientUpdateReceived(object sender, PlayerObjectEventArgs playerObjectEventArgs)
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                new Action(() => PlayerInformationViewModel.UpdatePlayer(playerObjectEventArgs.GameObject)));
+                new Action(() => PlayerInformationService.UpdatePlayer(playerObjectEventArgs.GameObject)));
         }
 
         private void ServerOnClientDisconnected(object sender, PlayerIdEventArgs playerIdEventArgs)
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                new Action(() => PlayerInformationViewModel.RemovePlayer(playerIdEventArgs.Id)));
+                new Action(() => PlayerInformationService.RemovePlayer(playerIdEventArgs.Id)));
         }
 
         private void ServerOnClientConnected(object sender, PlayerObjectEventArgs playerObjectEventArgs)
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-                new Action(() => PlayerInformationViewModel.AddPlayer(playerObjectEventArgs.GameObject)));
+                new Action(() => PlayerInformationService.AddPlayer(playerObjectEventArgs.GameObject)));
         }
 
         #endregion

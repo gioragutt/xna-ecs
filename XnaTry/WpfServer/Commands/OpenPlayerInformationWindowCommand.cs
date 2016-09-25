@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows.Threading;
 using WpfServer.Models;
+using WpfServer.ViewModels;
 using WpfServer.Views;
 using WpfServer.Windows;
 
@@ -9,11 +9,11 @@ namespace WpfServer.Commands
 {
     public class OpenPlayerInformationWindowCommand : AsyncCommandBase
     {
-        private Dispatcher dispatcher;
+        private readonly ServerViewModel serverViewModel;
 
-        public OpenPlayerInformationWindowCommand(Dispatcher dispatcher)
+        public OpenPlayerInformationWindowCommand(ServerViewModel serverViewModel)
         {
-            this.dispatcher = dispatcher;
+            this.serverViewModel = serverViewModel;
         }
 
         public override bool CanExecute(object parameter)
@@ -23,14 +23,14 @@ namespace WpfServer.Commands
         
         protected override void OnExecute(object parameter)
         {
-            dispatcher.BeginInvoke(new Action(() =>
+            serverViewModel.Dispatcher.BeginInvoke(new Action(() =>
             {
                 Debug.Assert(parameter is PlayerInformation);
                 var player = (PlayerInformation) parameter;
 
                 var playerInfoWindow = new PlayerInformationWindow
                 {
-                    DataContext = player,
+                    DataContext = new PlayerInformationViewModel(player, serverViewModel),
                 };
 
                 playerInfoWindow.ShowDialog();

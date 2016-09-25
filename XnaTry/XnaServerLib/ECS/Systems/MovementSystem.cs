@@ -4,7 +4,6 @@ using ECS.Interfaces;
 using Microsoft.Xna.Framework;
 using UtilsLib.Consts;
 using UtilsLib.Utility;
-using XnaCommonLib;
 using XnaCommonLib.ECS.Components;
 
 namespace XnaServerLib.ECS.Systems

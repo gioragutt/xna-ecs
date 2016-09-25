@@ -60,6 +60,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Commands\OpenPlayerInformationWindowCommand.cs" />
+    <Compile Include="ViewModels\PlayerInformationViewModel.cs" />
     <Compile Include="Views\PlayerInformationWindow.xaml.cs">
       <DependentUpon>PlayerInformationWindow.xaml</DependentUpon>
     </Compile>
@@ -73,7 +74,7 @@
     </Compile>
     <Compile Include="Commands\KickPlayerCommand.cs" />
     <Compile Include="Models\PlayerInformation.cs" />
-    <Compile Include="ViewModels\PlayerInformationViewModel.cs" />
+    <Compile Include="PlayerInformationService.cs" />
     <Compile Include="ViewModels\ServerViewModel.cs" />
     <Compile Include="Commands\StartListeningCommand.cs" />
     <Compile Include="Commands\StopListeningCommand.cs" />

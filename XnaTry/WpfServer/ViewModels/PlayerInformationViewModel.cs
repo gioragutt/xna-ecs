@@ -1,43 +1,16 @@
-﻿using System;
-using System.Linq;
-using WpfServer.Models;
-using WpfServer.Windows;
-using XnaCommonLib.ECS;
-using XnaCommonLib.ECS.Components;
+﻿using WpfServer.Models;
 
 namespace WpfServer.ViewModels
 {
     public class PlayerInformationViewModel
     {
-        public ObservableItemCollection<PlayerInformation> PlayerData { get; }
+        public PlayerInformation Player { get; }
+        public ServerViewModel Server { get; }
 
-        public PlayerInformationViewModel()
+        public PlayerInformationViewModel(PlayerInformation player, ServerViewModel server)
         {
-            PlayerData = new ObservableItemCollection<PlayerInformation>();
-        }
-
-        public void AddPlayer(GameObject gameObject)
-        {
-            var playerInformation = new PlayerInformation
-            {
-                Id = gameObject.Entity.Id,
-                Transform = gameObject.Transform,
-                Attributes = gameObject.Components.Get<PlayerAttributes>()
-            };
-
-            PlayerData.Add(playerInformation);
-        }
-
-        public void RemovePlayer(Guid playerGuid)
-        {
-            var item = PlayerData.FirstOrDefault(p => p.Id == playerGuid);
-            if (item != null)
-                PlayerData.Remove(item);
-        }
-
-        public void UpdatePlayer(GameObject gameObject)
-        {
-            PlayerData.FirstOrDefault(p => p.Id == gameObject.Entity.Id)?.Update(gameObject);
+            Player = player;
+            Server = server;
         }
     }
 }
