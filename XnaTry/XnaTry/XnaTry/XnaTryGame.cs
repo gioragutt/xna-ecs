@@ -215,7 +215,7 @@ namespace XnaTry
             if (currentKeyboardState.IsKeyDown(Keys.NumPad2) && !previousKeyboardState.IsKeyDown(Keys.NumPad2))
                 connectionHandler.Broadcast(
                     MessageBuilder.Create(Constants.Messages.DamagePlayers)
-                        .Add(Constants.Fields.PlayerGuid, connectionHandler.GameObject.Entity.Id)
+                        .Add(Constants.Fields.PlayerName, connectionHandler.GameObject.Components.Get<PlayerAttributes>().Name)
                         .Get());
 
             if (currentKeyboardState.IsKeyDown(Keys.P) && !previousKeyboardState.IsKeyDown(Keys.P))

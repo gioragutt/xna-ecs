@@ -22,6 +22,8 @@ namespace WpfServer.Commands
         {
             viewModel.Server.StartListen();
             viewModel.ServerStatus = "Starting Listening";
+
+            base.OnExecute(parameter);
         }
 
         protected override void AfterExecute(object parameter, Exception error)
@@ -30,6 +32,8 @@ namespace WpfServer.Commands
             if (error != null)
                 status += string.Format(" - {0}", error.Message);
             viewModel.ServerStatus = status;
+
+            base.AfterExecute(parameter, error);
         }
     }
 }

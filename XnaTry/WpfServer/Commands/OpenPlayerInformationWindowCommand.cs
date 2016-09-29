@@ -34,6 +34,8 @@ namespace WpfServer.Commands
                 };
 
                 playerInfoWindow.ShowDialog();
+
+                base.OnExecute(parameter);
             }));
         }
     }

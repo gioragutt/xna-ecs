@@ -42,14 +42,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\CommandExecutionData.cs" />
+    <Compile Include="Commands\DamagePlayersCommand.cs" />
     <Compile Include="ECS\ServerGameManager.cs" />
     <Compile Include="ECS\Systems\MovementSystem.cs" />
     <Compile Include="GameClient.cs" />
+    <Compile Include="Commands\IServerCommand.cs" />
     <Compile Include="PlayerIdEventArgs.cs" />
     <Compile Include="PlayerObjectEventArgs.cs" />
     <Compile Include="MapManager.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Commands\ServerCommandsService.cs" />
     <Compile Include="SpawningArea.cs" />
   </ItemGroup>
   <ItemGroup>

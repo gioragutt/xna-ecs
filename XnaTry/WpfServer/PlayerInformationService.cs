@@ -5,7 +5,7 @@ using WpfServer.Windows;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
 
-namespace WpfServer.ViewModels
+namespace WpfServer
 {
     public class PlayerInformationService
     {

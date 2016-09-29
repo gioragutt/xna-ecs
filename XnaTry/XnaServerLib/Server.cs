@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -10,6 +11,7 @@ using UtilsLib;
 using UtilsLib.Consts;
 using UtilsLib.Exceptions.Server;
 using XnaCommonLib.ECS.Components;
+using XnaServerLib.Commands;
 using XnaServerLib.ECS;
 using XnaServerLib.ECS.Systems;
 
@@ -26,9 +28,13 @@ namespace XnaServerLib
 
         #endregion Constants
 
+        #region Events
+
         public event EventHandler<PlayerObjectEventArgs> ClientConnected;
         public event EventHandler<PlayerObjectEventArgs> ClientUpdateReceived;
         public event EventHandler<PlayerIdEventArgs> ClientDisconnected;
+
+        #endregion
 
         #region Threads
 
@@ -76,9 +82,17 @@ namespace XnaServerLib
         /// </summary>
         public ServerGameManager GameManager { get; }
 
+        /// <summary>
+        /// The time the last update occured
+        /// </summary>
         public DateTime LastUpdateTime { get; private set; }
 
+        /// <summary>
+        /// Manages loading and interacting with the map
+        /// </summary>
         public MapManager MapManager { get; }
+
+        public ServerCommandsService CommandsService { get; private set; }
 
         #endregion Properties
 
@@ -96,7 +110,7 @@ namespace XnaServerLib
             Port = port;
 
             MapManager = new MapManager("xna_try_map1.tmx");
-
+            CommandsService = new ServerCommandsService(this);
             ConnectionListener = new TcpListener(IPAddress.Any, Port);
             Listening = false;
             threadsRunning = false;
@@ -106,29 +120,21 @@ namespace XnaServerLib
             Subscribe(Constants.Messages.DamagePlayers, Callback_DamagePlayers);
         }
 
+        #endregion Constructors
+
+        #region Callbacks
+
         private void Callback_DamagePlayers(JObject message)
         {
-            var player = message.GetGuid(Constants.Fields.PlayerGuid);
-            var damage = message.GetProp("damage", 10f);
-
-            var attrs = GameManager.EntityPool.GetAllOf<PlayerAttributes>().ToList();
-            if (player != null)
-                attrs = attrs.Where(c => c.Container.Parent.Id == player).ToList();
-
-            attrs.ForEach(a =>
-            {
-                a.Health -= damage;
-                if (a.JustDied)
-                {
-                    Broadcast(
-                        MessageBuilder.Create(Constants.Messages.AddMessageToBox)
-                        .Add(Constants.Fields.Content, string.Format("{0} died!", a.Name))
-                        .Get());
-                }
-            });
+            var player = message.GetProp<string>(Constants.Fields.PlayerName);
+            var damage = message.GetProp("damage", 10f).ToString(CultureInfo.InvariantCulture);
+            if (player == null)
+                CommandsService.Execute("damage", damage);
+            else
+                CommandsService.Execute("damage", damage, player);
         }
 
-        #endregion Constructors
+        #endregion
 
         #region API Methods
 
@@ -266,6 +272,5 @@ namespace XnaServerLib
         }
 
         #endregion
-
     }
 }

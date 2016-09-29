@@ -8,6 +8,10 @@ namespace WpfServer.Windows
     /// </summary>
     public abstract class AsyncCommandBase : CommandBase
     {
+        public event EventHandler<object> BeforeCommandExecute;
+        public event EventHandler<object> OnCommandExecute;
+        public event EventHandler<AfterExecuteEventArgs> AfterCommandExecute;
+
         /// <summary>
         /// When overridden in a derived class, performs operations in the UI thread
         /// before beginning the background operation.
@@ -15,6 +19,7 @@ namespace WpfServer.Windows
         /// <param name="parameter">The parameter passed to the <c>Execute</c> method of the command.</param>
         protected virtual void BeforeExecute(object parameter)
         {
+            OnBeforeCommandExecute(parameter);
         }
 
         /// <summary>
@@ -24,6 +29,7 @@ namespace WpfServer.Windows
         /// <param name="parameter">The paramter passed to the <c>Execute</c> method of the command.</param>
         protected virtual void OnExecute(object parameter)
         {
+            OnOnCommandExecute(parameter);
         }
 
         /// <summary>
@@ -34,6 +40,11 @@ namespace WpfServer.Windows
         /// <param name="error">The error object that was thrown during the background operation, or null if no error was thrown.</param>
         protected virtual void AfterExecute(object parameter, Exception error)
         {
+            OnAfterCommandExecute(new AfterExecuteEventArgs
+            {
+                Parameter = parameter,
+                Error = error
+            });
         }
 
         /// <summary>
@@ -60,5 +71,22 @@ namespace WpfServer.Windows
                 .ContinueWith(task => OnExecute(parameter))
                 .ContinueWith(task => AfterExecute(parameter, task.Exception));
         }
+
+        #region Event Invokations
+
+        protected virtual void OnBeforeCommandExecute(object e)
+        {
+            BeforeCommandExecute?.Invoke(this, e);
+        }
+        protected virtual void OnOnCommandExecute(object e)
+        {
+            OnCommandExecute?.Invoke(this, e);
+        }
+        protected virtual void OnAfterCommandExecute(AfterExecuteEventArgs e)
+        {
+            AfterCommandExecute?.Invoke(this, e);
+        }
+
+        #endregion
     }
 }

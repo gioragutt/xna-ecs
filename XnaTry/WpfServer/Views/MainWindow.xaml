@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:WpfServer.Windows.Converters;assembly=WpfServer.Windows"
         mc:Ignorable="d"
+        xmlns:local="clr-namespace:WpfServer.Views"
         Closing="MainWindow_OnClosing"
-        Title="MainWindow" Height="400" Width="400">
+        Title="MainWindow" Height="400" Width="500">
     <Window.Resources>
         <converters:PlayerGuidToDisplayerConverter x:Key="PlayerGuidToDisplayerConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
@@ -22,10 +24,11 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Command="{Binding StartListeningCommand}" Content="Start" Margin="5, 0, 5, 0" FontSize="18.667"/>
-            <Button Grid.Column="1" Command="{Binding StopListeningCommand}" Content="Stop" Margin="5, 0, 5, 0" FontSize="18.667"/>
+            <Button Grid.Column="0" Command="{Binding StartListeningCommand}" Content="Start" Margin="5, 0, 5, 0" FontSize="18"/>
+            <Button Grid.Column="1" Command="{Binding StopListeningCommand}" Content="Stop" Margin="0, 0, 5, 0" FontSize="18"/>
         </Grid>
-        <ListView x:Name="PlayersListView" Margin="5, 10, 5, 5" Grid.Row="2" ItemsSource="{Binding PlayerData, UpdateSourceTrigger=PropertyChanged}">
+        <local:ServerCommandLineControl x:Name="ServerCommand" Grid.Row="2"/> 
+        <ListView x:Name="PlayersListView" Margin="5, 0, 5, 5" Grid.Row="3" ItemsSource="{Binding PlayerData, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Kick" 

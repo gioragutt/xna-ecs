@@ -15,6 +15,7 @@ namespace WpfServer.Views
             InitializeComponent();
             server = new ServerViewModel(Dispatcher);
             DataContext = server;
+            ServerCommand.DataContext = new ServerCommandLineViewModel(server.Server.CommandsService);
         }
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)

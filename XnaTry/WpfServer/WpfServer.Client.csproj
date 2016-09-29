@@ -59,10 +59,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Commands\ExecuteServerCommandCommand.cs" />
     <Compile Include="Commands\OpenPlayerInformationWindowCommand.cs" />
+    <Compile Include="ViewModels\ServerCommandLineViewModel.cs" />
     <Compile Include="ViewModels\PlayerInformationViewModel.cs" />
     <Compile Include="Views\PlayerInformationWindow.xaml.cs">
       <DependentUpon>PlayerInformationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ServerCommandLineControl.xaml.cs">
+      <DependentUpon>ServerCommandLineControl.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -83,6 +88,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\PlayerInformationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ServerCommandLineControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

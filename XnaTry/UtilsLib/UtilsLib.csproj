@@ -50,10 +50,15 @@
     <Compile Include="Consts\Time.cs" />
     <Compile Include="Exceptions\Common\BaseGameException.cs" />
     <Compile Include="Exceptions\Common\CommunicationTimeoutException.cs" />
+    <Compile Include="Exceptions\Server\Commands\CommandExecutionException.cs" />
     <Compile Include="Exceptions\Server\ConnectionEstablishmentErrorException.cs" />
+    <Compile Include="Exceptions\Server\Commands\InvalidCommandParametersException.cs" />
     <Compile Include="Exceptions\Server\InvalidHeaderOrFooterException.cs" />
     <Compile Include="Exceptions\Server\InvalidPortException.cs" />
+    <Compile Include="Exceptions\Server\Commands\NoCommandSuppliedException.cs" />
+    <Compile Include="Exceptions\Server\Commands\NoSuchCommandException.cs" />
     <Compile Include="Exceptions\Server\ServerAlreadyRunningException.cs" />
+    <Compile Include="Exceptions\Server\Commands\ServerCommandsException.cs" />
     <Compile Include="Extentions.cs" />
     <Compile Include="MessageBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

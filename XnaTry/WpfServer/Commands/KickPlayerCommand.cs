@@ -28,6 +28,8 @@ namespace WpfServer.Commands
             var gameClient = viewModel.Server.GameClients.FirstOrDefault(c => c.GameObject.Entity.Id.Equals(id));
 
             gameClient?.StopClient();
+
+            base.OnExecute(parameter);
         }
     }
 }
