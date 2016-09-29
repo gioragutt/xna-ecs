@@ -117,7 +117,10 @@ namespace XnaClientLib
             Port = port;
             ClientGameManager = gameManager;
             GameObject = null;
-            UpdateThread = new Thread(ConnectionHandler_InteractWithServer);
+            UpdateThread = new Thread(ConnectionHandler_InteractWithServer)
+            {
+                IsBackground = true
+            };
             emsServerEndpoint = new EmsServerEndpoint();
             PacketProtocol = new PacketProtocol(0)
             {
