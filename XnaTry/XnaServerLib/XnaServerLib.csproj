@@ -42,6 +42,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\BaseServerCommand.cs" />
     <Compile Include="Commands\CommandExecutionData.cs" />
     <Compile Include="Commands\DamagePlayersCommand.cs" />
     <Compile Include="ECS\ServerGameManager.cs" />
