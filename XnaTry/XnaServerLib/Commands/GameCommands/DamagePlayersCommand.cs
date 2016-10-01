@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UtilsLib;
@@ -6,8 +5,9 @@ using UtilsLib.Consts;
 using UtilsLib.Exceptions.Server.Commands;
 using XnaCommonLib.ECS;
 using XnaCommonLib.ECS.Components;
+using XnaServerLib.Commands.BaseClasses;
 
-namespace XnaServerLib.Commands
+namespace XnaServerLib.Commands.GameCommands
 {
     public class DamagePlayersCommand : BaseServerCommand
     {
@@ -17,7 +17,7 @@ namespace XnaServerLib.Commands
             return parameters != null && parameters.Count > 1 && float.TryParse(parameters[1], out damage) && damage > 0;
         }
 
-        public override void Execute(IList<GameObject> gameObjects, IList<string> parameters)
+        protected override void DoExecute(IList<GameObject> gameObjects, IList<string> parameters)
         {
             float damage;
             if (!float.TryParse(parameters[0], out damage))

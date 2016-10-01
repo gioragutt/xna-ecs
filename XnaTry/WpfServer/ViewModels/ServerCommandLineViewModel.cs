@@ -1,14 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Threading;
 using WpfServer.Commands;
 using WpfServer.Windows;
-using XnaServerLib.Commands;
+using XnaServerLib.Commands.BaseClasses;
 
 namespace WpfServer.ViewModels
 {
     public class ServerCommandLineViewModel : ViewModelBase
     {
         public AsyncCommandBase ExecuteServerCommandCommand { get; set; }
+        public Dispatcher Dispatcher { get; }
+
+        #region CommandHistory
+
+        private ObservableCollection<string> commandHistory;
+
+        public ObservableCollection<string> CommandHistory
+        {
+            get
+            {
+                return commandHistory;
+            }
+            set
+            {
+                commandHistory = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion
 
         #region ErrorText
 
@@ -50,10 +72,23 @@ namespace WpfServer.ViewModels
 
         private const string ErrorFormat = "({0}) {1}";
 
-        public ServerCommandLineViewModel(ServerCommandsService commandsService)
+        public ServerCommandLineViewModel(ServerCommandsService commandsService, Dispatcher dispatcher)
         {
+            Dispatcher = dispatcher;
+            CommandHistory = new ObservableCollection<string>();
             ExecuteServerCommandCommand = new ExecuteServerCommandCommand(commandsService);
+            ExecuteServerCommandCommand.BeforeCommandExecute += AddCommandToHistory;
             ExecuteServerCommandCommand.AfterCommandExecute += GetCommandErrors;
+        }
+
+        private void AddCommandToHistory(object sender, object parameters)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var commandString = string.Join(" ", (IList<string>) parameters);
+                if (!CommandHistory.Contains(commandString))
+                    CommandHistory.Add(commandString);
+            }));
         }
 
         private void GetCommandErrors(object sender, AfterExecuteEventArgs afterExecuteEventArgs)

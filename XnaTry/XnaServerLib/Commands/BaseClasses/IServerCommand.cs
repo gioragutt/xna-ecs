@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using XnaCommonLib.ECS;
 
-namespace XnaServerLib.Commands
+namespace XnaServerLib.Commands.BaseClasses
 {
     public interface IServerCommand
     {

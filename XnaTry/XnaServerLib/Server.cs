@@ -12,6 +12,7 @@ using UtilsLib.Consts;
 using UtilsLib.Exceptions.Server;
 using XnaCommonLib.ECS.Components;
 using XnaServerLib.Commands;
+using XnaServerLib.Commands.BaseClasses;
 using XnaServerLib.ECS;
 using XnaServerLib.ECS.Systems;
 

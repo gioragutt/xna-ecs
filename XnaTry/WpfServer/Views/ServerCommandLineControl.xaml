@@ -19,11 +19,13 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBox Grid.Column="0"
+            <ComboBox Grid.Column="0"
+                 ItemsSource="{Binding CommandHistory, UpdateSourceTrigger=PropertyChanged}"
                  Grid.Row="0"
                  MinWidth="250"
                  VerticalAlignment="Center" 
                  FontSize="18"
+                 IsEditable="True"
                  x:Name="CommandParameters"/>
             <Button Grid.Column="1" 
                 Grid.Row="0"

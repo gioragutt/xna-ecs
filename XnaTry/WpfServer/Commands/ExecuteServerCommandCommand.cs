@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using WpfServer.Windows;
-using XnaServerLib.Commands;
+using XnaServerLib.Commands.BaseClasses;
 
 namespace WpfServer.Commands
 {

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UtilsLib.Exceptions.Server.Commands;
 using XnaCommonLib.ECS;
+using XnaServerLib.Commands.GameCommands;
 
-namespace XnaServerLib.Commands
+namespace XnaServerLib.Commands.BaseClasses
 {
     public class ServerCommandsService
     {
