@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UtilsLib;
@@ -8,7 +9,7 @@ using XnaCommonLib.ECS.Components;
 
 namespace XnaServerLib.Commands
 {
-    public class DamagePlayersCommand : BroadcastingServerCommand
+    public class DamagePlayersCommand : BaseServerCommand
     {
         public override bool CanExecute(IList<string> parameters)
         {
@@ -31,6 +32,8 @@ namespace XnaServerLib.Commands
                 DealDamageToPlayers(gameObjects, damage);
             else
                 DealDamageToPlayerInList(gameObjects, playersList, damage);
+
+            base.Execute(gameObjects, parameters);
         }
 
         private void DealDamageToPlayerInList(IList<GameObject> gameObjects, IEnumerable<string> playersList, float damage)
@@ -39,8 +42,9 @@ namespace XnaServerLib.Commands
             {
                 var player = gameObjects.FirstOrDefault(p => p.Components.Get<PlayerAttributes>().Name == playerName);
                 if (player == null)
-                    throw new CommandExecutionException(string.Format("Player {0} does not exist", playerName));
-                DealDamageToPlayer(player, damage);
+                    AddExecutionException(new CommandExecutionException(string.Format("Player {0} does not exist", playerName)));
+                else
+                    DealDamageToPlayer(player, damage);
             }
         }
 

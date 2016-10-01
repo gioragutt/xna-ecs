@@ -40,10 +40,17 @@ namespace WpfServer.Windows
         /// <param name="error">The error object that was thrown during the background operation, or null if no error was thrown.</param>
         protected virtual void AfterExecute(object parameter, Exception error)
         {
+            AggregateException exception = null;
+            if (error != null)
+            {
+                var aggregateException = error as AggregateException;
+                exception = aggregateException ?? new AggregateException(error);
+            }
+
             OnAfterCommandExecute(new AfterExecuteEventArgs
             {
                 Parameter = parameter,
-                Error = error
+                Error = exception
             });
         }
 

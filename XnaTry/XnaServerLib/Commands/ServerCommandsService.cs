@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UtilsLib.Exceptions.Server.Commands;
 using XnaCommonLib.ECS;
@@ -67,8 +68,8 @@ namespace XnaServerLib.Commands
         public void Execute(IList<string> parameters)
         {
             var commandData = ValidateCommandParameters(parameters);
-
-            commandData.Command.Execute(GameObjects(server.GameClients), commandData.Parameters);
+            if (commands != null)
+                commandData.Command.Execute(GameObjects(server.GameClients), commandData.Parameters);
         }
 
         private static IList<GameObject> GameObjects(IEnumerable<GameClient> gameClients)

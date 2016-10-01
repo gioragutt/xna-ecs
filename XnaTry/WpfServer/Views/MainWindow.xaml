@@ -28,7 +28,7 @@
             <Button Grid.Column="1" Command="{Binding StopListeningCommand}" Content="Stop" Margin="0, 0, 5, 0" FontSize="18"/>
         </Grid>
         <local:ServerCommandLineControl x:Name="ServerCommand" Grid.Row="2"/> 
-        <ListView x:Name="PlayersListView" Margin="5, 0, 5, 5" Grid.Row="3" ItemsSource="{Binding PlayerData, UpdateSourceTrigger=PropertyChanged}">
+        <ListView x:Name="PlayersListView" Margin="5" Grid.Row="3" ItemsSource="{Binding PlayerData, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Kick" 
